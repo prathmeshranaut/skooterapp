@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="skooterPrimaryBackgroundColor">@color/md_light_blue_500</color>
+    <color name="skooterSecondaryBackgroundColor">@color/md_light_blue_600</color>
+    <color name="skooterColorBackgroundAccent">@color/md_pink_500</color>
+    <color name="skooterBackgroundColor">@color/md_grey_100</color>
+    <color name="skooterPrimaryTextColor">@color/md_white_1000</color>
+    <color name="skooterSecondaryTextColor">@color/md_yellow_500</color>
+
+</resources>

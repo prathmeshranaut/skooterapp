@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Skooter" parent="Theme.Base">
+        <item name="android:navigationBarColor">?colorPrimaryDark</item>
+    </style>
+
+    <style name="ActionBarThemeOverlay" parent="">
+        <item name="android:textColorPrimary">@color/skooterPrimaryTextColor</item>
+        <item name="android:colorControlHighlight">@color/skooterBackgroundColor</item>
+        <item name="android:actionMenuTextColor">@color/skooterPrimaryTextColor</item>
+        <item name="android:textColorSecondary">@color/skooterPrimaryTextColor</item>
+        <item name="android:background">@color/skooterPrimaryBackgroundColor</item>
+    </style>
+</resources>

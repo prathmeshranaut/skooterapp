@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:skooter="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".MainActivity">
+
+    <item android:id="@+id/action_peek"
+          android:title="@string/action_peek"
+          android:orderInCategory="100"
+          skooter:showAsAction="never"/>
+
+    <item android:id="@+id/action_me"
+          android:title="@string/action_me"
+          android:orderInCategory="101"
+          skooter:showAsAction="never"/>
+
+    <item android:id="@+id/action_compose"
+          android:title="@string/compose"
+        android:orderInCategory="1"
+        android:icon="@android:drawable/ic_menu_edit"
+        skooter:showAsAction="always" />
+</menu>

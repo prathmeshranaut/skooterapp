@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="net.aayush.skooterapp.ComposeActivity">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/toolbar"/>
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"
+        android:inputType="textMultiLine"
+        android:ems="1"
+        android:id="@+id/editText2"
+        android:layout_below="@+id/app_bar" />
+
+
+</RelativeLayout>
