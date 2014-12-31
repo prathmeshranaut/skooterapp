@@ -2,6 +2,7 @@ package net.aayush.skooterapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,14 +11,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import net.aayush.skooterapp.data.Post;
-import net.aayush.skooterapp.data.PostData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends BaseActivity {
 
-    private List<Post> mPosts = new PostData().getPosts();
+    protected List<Post> mPostsList = new ArrayList<Post>();
+    protected ArrayAdapter<Post> mPostsAdapter;
+    protected ListView mListPosts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,16 +29,23 @@ public class MainActivity extends BaseActivity {
 
         activateToolbar();
 
-        ArrayAdapter<Post> mPostsAdapter = new ArrayAdapter<Post>(this, android.R.layout.simple_list_item_1, mPosts);
-        ListView listPosts = (ListView) findViewById(R.id.list_posts);
-        listPosts.setAdapter(mPostsAdapter);
+//        GetSkootData getSkootData = new GetSkootData("https://scooter.herokuapp.com/scoots");
+//        getSkootData.execute();
+//        mPosts = getSkootData.getPosts();
 
-        listPosts.setOnItemClickListener(new ListView.OnItemClickListener(){
+        ProcessPosts processPosts = new ProcessPosts("https://scooter.herokuapp.com/scoots");
+        processPosts.execute();
+
+        mPostsAdapter = new ArrayAdapter<Post>(this, android.R.layout.simple_list_item_1, mPostsList);
+        mListPosts = (ListView) findViewById(R.id.list_posts);
+        mListPosts.setAdapter(mPostsAdapter);
+
+        mListPosts.setOnItemClickListener(new ListView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, ViewPostActivity.class);
-                intent.putExtra(SKOOTER_POST, mPosts.get(position));
+                intent.putExtra(SKOOTER_POST, mPostsList.get(position));
                 startActivity(intent);
             }
         });
@@ -55,7 +65,7 @@ public class MainActivity extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Log.v("Main Activity", mPostsList.toString());
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_compose) {
             Intent intent = new Intent(MainActivity.this, ComposeActivity.class);
@@ -68,5 +78,30 @@ public class MainActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class ProcessPosts extends GetSkootData {
+
+        public ProcessPosts(String mRawUrl) {
+            super(mRawUrl);
+        }
+
+        public void execute()
+        {
+            super.execute();
+            ProcessData processData = new ProcessData();
+            processData.execute();
+        }
+
+        public class ProcessData extends DownloadJsonData {
+            protected void onPostExecute(String webData) {
+                super.onPostExecute(webData);
+                mPostsList = getPosts();
+                mPostsAdapter = new ArrayAdapter<Post>(MainActivity.this, android.R.layout.simple_list_item_1, mPostsList);
+                mListPosts = (ListView) findViewById(R.id.list_posts);
+                mListPosts.setAdapter(mPostsAdapter);
+                mPostsAdapter.notifyDataSetChanged();
+            }
+        }
     }
 }
