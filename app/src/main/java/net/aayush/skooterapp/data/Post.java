@@ -1,6 +1,20 @@
 package net.aayush.skooterapp.data;
 
+import android.util.Log;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Post implements Serializable {
 
@@ -74,12 +88,64 @@ public class Post implements Serializable {
     }
 
     public void upvotePost() {
-        mUserVote = true;
-        mIfUserVoted = true;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost("https://skooter.herokuapp.com/skoot/" + Post.this.getId());
+
+                try {
+                    // Add your data
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+                    nameValuePairs.add(new BasicNameValuePair("user_id", "2"));
+                    nameValuePairs.add(new BasicNameValuePair("vote", "true"));
+                    nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));
+                    nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
+                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    // Execute HTTP Post Request
+                    HttpResponse response = httpclient.execute(httppost);
+                    Log.v("Upvote Post", response.toString());
+                } catch (ClientProtocolException e) {
+                    // TODO Auto-generated catch block
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                }
+
+                mUserVote = true;
+                mIfUserVoted = true;
+            }
+        }).start();
     }
 
     public void downvotePost() {
-        mUserVote = false;
-        mIfUserVoted = true;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost("https://skooter.herokuapp.com/skoot/" + Post.this.getId());
+
+                try {
+                    // Add your data
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+                    nameValuePairs.add(new BasicNameValuePair("user_id", "2"));
+                    nameValuePairs.add(new BasicNameValuePair("vote", "false"));
+                    nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));
+                    nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
+                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    // Execute HTTP Post Request
+                    HttpResponse response = httpclient.execute(httppost);
+                    Log.v("Downvote Post", response.toString());
+                } catch (ClientProtocolException e) {
+                    // TODO Auto-generated catch block
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                }
+
+                mUserVote = false;
+                mIfUserVoted = true;
+            }
+        }).start();
     }
 }

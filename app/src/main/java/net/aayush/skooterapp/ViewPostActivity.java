@@ -19,6 +19,10 @@ import java.util.List;
 
 public class ViewPostActivity extends BaseActivity {
 
+    protected List<Comment> mCommentsList = new ArrayList<Comment>();
+    protected ArrayAdapter<Comment> mCommentsAdapter;
+    protected ListView mListComments;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,17 +35,18 @@ public class ViewPostActivity extends BaseActivity {
         List<Post> postList = new ArrayList<Post>();
         postList.add(post);
 
-        ArrayAdapter<Post> postAdapter = new ArrayAdapter<Post>(this, android.R.layout.simple_list_item_1, postList);
+        ArrayAdapter<Post> postAdapter = new PostAdapter(this, R.layout.list_view_post_row, postList);
         ListView listPosts = (ListView) findViewById(R.id.list_posts);
         listPosts.setAdapter(postAdapter);
 
-
         //Get the comments via JSON API
-        List<Comment> comments = new CommentData().getComments();
-        ArrayAdapter<Comment> commentAdapter = new ArrayAdapter<Comment>(this, android.R.layout.simple_list_item_1, comments);
+        ProcessComments processComments = new ProcessComments("https://skooter.herokuapp.com/skoot/2/" + post.getId() + ".json");
+        processComments.execute();
 
-        ListView listComments = (ListView) findViewById(R.id.list_comments);
-        listComments.setAdapter(commentAdapter);
+        List<Comment> comments = new CommentData().getComments();
+        mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_post_row, mCommentsList);
+        mListComments = (ListView) findViewById(R.id.list_comments);
+        mListComments.setAdapter(mCommentsAdapter);
 
         //Setup the item click listeners
         listPosts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,5 +79,27 @@ public class ViewPostActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public class ProcessComments extends GetSkootComments {
+
+        public ProcessComments(String mRawUrl) {
+            super(mRawUrl);
+        }
+
+        public void execute() {
+            super.execute();
+            ProcessData processData = new ProcessData();
+            processData.execute();
+        }
+
+        public class ProcessData extends DownloadJsonData {
+            protected void onPostExecute(String webData) {
+                super.onPostExecute(webData);
+                mCommentsList = getComments();
+                mCommentsAdapter.addAll(mCommentsList);
+                mCommentsAdapter.notifyDataSetChanged();
+            }
+        }
     }
 }
