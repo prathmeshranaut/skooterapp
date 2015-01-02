@@ -13,7 +13,7 @@
         android:layout_height="300dp"
         android:inputType="textMultiLine"
         android:ems="1"
-        android:id="@+id/editText2"
+        android:id="@+id/skootText"
         android:layout_below="@+id/app_bar" />
 
 

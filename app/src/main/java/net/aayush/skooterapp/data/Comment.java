@@ -13,7 +13,10 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Comment implements Serializable {
@@ -74,7 +77,17 @@ public class Comment implements Serializable {
     }
 
     public String getTimestamp() {
-        return mTimestamp;
+        SimpleDateFormat formatter, FORMATTER;
+        formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        String oldDate = "2011-03-10T11:54:30.207Z";
+        Date date = null;
+        try {
+            date = formatter.parse(mTimestamp.substring(0, 24));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        FORMATTER = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
+        return FORMATTER.format(date);
     }
 
     @Override

@@ -2,17 +2,30 @@ package net.aayush.skooterapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import net.aayush.skooterapp.data.Comment;
 import net.aayush.skooterapp.data.CommentData;
 import net.aayush.skooterapp.data.Post;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +67,47 @@ public class ViewPostActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ViewPostActivity.this, MapActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        Button commentBtn = (Button) findViewById(R.id.commentSkoot);
+        final TextView commentText = (TextView) findViewById(R.id.commentText);
+        final int postId = post.getId();
+
+        commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commentText.getText();
+                if(commentText.getText().length() > 0)
+                {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            HttpClient httpclient = new DefaultHttpClient();
+                            HttpPost httppost = new HttpPost("https://skooter.herokuapp.com/comment");
+
+                            try {
+                                // Add your data
+                                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(6);
+                                nameValuePairs.add(new BasicNameValuePair("user_id", "2"));
+                                nameValuePairs.add(new BasicNameValuePair("handle", ""));
+                                nameValuePairs.add(new BasicNameValuePair("content", commentText.getText().toString()));
+                                nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));
+                                nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
+                                nameValuePairs.add(new BasicNameValuePair("post_id", Integer.toString(postId)));
+                                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                                // Execute HTTP Post Request
+                                HttpResponse response = httpclient.execute(httppost);
+                                Log.v("Posted Skoot Comment", response.toString());
+                            } catch (ClientProtocolException e) {
+                                // TODO Auto-generated catch block
+                            } catch (IOException e) {
+                                // TODO Auto-generated catch block
+                            }
+                        }
+                    }).start();
+                }
             }
         });
 

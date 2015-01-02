@@ -48,7 +48,7 @@ public class GetSkootData extends GetRawData {
         final String SKOOT_IF_USER_VOTED = "if_user_voted";
         final String SKOOT_USER_VOTE = "user_vote";
         final String SKOOT_USER_SCOOT = "user_skoot";
-        final String SKOOT_CREATED_AT = "days";
+        final String SKOOT_CREATED_AT = "created_at";
 
         try {
             JSONObject jsonObject = new JSONObject(getmData());

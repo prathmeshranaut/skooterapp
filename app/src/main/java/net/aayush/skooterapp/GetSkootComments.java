@@ -42,7 +42,7 @@ public class GetSkootComments extends GetRawData {
         final String SKOOT_POST = "content";
         final String SKOOT_COMMENTS = "comments";
         final String SKOOT_HANDLE = "handle";
-        final String SKOOT_CREATED_AT = "days";
+        final String SKOOT_CREATED_AT = "created_at";
         final String SKOOT_UPVOTES = "upvotes";
         final String SKOOT_DOWNVOTES = "downvotes";
         final String SKOOT_IF_USER_VOTED = "if_user_voted";
@@ -66,8 +66,9 @@ public class GetSkootComments extends GetRawData {
                     user_vote = jsonComment.getBoolean(SKOOT_USER_VOTE);
                 }
                 boolean user_skoot = jsonComment.getBoolean(SKOOT_USER_COMMENT);
+                String timestamp = jsonComment.getString(SKOOT_CREATED_AT);
 
-                Comment commentObject = new Comment(id, comment, handle, upvotes, downvotes, if_user_voted, user_vote, user_skoot, "1");
+                Comment commentObject = new Comment(id, comment, handle, upvotes, downvotes, if_user_voted, user_vote, user_skoot, timestamp);
                 this.mComments.add(commentObject);
             }
         } catch (JSONException e) {
