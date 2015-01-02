@@ -39,24 +39,35 @@ public class GetSkootData extends GetRawData {
             return;
         }
 
+        final String SKOOTS = "skoots";
         final String SKOOT_ID = "id";
-        final String SKOOT_USER = "user";
-        final String SKOOT_POST = "post";
+        final String SKOOT_POST = "content";
         final String SKOOT_HANDLE = "handle";
-        final String SKOOT_CREATED_AT = "created_at";
+        final String SKOOT_UPVOTES = "upvotes";
+        final String SKOOT_DOWNVOTES = "downvotes";
+        final String SKOOT_IF_USER_VOTED = "if_user_voted";
+        final String SKOOT_USER_VOTE = "user_vote";
+        final String SKOOT_USER_SCOOT = "user_skoot";
+        final String SKOOT_CREATED_AT = "days";
 
         try {
-            JSONArray jsonArray = new JSONArray(getmData());
+            JSONObject jsonObject = new JSONObject(getmData());
+            JSONArray jsonArray = jsonObject.getJSONArray(SKOOTS);
 
+            Log.v(LOG_TAG, jsonArray.toString());
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonPost = jsonArray.getJSONObject(i);
                 int id = jsonPost.getInt(SKOOT_ID);
-                String user = jsonPost.getString(SKOOT_USER);
                 String post = jsonPost.getString(SKOOT_POST);
                 String handle = jsonPost.getString(SKOOT_HANDLE);
+                int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
+                int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
+                boolean skoot_if_user_voted = jsonPost.getBoolean(SKOOT_IF_USER_VOTED);
+                boolean user_vote = jsonPost.getBoolean(SKOOT_USER_VOTE);
+                boolean user_skoot = jsonPost.getBoolean(SKOOT_USER_SCOOT);
                 String created_at = jsonPost.getString(SKOOT_CREATED_AT);
 
-                Post postObject = new Post(id, user, handle, post, 100, 50, created_at);
+                Post postObject = new Post(id, handle, post, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, created_at);
                 this.mPosts.add(postObject);
             }
         } catch (JSONException e) {

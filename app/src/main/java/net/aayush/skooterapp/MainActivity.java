@@ -1,5 +1,6 @@
 package net.aayush.skooterapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,10 +34,10 @@ public class MainActivity extends BaseActivity {
 //        getSkootData.execute();
 //        mPosts = getSkootData.getPosts();
 
-        ProcessPosts processPosts = new ProcessPosts("https://scooter.herokuapp.com/scoots");
+        ProcessPosts processPosts = new ProcessPosts("https://skooter.herokuapp.com/latest/2.json");
         processPosts.execute();
 
-        mPostsAdapter = new ArrayAdapter<Post>(this, android.R.layout.simple_list_item_1, mPostsList);
+        mPostsAdapter = new PostAdapter(this, R.layout.list_view_post_row, mPostsList);
         mListPosts = (ListView) findViewById(R.id.list_posts);
         mListPosts.setAdapter(mPostsAdapter);
 
@@ -44,6 +45,8 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Context context = view.getContext();
+
                 Intent intent = new Intent(MainActivity.this, ViewPostActivity.class);
                 intent.putExtra(SKOOTER_POST, mPostsList.get(position));
                 startActivity(intent);
@@ -97,9 +100,7 @@ public class MainActivity extends BaseActivity {
             protected void onPostExecute(String webData) {
                 super.onPostExecute(webData);
                 mPostsList = getPosts();
-                mPostsAdapter = new ArrayAdapter<Post>(MainActivity.this, android.R.layout.simple_list_item_1, mPostsList);
-                mListPosts = (ListView) findViewById(R.id.list_posts);
-                mListPosts.setAdapter(mPostsAdapter);
+                mPostsAdapter.addAll(mPostsList);
                 mPostsAdapter.notifyDataSetChanged();
             }
         }
