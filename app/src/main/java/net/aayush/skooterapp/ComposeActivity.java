@@ -58,7 +58,7 @@ public class ComposeActivity extends BaseActivity {
                         try {
                             // Add your data
                             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
-                            nameValuePairs.add(new BasicNameValuePair("user_id", "2"));
+                            nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
                             nameValuePairs.add(new BasicNameValuePair("handle", ""));
                             nameValuePairs.add(new BasicNameValuePair("content", skootText.getText().toString()));
                             nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));

@@ -49,6 +49,11 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         upvoteBtn.setTag(comment);
         downvoteBtn.setTag(comment);
 
+        upvoteBtn.setEnabled(true);
+        downvoteBtn.setEnabled(true);
+        upvoteBtn.setAlpha(1.0f);
+        downvoteBtn.setAlpha(1.0f);
+
         if (comment.isIfUserVoted()) {
             upvoteBtn.setEnabled(false);
             downvoteBtn.setEnabled(false);

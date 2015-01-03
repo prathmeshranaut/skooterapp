@@ -19,5 +19,6 @@
     </string-array>
 
     <string name="title_activity_map">Map</string>
+    <string name="title_activity_loading">Loading</string>
 
 </resources>

@@ -53,7 +53,7 @@ public class ViewPostActivity extends BaseActivity {
         listPosts.setAdapter(postAdapter);
 
         //Get the comments via JSON API
-        ProcessComments processComments = new ProcessComments("https://skooter.herokuapp.com/skoot/2/" + post.getId() + ".json");
+        ProcessComments processComments = new ProcessComments("https://skooter.herokuapp.com/skoot/"+ getUserId() +"/" + post.getId() + ".json");
         processComments.execute();
 
         List<Comment> comments = new CommentData().getComments();
@@ -89,7 +89,7 @@ public class ViewPostActivity extends BaseActivity {
                             try {
                                 // Add your data
                                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(6);
-                                nameValuePairs.add(new BasicNameValuePair("user_id", "2"));
+                                nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
                                 nameValuePairs.add(new BasicNameValuePair("handle", ""));
                                 nameValuePairs.add(new BasicNameValuePair("content", commentText.getText().toString()));
                                 nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));

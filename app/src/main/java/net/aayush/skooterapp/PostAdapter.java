@@ -50,6 +50,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
         upvoteBtn.setTag(post);
         downvoteBtn.setTag(post);
 
+        upvoteBtn.setEnabled(true);
+        downvoteBtn.setEnabled(true);
+        upvoteBtn.setAlpha(1.0f);
+        downvoteBtn.setAlpha(1.0f);
+
         if (post.isIfUserVoted()) {
             upvoteBtn.setEnabled(false);
             downvoteBtn.setEnabled(false);

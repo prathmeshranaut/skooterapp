@@ -30,11 +30,11 @@ public class MainActivity extends BaseActivity {
 
         activateToolbar();
 
-//        GetSkootData getSkootData = new GetSkootData("https://scooter.herokuapp.com/scoots");
-//        getSkootData.execute();
-//        mPosts = getSkootData.getPosts();
+        //Check if the user has registered
+        int userId = getUserId();
+        Log.v("Main Activity", "User ID: "+userId);
 
-        ProcessPosts processPosts = new ProcessPosts("https://skooter.herokuapp.com/latest/2.json");
+        ProcessPosts processPosts = new ProcessPosts("https://skooter.herokuapp.com/latest/"+ userId +".json");
         processPosts.execute();
 
         mPostsAdapter = new PostAdapter(this, R.layout.list_view_post_row, mPostsList);

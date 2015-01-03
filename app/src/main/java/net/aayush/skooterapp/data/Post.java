@@ -2,6 +2,8 @@ package net.aayush.skooterapp.data;
 
 import android.util.Log;
 
+import net.aayush.skooterapp.BaseActivity;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -110,7 +112,7 @@ public class Post implements Serializable {
                 try {
                     // Add your data
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
-                    nameValuePairs.add(new BasicNameValuePair("user_id", "2"));
+                    nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
                     nameValuePairs.add(new BasicNameValuePair("vote", "true"));
                     nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));
                     nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
@@ -141,7 +143,7 @@ public class Post implements Serializable {
                 try {
                     // Add your data
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
-                    nameValuePairs.add(new BasicNameValuePair("user_id", "2"));
+                    nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
                     nameValuePairs.add(new BasicNameValuePair("vote", "false"));
                     nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));
                     nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
