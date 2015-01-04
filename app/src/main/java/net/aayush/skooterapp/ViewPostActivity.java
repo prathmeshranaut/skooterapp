@@ -92,7 +92,6 @@ public class ViewPostActivity extends BaseActivity {
                                 nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
                                 nameValuePairs.add(new BasicNameValuePair("handle", ""));
                                 nameValuePairs.add(new BasicNameValuePair("content", commentText.getText().toString()));
-                                nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));
                                 nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
                                 nameValuePairs.add(new BasicNameValuePair("post_id", Integer.toString(postId)));
                                 httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));

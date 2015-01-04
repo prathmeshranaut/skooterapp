@@ -114,7 +114,6 @@ public class Post implements Serializable {
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
                     nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
                     nameValuePairs.add(new BasicNameValuePair("vote", "true"));
-                    nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));
                     nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
                     httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -145,7 +144,6 @@ public class Post implements Serializable {
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
                     nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
                     nameValuePairs.add(new BasicNameValuePair("vote", "false"));
-                    nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));
                     nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
                     httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
