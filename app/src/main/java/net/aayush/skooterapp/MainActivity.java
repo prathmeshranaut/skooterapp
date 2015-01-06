@@ -6,20 +6,9 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import net.aayush.skooterapp.data.Post;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends BaseActivity {
-
-    protected List<Post> mPostsList = new ArrayList<Post>();
-    protected ArrayAdapter<Post> mPostsAdapter;
-    protected ListView mListPosts;
     protected PagerAdapter mPagerAdapter;
 
     @Override
@@ -36,11 +25,15 @@ public class MainActivity extends BaseActivity {
         viewPager.setBackgroundColor(getResources().getColor(R.color.skooterBackgroundColor));
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem menuItem = menu.findItem(R.id.score);
+        Log.d("MainActivity", menuItem.toString());
+        Log.d("MainActivity", Integer.toString(mUser.getScore()));
+        menuItem.setTitle(Integer.toString(mUser.getScore()));
+        menuItem.setEnabled(false);
         return true;
     }
 
@@ -50,7 +43,7 @@ public class MainActivity extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Log.v("Main Activity", mPostsList.toString());
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_compose) {
             Intent intent = new Intent(MainActivity.this, ComposeActivity.class);

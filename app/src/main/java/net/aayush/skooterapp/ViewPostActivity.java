@@ -53,7 +53,7 @@ public class ViewPostActivity extends BaseActivity {
         listPosts.setAdapter(postAdapter);
 
         //Get the comments via JSON API
-        ProcessComments processComments = new ProcessComments("https://skooter.herokuapp.com/skoot/"+ getUserId() +"/" + post.getId() + ".json");
+        ProcessComments processComments = new ProcessComments("https://skooter.herokuapp.com/skoot/"+ getUserId() +"/" + post.getId() + ".json", post.getId());
         processComments.execute();
 
         List<Comment> comments = new CommentData().getComments();
@@ -136,8 +136,8 @@ public class ViewPostActivity extends BaseActivity {
 
     public class ProcessComments extends GetSkootComments {
 
-        public ProcessComments(String mRawUrl) {
-            super(mRawUrl);
+        public ProcessComments(String mRawUrl, int mPostId) {
+            super(mRawUrl, mPostId);
         }
 
         public void execute() {

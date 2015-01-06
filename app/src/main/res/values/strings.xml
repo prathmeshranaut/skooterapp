@@ -20,5 +20,6 @@
 
     <string name="title_activity_map">Map</string>
     <string name="title_activity_loading">Loading</string>
+    <string name="score">100</string>
 
 </resources>

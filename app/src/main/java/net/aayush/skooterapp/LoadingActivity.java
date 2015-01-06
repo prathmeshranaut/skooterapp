@@ -27,13 +27,15 @@ public class LoadingActivity extends BaseActivity {
             LoginUser loginUser = new LoginUser("https://skooter.herokuapp.com/user", data);
             loginUser.execute();
         } else {
-            Intent i = new Intent(LoadingActivity.this, MainActivity.class);
-            startActivity(i);
-            finish();
+            getUserDetails();
         }
-
     }
 
+    public void getUserDetails()
+    {
+        UserDetails userDetails = new UserDetails("https://skooter.herokuapp.com/user/"+userId+".json", userId);
+        userDetails.execute();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,6 +80,27 @@ public class LoadingActivity extends BaseActivity {
                 SharedPreferences.Editor editor = mSettings.edit();
                 editor.putInt("userId", userId);
                 editor.commit();
+                getUserDetails();
+            }
+        }
+    }
+
+    public class UserDetails extends GetUserDetails {
+        public UserDetails(String mRawUrl, int mUserId) {
+            super(mRawUrl, mUserId);
+        }
+
+        public void execute()
+        {
+            super.execute();
+            ProcessData processData = new ProcessData();
+            processData.execute();
+        }
+
+        public class ProcessData extends GetUserDetails.DownloadJsonData {
+            protected void onPostExecute(String webData) {
+                super.onPostExecute(webData);
+                mUser = getUser();
                 Intent i = new Intent(LoadingActivity.this, MainActivity.class);
                 startActivity(i);
                 finish();

@@ -13,9 +13,14 @@
           android:orderInCategory="101"
           skooter:showAsAction="never"/>
 
+    <item android:id="@+id/score"
+          android:title="@string/score"
+          android:orderInCategory="1"
+          skooter:showAsAction="always" />
+
     <item android:id="@+id/action_compose"
           android:title="@string/compose"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         android:icon="@android:drawable/ic_menu_edit"
         skooter:showAsAction="always" />
 </menu>

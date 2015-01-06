@@ -4,12 +4,15 @@ import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
+import net.aayush.skooterapp.data.User;
+
 import java.util.Calendar;
 import java.util.Date;
 
 public class BaseActivity extends ActionBarActivity {
     private Toolbar mToolbar;
     public static int userId;
+    public static User mUser;
 
     public static final String SKOOTER_POST = "SKOOTER_POST";
     public static final String PREFS_NAME = "Skooter";

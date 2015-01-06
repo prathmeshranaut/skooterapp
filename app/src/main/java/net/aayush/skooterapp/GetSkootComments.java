@@ -15,6 +15,7 @@ public class GetSkootComments extends GetRawData {
 
     private String LOG_TAG = GetSkootComments.class.getSimpleName();
     private String mRawUrl;
+    protected int mPostId;
 
     protected List<Comment> mComments = new ArrayList<Comment>();
 
@@ -22,9 +23,10 @@ public class GetSkootComments extends GetRawData {
         return mComments;
     }
 
-    public GetSkootComments(String mRawUrl) {
+    public GetSkootComments(String mRawUrl, int postId) {
         super(mRawUrl);
         this.mRawUrl = mRawUrl;
+        this.mPostId = postId;
     }
 
     public void execute() {
@@ -68,7 +70,7 @@ public class GetSkootComments extends GetRawData {
                 boolean user_skoot = jsonComment.getBoolean(SKOOT_USER_COMMENT);
                 String timestamp = jsonComment.getString(SKOOT_CREATED_AT);
 
-                Comment commentObject = new Comment(id, comment, handle, upvotes, downvotes, if_user_voted, user_vote, user_skoot, timestamp);
+                Comment commentObject = new Comment(id, mPostId, comment, handle, upvotes, downvotes, if_user_voted, user_vote, user_skoot, timestamp);
                 this.mComments.add(commentObject);
             }
         } catch (JSONException e) {
