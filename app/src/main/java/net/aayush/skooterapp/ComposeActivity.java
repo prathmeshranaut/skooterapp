@@ -48,6 +48,7 @@ public class ComposeActivity extends BaseActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_send) {
             final TextView skootText = (TextView) findViewById(R.id.skootText);
+            final TextView skootHandle = (TextView) findViewById(R.id.skootHandle);
             if (skootText.getText().length() > 0) {
                 new Thread(new Runnable() {
                     @Override
@@ -59,7 +60,7 @@ public class ComposeActivity extends BaseActivity {
                             // Add your data
                             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
                             nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
-                            nameValuePairs.add(new BasicNameValuePair("handle", ""));
+                            nameValuePairs.add(new BasicNameValuePair("handle", skootHandle.getText().toString()));
                             nameValuePairs.add(new BasicNameValuePair("content", skootText.getText().toString()));
                             nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));
                             nameValuePairs.add(new BasicNameValuePair("location_id", "1"));

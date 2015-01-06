@@ -10,11 +10,20 @@
 
     <EditText
         android:layout_width="fill_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:inputType="textMultiLine"
         android:ems="1"
+        android:hint="@string/enter_a_skoot"
         android:id="@+id/skootText"
         android:layout_below="@+id/app_bar" />
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:hint="@string/handle"
+        android:ems="1"
+        android:id="@+id/skootHandle"
+        android:layout_below="@+id/skootText" />
 
 
 </RelativeLayout>

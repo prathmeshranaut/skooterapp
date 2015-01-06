@@ -22,5 +22,7 @@
     <string name="title_activity_loading">Loading</string>
     <string name="score">100</string>
     <string name="title_activity_me">Me</string>
+    <string name="handle">\@handle</string>
+    <string name="enter_a_skoot">Enter a skoot...</string>
 
 </resources>

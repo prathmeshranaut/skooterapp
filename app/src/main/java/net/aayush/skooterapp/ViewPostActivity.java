@@ -72,12 +72,12 @@ public class ViewPostActivity extends BaseActivity {
 
         Button commentBtn = (Button) findViewById(R.id.commentSkoot);
         final TextView commentText = (TextView) findViewById(R.id.commentText);
+        final TextView commentHandle = (TextView) findViewById(R.id.commentHandle);
         final int postId = post.getId();
 
         commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                commentText.getText();
                 if(commentText.getText().length() > 0)
                 {
                     new Thread(new Runnable() {
@@ -90,7 +90,7 @@ public class ViewPostActivity extends BaseActivity {
                                 // Add your data
                                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(6);
                                 nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
-                                nameValuePairs.add(new BasicNameValuePair("handle", ""));
+                                nameValuePairs.add(new BasicNameValuePair("handle", commentHandle.getText().toString()));
                                 nameValuePairs.add(new BasicNameValuePair("content", commentText.getText().toString()));
                                 nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
                                 nameValuePairs.add(new BasicNameValuePair("post_id", Integer.toString(postId)));
