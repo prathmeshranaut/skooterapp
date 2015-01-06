@@ -8,8 +8,8 @@ public class BaseActivity extends ActionBarActivity {
     private Toolbar mToolbar;
     public static int userId;
 
-    protected static final String SKOOTER_POST = "SKOOTER_POST";
-    protected static final String PREFS_NAME = "Skooter";
+    public static final String SKOOTER_POST = "SKOOTER_POST";
+    public static final String PREFS_NAME = "Skooter";
 
     protected Toolbar activateToolbar() {
         if (mToolbar == null) {

@@ -1,13 +1,11 @@
 package net.aayush.skooterapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -22,6 +20,7 @@ public class MainActivity extends BaseActivity {
     protected List<Post> mPostsList = new ArrayList<Post>();
     protected ArrayAdapter<Post> mPostsAdapter;
     protected ListView mListPosts;
+    protected PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,28 +29,11 @@ public class MainActivity extends BaseActivity {
 
         activateToolbar();
 
-        //Check if the user has registered
-        int userId = getUserId();
-        Log.v("Main Activity", "User ID: "+userId);
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
 
-        ProcessPosts processPosts = new ProcessPosts("https://skooter.herokuapp.com/latest/"+ userId +".json");
-        processPosts.execute();
-
-        mPostsAdapter = new PostAdapter(this, R.layout.list_view_post_row, mPostsList);
-        mListPosts = (ListView) findViewById(R.id.list_posts);
-        mListPosts.setAdapter(mPostsAdapter);
-
-        mListPosts.setOnItemClickListener(new ListView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Context context = view.getContext();
-
-                Intent intent = new Intent(MainActivity.this, ViewPostActivity.class);
-                intent.putExtra(SKOOTER_POST, mPostsList.get(position));
-                startActivity(intent);
-            }
-        });
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.setAdapter(mPagerAdapter);
+        viewPager.setBackgroundColor(getResources().getColor(R.color.skooterBackgroundColor));
     }
 
 
@@ -81,28 +63,5 @@ public class MainActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public class ProcessPosts extends GetSkootData {
-
-        public ProcessPosts(String mRawUrl) {
-            super(mRawUrl);
-        }
-
-        public void execute()
-        {
-            super.execute();
-            ProcessData processData = new ProcessData();
-            processData.execute();
-        }
-
-        public class ProcessData extends DownloadJsonData {
-            protected void onPostExecute(String webData) {
-                super.onPostExecute(webData);
-                mPostsList = getPosts();
-                mPostsAdapter.addAll(mPostsList);
-                mPostsAdapter.notifyDataSetChanged();
-            }
-        }
     }
 }

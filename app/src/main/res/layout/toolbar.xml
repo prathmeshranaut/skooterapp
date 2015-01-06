@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="?actionBarSize"
     skooter:theme="@style/ActionBarThemeOverlay"
+    android:background="?attr/colorPrimary"
     skooter:titleTextAppearance="@style/ActionBar.TitleText">
 
 </android.support.v7.widget.Toolbar>
