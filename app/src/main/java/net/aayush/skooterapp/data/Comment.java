@@ -159,4 +159,8 @@ public class Comment implements Serializable {
             }
         }).start();
     }
+
+    public int getVoteCount() {
+        return mUpvotes - mDownvotes;
+    }
 }

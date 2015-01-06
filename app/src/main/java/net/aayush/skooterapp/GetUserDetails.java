@@ -51,6 +51,7 @@ public class GetUserDetails extends GetRawData {
         final String SKOOT_UPVOTES = "upvotes";
         final String SKOOT_DOWNVOTES = "downvotes";
         final String SKOOT_CREATED_AT = "created_at";
+        final String SKOOT_COMMENTS_COUNT = "comments_count";
         final String SKOOT_POST_ID = "post_id";
 
         try {
@@ -67,9 +68,10 @@ public class GetUserDetails extends GetRawData {
                 String handle = jsonPost.getString(SKOOT_HANDLE);
                 int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
                 int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
+                int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);
                 String created_at = jsonPost.getString(SKOOT_CREATED_AT);
 
-                Post postObject = new Post(id, handle, post, upvotes, downvotes, false, false, true, created_at);
+                Post postObject = new Post(id, handle, post, commentsCount, upvotes, downvotes, false, false, true, created_at);
                 posts.add(postObject);
             }
 

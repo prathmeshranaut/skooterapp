@@ -43,6 +43,9 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         timestamp.setText(comment.getTimestamp());
 
+        TextView voteCount = (TextView) convertView.findViewById(R.id.voteCount);
+        voteCount.setText(Integer.toString(comment.getVoteCount()));
+
         Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
         Button downvoteBtn = (Button) convertView.findViewById(R.id.downvote);
 

@@ -49,6 +49,7 @@ public class GetSkootData extends GetRawData {
         final String SKOOT_USER_VOTE = "user_vote";
         final String SKOOT_USER_SCOOT = "user_skoot";
         final String SKOOT_CREATED_AT = "created_at";
+        final String SKOOT_COMMENTS_COUNT = "comments_count";
 
         try {
             JSONObject jsonObject = new JSONObject(getmData());
@@ -61,13 +62,14 @@ public class GetSkootData extends GetRawData {
                 String post = jsonPost.getString(SKOOT_POST);
                 String handle = jsonPost.getString(SKOOT_HANDLE);
                 int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
+                int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);
                 int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
                 boolean skoot_if_user_voted = jsonPost.getBoolean(SKOOT_IF_USER_VOTED);
                 boolean user_vote = jsonPost.getBoolean(SKOOT_USER_VOTE);
                 boolean user_skoot = jsonPost.getBoolean(SKOOT_USER_SCOOT);
                 String created_at = jsonPost.getString(SKOOT_CREATED_AT);
 
-                Post postObject = new Post(id, handle, post, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, created_at);
+                Post postObject = new Post(id, handle, post, commentsCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, created_at);
                 this.mPosts.add(postObject);
             }
         } catch (JSONException e) {

@@ -3,7 +3,6 @@ package net.aayush.skooterapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -30,8 +29,6 @@ public class MainActivity extends BaseActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem menuItem = menu.findItem(R.id.score);
-        Log.d("MainActivity", menuItem.toString());
-        Log.d("MainActivity", Integer.toString(mUser.getScore()));
         menuItem.setTitle(Integer.toString(mUser.getScore()));
         menuItem.setEnabled(false);
         return true;
@@ -52,6 +49,10 @@ public class MainActivity extends BaseActivity {
             return true;
         } else if(id == R.id.action_peek) {
             Intent intent = new Intent(MainActivity.this, PeekActivity.class);
+            startActivity(intent);
+        }
+        else if(id == R.id.action_me) {
+            Intent intent = new Intent(MainActivity.this, MeActivity.class);
             startActivity(intent);
         }
 

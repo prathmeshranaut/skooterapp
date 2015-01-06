@@ -28,6 +28,14 @@ public class Post implements Serializable {
     private int mId;
     private String mHandle;
 
+    private String mContent;
+    private int mUpvotes;
+    private int mDownvotes;
+    private int mCommentsCount;
+    private boolean mIfUserVoted;
+    private boolean mUserVote;
+    private boolean mUserSkoot;
+
     public int getId() {
         return mId;
     }
@@ -73,19 +81,13 @@ public class Post implements Serializable {
         return time;
     }
 
-    private String mContent;
-    private int mUpvotes;
-    private int mDownvotes;
-    private boolean mIfUserVoted;
-    private boolean mUserVote;
-    private boolean mUserSkoot;
-
     private String mTimestamp;
 
-    public Post(int id, String handle, String content, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, String timestamp) {
+    public Post(int id, String handle, String content, int commentsCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, String timestamp) {
         mId = id;
         mHandle = handle;
         mContent = content;
+        mCommentsCount = commentsCount;
         mUpvotes = upvotes;
         mDownvotes = downvotes;
         mIfUserVoted = ifUserVoted;
@@ -99,6 +101,10 @@ public class Post implements Serializable {
         return mContent + "\n" +
                 (mUpvotes - mDownvotes) + "\n" +
                 mTimestamp;
+    }
+
+    public int getVoteCount() {
+        return mUpvotes - mDownvotes;
     }
 
     public void upvotePost() {
@@ -159,5 +165,9 @@ public class Post implements Serializable {
                 mIfUserVoted = true;
             }
         }).start();
+    }
+
+    public int getCommentsCount() {
+        return mCommentsCount;
     }
 }
