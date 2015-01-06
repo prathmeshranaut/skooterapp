@@ -61,17 +61,16 @@ public class Post implements Serializable {
     }
 
     public String getTimestamp() {
-        SimpleDateFormat formatter, FORMATTER;
+        SimpleDateFormat formatter;
         formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        String oldDate = "2011-03-10T11:54:30.207Z";
-        Date date = null;
+        String time = null;
         try {
-            date = formatter.parse(mTimestamp.substring(0, 24));
+            Date date = formatter.parse(mTimestamp.substring(0, 24));
+            time = BaseActivity.getTimeAgo(date.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        FORMATTER = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
-        return FORMATTER.format(date);
+        return time;
     }
 
     private String mContent;

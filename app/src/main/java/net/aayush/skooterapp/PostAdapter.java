@@ -42,7 +42,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         postContent.setText(post.getContent());
 
         TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
-        timestamp.setText(post.getTimestamp() + " days ago");
+        timestamp.setText(post.getTimestamp());
 
         Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
         Button downvoteBtn = (Button) convertView.findViewById(R.id.downvote);

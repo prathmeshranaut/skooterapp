@@ -40,7 +40,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
         CharSequence mTitle = null;
         switch (position) {
             case 0:
-                return "Home";
+                return "Latest";
             case 1:
                 return "Trending";
             case 2:
