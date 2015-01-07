@@ -107,7 +107,7 @@ public class GetRawData {
             mData = webData;
             Log.v(LOG_TAG, "Data returned was: "+ mData);
 
-            if(mData == null)
+            if(mData == null || mData.length() == 0)
             {
                 if(mRawUrl == null) {
                     mDownloadStatus = DownloadStatus.NOT_INITIALISED;

@@ -3,20 +3,27 @@ package net.aayush.skooterapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class LoadingActivity extends BaseActivity {
 
+    public static final int MAX_COOLING_PERIOD = 300000;
     protected SharedPreferences mSettings;
+    protected TextView mLoadingTextView;
+    protected boolean mStatus = false;
+    protected int mCollingPeriod = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
+        mLoadingTextView = (TextView) findViewById(R.id.loadingText);
         mSettings = getSharedPreferences(PREFS_NAME, 0);
         userId = mSettings.getInt("userId", 0);
 
@@ -33,8 +40,19 @@ public class LoadingActivity extends BaseActivity {
 
     public void getUserDetails()
     {
-        UserDetails userDetails = new UserDetails("https://skooter.herokuapp.com/user/"+userId+".json", userId);
-        userDetails.execute();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                UserDetails userDetails = new UserDetails("https://skooter.herokuapp.com/user/" + userId + ".json", userId);
+                userDetails.execute();
+            }
+        }, mCollingPeriod);
+        mCollingPeriod += 3000;
+        if(mCollingPeriod > MAX_COOLING_PERIOD)
+        {
+            mCollingPeriod = MAX_COOLING_PERIOD;
+        }
     }
 
     @Override
@@ -76,7 +94,6 @@ public class LoadingActivity extends BaseActivity {
             protected void onPostExecute(String webData) {
                 super.onPostExecute(webData);
                 userId = getUserId();
-
                 SharedPreferences.Editor editor = mSettings.edit();
                 editor.putInt("userId", userId);
                 editor.commit();
@@ -97,13 +114,22 @@ public class LoadingActivity extends BaseActivity {
             processData.execute();
         }
 
-        public class ProcessData extends GetUserDetails.DownloadJsonData {
+        public class ProcessData extends DownloadJsonData {
             protected void onPostExecute(String webData) {
                 super.onPostExecute(webData);
-                mUser = getUser();
-                Intent i = new Intent(LoadingActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
+                if (getmDownloadStatus() != DownloadStatus.OK)
+                {
+                    if(getmDownloadStatus() == DownloadStatus.FAILED_OR_EMPTY)
+                    {
+                        mLoadingTextView.setText("Darn! Looks like we couldn't log you in. Hold on we'll keep trying!");
+                    }
+                    getUserDetails();
+                } else {
+                    mUser = getUser();
+                    Intent i = new Intent(LoadingActivity.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                }
             }
         }
     }

@@ -36,7 +36,7 @@ public class PostRawData {
         this.mRawUrl = mRawUrl;
     }
 
-    public DownloadStatus getmDownlaodStatus() {
+    public DownloadStatus getmDownloadStatus() {
         return mDownloadStatus;
     }
 

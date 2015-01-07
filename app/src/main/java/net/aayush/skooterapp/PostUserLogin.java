@@ -51,7 +51,7 @@ public class PostUserLogin extends PostRawData {
     }
 
     public void processResult() {
-        if(getmDownlaodStatus() != DownloadStatus.OK) {
+        if(getmDownloadStatus() != DownloadStatus.OK) {
             Log.e(LOG_TAG, "Error posting raw data");
             return;
         }
