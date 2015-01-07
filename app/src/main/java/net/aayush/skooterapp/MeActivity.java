@@ -1,17 +1,27 @@
 package net.aayush.skooterapp;
 
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 
-public class MeActivity extends BaseActivity {
-    private GoogleMap googleMap;
+public class MeActivity extends BaseActivity implements LocationSource, LocationListener {
 
+    GoogleMap map;
+
+    LocationManager myLocationManager = null;
+    OnLocationChangedListener myLocationListener = null;
+    Criteria myCriteria;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,35 +29,12 @@ public class MeActivity extends BaseActivity {
 
         activateToolbarWithHomeEnabled();
 
-        try {
-            // Loading map
-            initilizeMap();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setZoomGesturesEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(false);
     }
-
-    private void initilizeMap() {
-        if (googleMap == null) {
-            googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-
-            // check if map is created successfully or not
-            if (googleMap == null) {
-                Toast.makeText(getApplicationContext(),
-                        "Sorry! unable to create maps", Toast.LENGTH_SHORT)
-                        .show();
-            }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initilizeMap();
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,5 +56,43 @@ public class MeActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (myLocationListener != null) {
+            myLocationListener.onLocationChanged(location);
+
+            double lat = location.getLatitude();
+            double lon = location.getLongitude();
+
+            LatLng latlng= new LatLng(location.getLatitude(), location.getLongitude());
+            map.animateCamera(CameraUpdateFactory.newLatLng(latlng));
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void activate(OnLocationChangedListener onLocationChangedListener) {
+
+    }
+
+    @Override
+    public void deactivate() {
+
     }
 }

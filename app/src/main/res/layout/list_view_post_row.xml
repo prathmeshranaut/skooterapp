@@ -44,9 +44,9 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Upvote"
         android:id="@+id/upvote"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:background="@drawable/ic_action_collapse"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -62,11 +62,11 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Down"
         android:id="@+id/downvote"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/voteCount"
         android:layout_alignLeft="@+id/upvote"
+        android:background="@drawable/ic_action_expand"
         />
 
     <TextView
@@ -80,5 +80,5 @@
         android:layout_toEndOf="@+id/timestamp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="15dp" />
+        android:layout_marginLeft="15dp"/>
 </RelativeLayout>
