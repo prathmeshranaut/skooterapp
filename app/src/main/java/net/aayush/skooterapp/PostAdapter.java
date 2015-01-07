@@ -47,7 +47,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         timestamp.setText(post.getTimestamp());
 
-        TextView voteCount = (TextView) convertView.findViewById(R.id.voteCount);
+        final TextView voteCount = (TextView) convertView.findViewById(R.id.voteCount);
         voteCount.setText(Integer.toString(post.getVoteCount()));
 
         TextView commentsCount = (TextView) convertView.findViewById(R.id.commentsCount);
@@ -86,7 +86,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
                     //Call the upvote method
                     post.upvotePost();
-                    notifyDataSetChanged();
+                    voteCount.setText(Integer.toString(post.getVoteCount() + 1));
+                    upvoteBtn.setEnabled(false);
+                    downvoteBtn.setEnabled(false);
+                    upvoteBtn.setAlpha(0.8f);
+                    downvoteBtn.setAlpha(0.3f);
                 }
             });
 
@@ -101,7 +105,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
                     //Call the upvote method
                     post.downvotePost();
-                    notifyDataSetChanged();
+                    voteCount.setText(Integer.toString(post.getVoteCount() - 1));
+                    upvoteBtn.setEnabled(false);
+                    downvoteBtn.setEnabled(false);
+                    upvoteBtn.setAlpha(0.3f);
+                    downvoteBtn.setAlpha(0.8f);
                 }
             });
         }
