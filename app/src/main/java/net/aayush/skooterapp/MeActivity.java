@@ -1,5 +1,7 @@
 package net.aayush.skooterapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -7,17 +9,25 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 
 
 public class MeActivity extends BaseActivity implements LocationSource, LocationListener {
 
-    GoogleMap map;
+    private GoogleMap mMap;
 
     LocationManager myLocationManager = null;
     OnLocationChangedListener myLocationListener = null;
@@ -29,11 +39,74 @@ public class MeActivity extends BaseActivity implements LocationSource, Location
 
         activateToolbarWithHomeEnabled();
 
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.setMyLocationEnabled(true);
-        map.getUiSettings().setZoomGesturesEnabled(false);
-        map.getUiSettings().setZoomControlsEnabled(false);
+        ListView myList = (ListView) findViewById(R.id.myList);
+
+        ArrayList<String> testData = new ArrayList<String>(3);
+        testData.add("My Skoots");
+        testData.add("My Replies");
+        testData.add("Settings");
+
+        myList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, testData));
+
+        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = null;
+                switch(position) {
+                    case 0:
+                        intent = new Intent(MeActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        intent = new Intent(MeActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        break;
+                }
+            }
+        });
+
+        setUpMapIfNeeded();
+    }
+
+    private void setUpMapIfNeeded() {
+        // Do a null check to confirm that we have not already instantiated the map.
+        if (mMap == null) {
+            mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+            // Check if we were successful in obtaining the map.
+            if (mMap != null) {
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setCompassEnabled(false);
+                mMap.getUiSettings().setZoomControlsEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                CameraUpdate update = getLastKnownLocation();
+                if (update != null) {
+                    mMap.moveCamera(update);
+                }
+            }
+        }
+    }
+
+    private CameraUpdate getLastKnownLocation() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_LOW);
+        String provider = lm.getBestProvider(criteria, true);
+        if (provider == null) {
+            return null;
+        }
+        Location loc = lm.getLastKnownLocation(provider);
+        if (loc != null) {
+            return CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 14.0f));
+        }
+        return null;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUpMapIfNeeded();
     }
 
     @Override
@@ -67,7 +140,7 @@ public class MeActivity extends BaseActivity implements LocationSource, Location
             double lon = location.getLongitude();
 
             LatLng latlng= new LatLng(location.getLatitude(), location.getLongitude());
-            map.animateCamera(CameraUpdateFactory.newLatLng(latlng));
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(latlng));
         }
     }
 

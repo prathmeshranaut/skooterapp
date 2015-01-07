@@ -1,18 +1,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="net.aayush.skooterapp.MeActivity">
+                xmlns:skooter="http://schemas.android.com/tools"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                skooter:context="net.aayush.skooterapp.MeActivity">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/toolbar"/>
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.MapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_below="@id/app_bar"/>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_bar">
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/myListLayout">
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"/>
+
+            <ListView
+                android:id="@+id/myList"
+                android:layout_width="fill_parent"
+                android:layout_height="400dp">
+            </ListView>
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

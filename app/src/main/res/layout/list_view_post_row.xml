@@ -54,6 +54,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="0"
         android:id="@+id/voteCount"
+        android:layout_marginRight="15dp"
         android:layout_below="@+id/upvote"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
