@@ -1,9 +1,13 @@
 package net.aayush.skooterapp;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +20,7 @@ public class LoadingActivity extends BaseActivity {
     protected SharedPreferences mSettings;
     protected TextView mLoadingTextView;
     protected boolean mStatus = false;
-    protected int mCollingPeriod = 0;
+    protected static int mCollingPeriod = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,32 +31,41 @@ public class LoadingActivity extends BaseActivity {
         mSettings = getSharedPreferences(PREFS_NAME, 0);
         userId = mSettings.getInt("userId", 0);
 
-        if (userId == 0) {
-            String androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-            String[] data = {"phone", androidId};
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo == null && !networkInfo.isConnected()) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoadingActivity.this);
+            alertDialogBuilder.setMessage("Looks like you aren't connected to the internet! Would you please mind doing so?");
+            alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
 
-            LoginUser loginUser = new LoginUser("https://skooter.herokuapp.com/user", data);
-            loginUser.execute();
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
+
+        if (userId == 0) {
+            loginUser();
         } else {
             getUserDetails();
         }
     }
 
-    public void getUserDetails()
+    public void getUserDetails() {
+        UserDetails userDetails = new UserDetails("https://skooter.herokuapp.com/user/" + userId + ".json", userId);
+        userDetails.execute();
+    }
+
+    public void loginUser()
     {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                UserDetails userDetails = new UserDetails("https://skooter.herokuapp.com/user/" + userId + ".json", userId);
-                userDetails.execute();
-            }
-        }, mCollingPeriod);
-        mCollingPeriod += 3000;
-        if(mCollingPeriod > MAX_COOLING_PERIOD)
-        {
-            mCollingPeriod = MAX_COOLING_PERIOD;
-        }
+        String androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        String[] data = {"phone", androidId};
+
+        LoginUser loginUser = new LoginUser("https://skooter.herokuapp.com/user", data);
+        loginUser.execute();
     }
 
     @Override
@@ -93,11 +106,17 @@ public class LoadingActivity extends BaseActivity {
 
             protected void onPostExecute(String webData) {
                 super.onPostExecute(webData);
-                userId = getUserId();
-                SharedPreferences.Editor editor = mSettings.edit();
-                editor.putInt("userId", userId);
-                editor.commit();
-                getUserDetails();
+                BaseActivity.userId = getUserId();
+                if (BaseActivity.userId == 0) {
+                    if (getmDownloadStatus() == DownloadStatus.FAILED_OR_EMPTY) {
+                        mLoadingTextView.setText("Darn! Looks like we couldn't log you in. Hold on we'll keep trying!");
+                    }
+                } else {
+                    SharedPreferences.Editor editor = mSettings.edit();
+                    editor.putInt("userId", userId);
+                    editor.commit();
+                    getUserDetails();
+                }
             }
         }
     }
@@ -107,8 +126,7 @@ public class LoadingActivity extends BaseActivity {
             super(mRawUrl, mUserId);
         }
 
-        public void execute()
-        {
+        public void execute() {
             super.execute();
             ProcessData processData = new ProcessData();
             processData.execute();
@@ -117,15 +135,13 @@ public class LoadingActivity extends BaseActivity {
         public class ProcessData extends DownloadJsonData {
             protected void onPostExecute(String webData) {
                 super.onPostExecute(webData);
-                if (getmDownloadStatus() != DownloadStatus.OK)
-                {
-                    if(getmDownloadStatus() == DownloadStatus.FAILED_OR_EMPTY)
-                    {
+                if (getmDownloadStatus() != DownloadStatus.OK) {
+                    if (getmDownloadStatus() == DownloadStatus.FAILED_OR_EMPTY) {
                         mLoadingTextView.setText("Darn! Looks like we couldn't log you in. Hold on we'll keep trying!");
                     }
-                    getUserDetails();
                 } else {
                     mUser = getUser();
+                    mStatus = true;
                     Intent i = new Intent(LoadingActivity.this, MainActivity.class);
                     startActivity(i);
                     finish();
