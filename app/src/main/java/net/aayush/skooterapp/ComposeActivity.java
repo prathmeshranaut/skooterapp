@@ -1,5 +1,7 @@
 package net.aayush.skooterapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -49,7 +51,7 @@ public class ComposeActivity extends BaseActivity {
         if (id == R.id.action_send) {
             final TextView skootText = (TextView) findViewById(R.id.skootText);
             final TextView skootHandle = (TextView) findViewById(R.id.skootHandle);
-            if (skootText.getText().length() > 0) {
+            if (skootText.getText().length() > 0 && skootText.getText().length() <= 250) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -76,8 +78,31 @@ public class ComposeActivity extends BaseActivity {
                         }
                     }
                 }).start();
+                finish();
+            } else if (skootText.getText().length() > 250) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage("You cannot simply skoot with more than 250! For that you would have login through Facebook.");
+                alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                    }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            } else {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage("You cannot simply skoot with no content!");
+                alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                    }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
-            finish();
+
             return true;
         }
 

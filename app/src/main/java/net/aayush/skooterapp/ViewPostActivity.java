@@ -1,5 +1,7 @@
 package net.aayush.skooterapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -53,7 +55,7 @@ public class ViewPostActivity extends BaseActivity {
         listPosts.setAdapter(postAdapter);
 
         //Get the comments via JSON API
-        ProcessComments processComments = new ProcessComments("https://skooter.herokuapp.com/skoot/"+ getUserId() +"/" + post.getId() + ".json", post.getId());
+        ProcessComments processComments = new ProcessComments("https://skooter.herokuapp.com/skoot/" + getUserId() + "/" + post.getId() + ".json", post.getId());
         processComments.execute();
 
         List<Comment> comments = new CommentData().getComments();
@@ -78,8 +80,7 @@ public class ViewPostActivity extends BaseActivity {
         commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(commentText.getText().length() > 0)
-                {
+                if (commentText.getText().length() > 0 && commentText.getText().length() < 250) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -106,6 +107,28 @@ public class ViewPostActivity extends BaseActivity {
                             }
                         }
                     }).start();
+                } else if (commentText.getText().length() > 250) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
+                    alertDialogBuilder.setMessage("You cannot simply skoot with more than 250! For that you would have login through Facebook.");
+                    alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
+                    alertDialogBuilder.setMessage("You cannot simply skoot with no content!");
+                    alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
                 }
             }
         });
