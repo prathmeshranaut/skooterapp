@@ -30,4 +30,14 @@ public class User {
     public List<Comment> getComments() {
         return mComments;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "mUserId=" + mUserId +
+                ", mScore=" + mScore +
+                ", mSkoots=" + mSkoots +
+                ", mComments=" + mComments +
+                '}';
+    }
 }

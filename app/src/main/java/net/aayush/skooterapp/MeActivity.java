@@ -54,11 +54,11 @@ public class MeActivity extends BaseActivity implements LocationSource, Location
                 Intent intent = null;
                 switch(position) {
                     case 0:
-                        intent = new Intent(MeActivity.this, MainActivity.class);
+                        intent = new Intent(MeActivity.this, MePostsActivity.class);
                         startActivity(intent);
                         break;
                     case 1:
-                        intent = new Intent(MeActivity.this, MainActivity.class);
+                        intent = new Intent(MeActivity.this, MeCommentsActivity.class);
                         startActivity(intent);
                         break;
                     case 2:

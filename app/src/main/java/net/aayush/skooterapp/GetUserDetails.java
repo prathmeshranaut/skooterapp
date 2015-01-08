@@ -86,7 +86,7 @@ public class GetUserDetails extends GetRawData {
                 int postId = jsonComment.getInt(SKOOT_POST_ID);
                 String created_at = jsonComment.getString(SKOOT_CREATED_AT);
 
-                Comment commentObject = new Comment(id, postId, handle, post, upvotes, downvotes, false, false, true, created_at);
+                Comment commentObject = new Comment(id, postId, post ,handle, upvotes, downvotes, false, false, true, created_at);
                 comments.add(commentObject);
             }
 

@@ -31,8 +31,7 @@ public class LoadingActivity extends BaseActivity {
         mSettings = getSharedPreferences(PREFS_NAME, 0);
         userId = mSettings.getInt("userId", 0);
 
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo == null && !networkInfo.isConnected()) {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoadingActivity.this);
