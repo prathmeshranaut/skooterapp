@@ -91,7 +91,7 @@ public class MeActivity extends BaseActivity implements LocationSource, Location
     private CameraUpdate getLastKnownLocation() {
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_LOW);
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
         String provider = lm.getBestProvider(criteria, true);
         if (provider == null) {
             return null;
@@ -131,16 +131,16 @@ public class MeActivity extends BaseActivity implements LocationSource, Location
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onLocationChanged(Location location) {
         if (myLocationListener != null) {
             myLocationListener.onLocationChanged(location);
 
-            double lat = location.getLatitude();
-            double lon = location.getLongitude();
-
-            LatLng latlng= new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latlng));
+            CameraUpdate update = CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 11.0f));
+            if (update != null) {
+                mMap.moveCamera(update);
+            }
         }
     }
 
@@ -160,12 +160,12 @@ public class MeActivity extends BaseActivity implements LocationSource, Location
     }
 
     @Override
-    public void activate(OnLocationChangedListener onLocationChangedListener) {
-
+    public void activate(OnLocationChangedListener listener) {
+        myLocationListener = listener;
     }
 
     @Override
     public void deactivate() {
-
+        myLocationListener = null;
     }
 }

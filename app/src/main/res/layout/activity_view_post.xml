@@ -1,16 +1,17 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.aayush.skooterapp.ViewPostActivity">
+    tools:context="net.aayush.skooterapp.ViewPostActivity"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/toolbar"/>
 
     <ListView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/list_posts"
         android:layout_below="@+id/app_bar"
@@ -19,46 +20,42 @@
         android:layout_alignParentStart="true"/>
 
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="360dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:id="@+id/list_comments"
         android:layout_below="@+id/list_posts"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_weight="1"/>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/list_comments">
+        android:inputType="text"
+        android:hint="@string/handle"
+        android:id="@+id/commentHandle"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Skoot!"
+            android:id="@+id/commentSkoot"
+            android:layout_alignParentRight="true"
+            />
 
         <EditText
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:inputType="text"
-            android:hint="@string/handle"
-            android:id="@+id/commentHandle"/>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/list_comments">
+            android:inputType="text"
+            android:hint="@string/enter_a_skoot"
+            android:id="@+id/commentText"
+            android:layout_toLeftOf="@id/commentSkoot"
+            />
 
-            <EditText
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="@string/enter_a_skoot"
-                android:id="@+id/commentText"/>
+    </RelativeLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Skoot!"
-                android:id="@+id/commentSkoot"
-                />
-        </LinearLayout>
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>
