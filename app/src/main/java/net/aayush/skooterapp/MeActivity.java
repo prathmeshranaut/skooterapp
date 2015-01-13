@@ -76,6 +76,7 @@ public class MeActivity extends BaseActivity implements LocationSource, Location
             mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
+                mMap.getUiSettings().setAllGesturesEnabled(false);
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setCompassEnabled(false);
                 mMap.getUiSettings().setZoomControlsEnabled(false);

@@ -3,7 +3,10 @@ package net.aayush.skooterapp.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +24,27 @@ import net.aayush.skooterapp.data.Post;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Home extends Fragment {
+public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     protected List<Post> mPostsList = new ArrayList<Post>();
     protected ArrayAdapter<Post> mPostsAdapter;
     protected ListView mListPosts;
     protected Context mContext;
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                Log.v("Main Activity", "Refreshed");
+            }
+        }, 5000);
     }
 
     @Override
@@ -39,6 +54,13 @@ public class Home extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         int userId = BaseActivity.userId;
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         ProcessPosts processPosts = new ProcessPosts("https://skooter.herokuapp.com/latest/" + userId + ".json");
         processPosts.execute();

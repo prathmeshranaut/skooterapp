@@ -27,12 +27,4 @@
             />
     </android.support.v4.view.ViewPager>
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/list_posts"
-        android:layout_below="@+id/viewPager"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-
 </RelativeLayout>

@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 public class MainActivity extends BaseActivity {
     protected PagerAdapter mPagerAdapter;
 
