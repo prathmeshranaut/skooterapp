@@ -8,23 +8,11 @@
         android:id="@+id/app_bar"
         layout="@layout/toolbar" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
+    <FrameLayout
+        android:id="@+id/sample_content_fragment"
+        android:layout_weight="2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/app_bar"
-        android:background="@color/skooterPrimaryTextColor">
-
-        <android.support.v4.view.PagerTabStrip
-            android:id="@+id/pager_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:background="@color/skooterPrimaryTextColor"
-            android:textColor="@color/skooterPrimaryBackgroundColor"
-            />
-    </android.support.v4.view.ViewPager>
+        android:layout_below="@id/app_bar"/>
 
 </RelativeLayout>

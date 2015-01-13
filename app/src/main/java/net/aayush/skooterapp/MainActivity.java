@@ -2,12 +2,16 @@ package net.aayush.skooterapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import net.aayush.skooterapp.common.view.SlidingTabLayout;
+
 public class MainActivity extends BaseActivity {
-    protected PagerAdapter mPagerAdapter;
+    private SlidingTabLayout mSlidingTabLayout;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,11 +20,23 @@ public class MainActivity extends BaseActivity {
 
         activateToolbar();
 
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+//        mCustomPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
+//
+//        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+//        viewPager.setAdapter(mCustomPagerAdapter);
+//        viewPager.setBackgroundColor(getResources().getColor(R.color.skooterBackgroundColor));
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        viewPager.setAdapter(mPagerAdapter);
-        viewPager.setBackgroundColor(getResources().getColor(R.color.skooterBackgroundColor));
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            SlidingFragment fragment = new SlidingFragment();
+            transaction.replace(R.id.sample_content_fragment, fragment);
+            transaction.commit();
+        }
+
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        SlidingFragment fragment = new SlidingFragment();
+//        transaction.replace(R.id.sample_content_fragment, fragment);
+//        transaction.commit();
     }
 
     @Override
