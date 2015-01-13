@@ -33,16 +33,12 @@ public class SlidingFragment extends Fragment {
         mViewPager.setAdapter(new TabsPagerAdapter(getFragmentManager()));
         mViewPager.setBackgroundColor(getResources().getColor(R.color.skooterBackgroundColor));
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+        mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setViewPager(mViewPager);
         mSlidingTabLayout.setCustomTabColorizer(new TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
                 return SlidingFragment.this.getResources().getColor(R.color.md_light_blue_300);
-            }
-
-            @Override
-            public int getDividerColor(int position) {
-                return 0;
             }
         });
     }

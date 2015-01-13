@@ -1,23 +1,37 @@
 package net.aayush.skooterapp.common.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import net.aayush.skooterapp.R;
-
+/**
+ * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
+ * the user's scroll progress.
+ * <p>
+ * To use the component, simply add it to your view hierarchy. Then in your
+ * {@link android.app.Activity} or {@link android.support.v4.app.Fragment} call
+ * {@link #setViewPager(ViewPager)} providing it the ViewPager this layout is being used for.
+ * <p>
+ * The colors can be customized in two ways. The first and simplest is to provide an array of colors
+ * via {@link #setSelectedIndicatorColors(int...)}. The
+ * alternative is via the {@link TabColorizer} interface which provides you complete control over
+ * which color is used for any individual position.
+ * <p>
+ * The views used as tabs can be customized by calling {@link #setCustomTabView(int, int)},
+ * providing the layout ID of your custom layout.
+ */
 public class SlidingTabLayout extends HorizontalScrollView {
-
     /**
      * Allows complete control over the colors drawn in the tab layout. Set with
      * {@link #setCustomTabColorizer(TabColorizer)}.
@@ -29,11 +43,6 @@ public class SlidingTabLayout extends HorizontalScrollView {
          */
         int getIndicatorColor(int position);
 
-        /**
-         * @return return the color of the divider drawn to the right of {@code position}.
-         */
-        int getDividerColor(int position);
-
     }
 
     private static final int TITLE_OFFSET_DIPS = 24;
@@ -44,8 +53,10 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     private int mTabViewLayoutId;
     private int mTabViewTextViewId;
+    private boolean mDistributeEvenly;
 
     private ViewPager mViewPager;
+    private SparseArray<String> mContentDescriptions = new SparseArray<String>();
     private ViewPager.OnPageChangeListener mViewPagerPageChangeListener;
 
     private final SlidingTabStrip mTabStrip;
@@ -76,11 +87,15 @@ public class SlidingTabLayout extends HorizontalScrollView {
      * Set the custom {@link TabColorizer} to be used.
      *
      * If you only require simple custmisation then you can use
-     * {@link #setSelectedIndicatorColors(int...)} and {@link #setDividerColors(int...)} to achieve
+     * {@link #setSelectedIndicatorColors(int...)} to achieve
      * similar effects.
      */
     public void setCustomTabColorizer(TabColorizer tabColorizer) {
         mTabStrip.setCustomTabColorizer(tabColorizer);
+    }
+
+    public void setDistributeEvenly(boolean distributeEvenly) {
+        mDistributeEvenly = distributeEvenly;
     }
 
     /**
@@ -89,14 +104,6 @@ public class SlidingTabLayout extends HorizontalScrollView {
      */
     public void setSelectedIndicatorColors(int... colors) {
         mTabStrip.setSelectedIndicatorColors(colors);
-    }
-
-    /**
-     * Sets the colors to be used for tab dividers. These colors are treated as a circular array.
-     * Providing one color will mean that all tabs are indicated with the same color.
-     */
-    public void setDividerColors(int... colors) {
-        mTabStrip.setDividerColors(colors);
     }
 
     /**
@@ -139,27 +146,19 @@ public class SlidingTabLayout extends HorizontalScrollView {
      * Create a default view to be used for tabs. This is called if a custom tab view is not set via
      * {@link #setCustomTabView(int, int)}.
      */
-    @SuppressLint("NewApi")
     protected TextView createDefaultTabView(Context context) {
         TextView textView = new TextView(context);
         textView.setGravity(Gravity.CENTER);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, TAB_VIEW_TEXT_SIZE_SP);
         textView.setTypeface(Typeface.DEFAULT_BOLD);
-        textView.setTextColor(context.getResources().getColor(R.color.md_amber_500));
+        textView.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // If we're running on Honeycomb or newer, then we can use the Theme's
-            // selectableItemBackground to ensure that the View has a pressed state
-            TypedValue outValue = new TypedValue();
-            getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
-                    outValue, true);
-            textView.setBackgroundResource(outValue.resourceId);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            // If we're running on ICS or newer, enable all-caps to match the Action Bar tab style
-            textView.setAllCaps(true);
-        }
+        TypedValue outValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
+                outValue, true);
+        textView.setBackgroundResource(outValue.resourceId);
+        textView.setAllCaps(true);
 
         int padding = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
         textView.setPadding(padding, padding, padding, padding);
@@ -190,11 +189,28 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 tabTitleView = (TextView) tabView;
             }
 
+            if (mDistributeEvenly) {
+                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) tabView.getLayoutParams();
+                lp.width = 0;
+                lp.weight = 1;
+            }
+
             tabTitleView.setText(adapter.getPageTitle(i));
             tabView.setOnClickListener(tabClickListener);
+            String desc = mContentDescriptions.get(i, null);
+            if (desc != null) {
+                tabView.setContentDescription(desc);
+            }
 
             mTabStrip.addView(tabView);
+            if (i == mViewPager.getCurrentItem()) {
+                tabView.setSelected(true);
+            }
         }
+    }
+
+    public void setContentDescription(int i, String desc) {
+        mContentDescriptions.put(i, desc);
     }
 
     @Override
@@ -264,7 +280,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 mTabStrip.onViewPagerPageChanged(position, 0f);
                 scrollToTab(position, 0);
             }
-
+            for (int i = 0; i < mTabStrip.getChildCount(); i++) {
+                mTabStrip.getChildAt(i).setSelected(position == i);
+            }
             if (mViewPagerPageChangeListener != null) {
                 mViewPagerPageChangeListener.onPageSelected(position);
             }
@@ -283,5 +301,4 @@ public class SlidingTabLayout extends HorizontalScrollView {
             }
         }
     }
-
 }

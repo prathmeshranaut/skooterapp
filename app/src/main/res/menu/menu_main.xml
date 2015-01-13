@@ -4,18 +4,6 @@
       tools:context=".MainActivity">
 
     <item
-        android:id="@+id/action_peek"
-        android:title="@string/action_peek"
-        android:orderInCategory="100"
-        skooter:showAsAction="never"/>
-
-    <item
-        android:id="@+id/action_me"
-        android:title="@string/action_me"
-        android:orderInCategory="101"
-        skooter:showAsAction="never"/>
-
-    <item
         android:id="@+id/score"
         android:title="@string/score"
         android:orderInCategory="1"

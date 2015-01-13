@@ -19,24 +19,13 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         activateToolbar();
-
-//        mCustomPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
-//
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-//        viewPager.setAdapter(mCustomPagerAdapter);
-//        viewPager.setBackgroundColor(getResources().getColor(R.color.skooterBackgroundColor));
-
         if (savedInstanceState == null) {
+
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             SlidingFragment fragment = new SlidingFragment();
             transaction.replace(R.id.sample_content_fragment, fragment);
             transaction.commit();
         }
-
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        SlidingFragment fragment = new SlidingFragment();
-//        transaction.replace(R.id.sample_content_fragment, fragment);
-//        transaction.commit();
     }
 
     @Override
@@ -62,13 +51,6 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
 
             return true;
-        } else if(id == R.id.action_peek) {
-            Intent intent = new Intent(MainActivity.this, PeekActivity.class);
-            startActivity(intent);
-        }
-        else if(id == R.id.action_me) {
-            Intent intent = new Intent(MainActivity.this, MeActivity.class);
-            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

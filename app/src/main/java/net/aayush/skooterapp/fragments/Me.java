@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
 import net.aayush.skooterapp.BaseActivity;
+import net.aayush.skooterapp.MeCommentsActivity;
+import net.aayush.skooterapp.MePostsActivity;
 import net.aayush.skooterapp.R;
 import net.aayush.skooterapp.data.Post;
 
@@ -67,18 +70,18 @@ public class Me extends Fragment implements LocationSource, LocationListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = null;
-//                switch (position) {
-//                    case 0:
-//                        intent = new Intent(MeActivity.this, MePostsActivity.class);
-//                        startActivity(intent);
-//                        break;
-//                    case 1:
-//                        intent = new Intent(MeActivity.this, MeCommentsActivity.class);
-//                        startActivity(intent);
-//                        break;
-//                    case 2:
-//                        break;
-//                }
+                switch (position) {
+                    case 0:
+                        intent = new Intent(getActivity(), MePostsActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        intent = new Intent(getActivity(), MeCommentsActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        break;
+                }
             }
         });
 
@@ -87,24 +90,28 @@ public class Me extends Fragment implements LocationSource, LocationListener {
         return rootView;
     }
 
-    private void setUpMapIfNeeded() {
-        // Do a null check to confirm that we have not already instantiated the map.
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        FragmentManager fm = getChildFragmentManager();
+        mSupportMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
         if (mSupportMapFragment == null) {
-            mSupportMapFragment = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map));
-            if (mSupportMapFragment != null) {
-                mMap = mSupportMapFragment.getMap();
-                // Check if we were successful in obtaining the map.
-                if (mMap != null) {
-                    mMap.getUiSettings().setAllGesturesEnabled(false);
-                    mMap.setMyLocationEnabled(true);
-                    mMap.getUiSettings().setCompassEnabled(false);
-                    mMap.getUiSettings().setZoomControlsEnabled(false);
-                    mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                    CameraUpdate update = getLastKnownLocation();
-                    if (update != null) {
-                        mMap.moveCamera(update);
-                    }
-                }
+            mSupportMapFragment = SupportMapFragment.newInstance();
+            fm.beginTransaction().replace(R.id.map, mSupportMapFragment).commit();
+        }
+    }
+
+    private void setUpMapIfNeeded() {
+        // Check if we were successful in obtaining the map.
+        if (mMap != null) {
+            mMap.getUiSettings().setAllGesturesEnabled(false);
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setCompassEnabled(false);
+            mMap.getUiSettings().setZoomControlsEnabled(false);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            CameraUpdate update = getLastKnownLocation();
+            if (update != null) {
+                mMap.moveCamera(update);
             }
         }
     }
@@ -127,7 +134,10 @@ public class Me extends Fragment implements LocationSource, LocationListener {
     @Override
     public void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
+        if (mMap == null) {
+            mMap = mSupportMapFragment.getMap();
+            setUpMapIfNeeded();
+        }
     }
 
     @Override
