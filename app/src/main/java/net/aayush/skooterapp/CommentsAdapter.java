@@ -43,7 +43,7 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         timestamp.setText(comment.getTimestamp());
 
-        TextView voteCount = (TextView) convertView.findViewById(R.id.voteCount);
+        final TextView voteCount = (TextView) convertView.findViewById(R.id.voteCount);
         voteCount.setText(Integer.toString(comment.getVoteCount()));
 
         Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
@@ -73,11 +73,16 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
                 public void onClick(View v) {
                     RelativeLayout rl = (RelativeLayout) v.getParent();
                     Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
+                    Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
                     Comment comment = (Comment) upvoteBtn.getTag();
 
                     //Call the upvote method
                     comment.upvoteComment();
-                    notifyDataSetChanged();
+                    voteCount.setText(Integer.toString(comment.getVoteCount() + 1));
+                    upvoteBtn.setEnabled(false);
+                    downvoteBtn.setEnabled(false);
+                    upvoteBtn.setAlpha(0.8f);
+                    downvoteBtn.setAlpha(0.3f);
                 }
             });
 
@@ -85,13 +90,18 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
                 @Override
                 public void onClick(View v) {
                     RelativeLayout rl = (RelativeLayout) v.getParent();
+                    Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
                     Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
 
                     Comment comment = (Comment) downvoteBtn.getTag();
 
                     //Call the upvote method
                     comment.downvoteComment();
-                    notifyDataSetChanged();
+                    voteCount.setText(Integer.toString(comment.getVoteCount() - 1));
+                    upvoteBtn.setEnabled(false);
+                    downvoteBtn.setEnabled(false);
+                    upvoteBtn.setAlpha(0.3f);
+                    downvoteBtn.setAlpha(0.8f);
                 }
             });
         }

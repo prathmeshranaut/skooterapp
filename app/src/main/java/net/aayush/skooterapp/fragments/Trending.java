@@ -38,7 +38,7 @@ public class Trending extends Fragment {
                              Bundle savedInstanceState) {
         mContext = container.getContext();
 
-        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_trending, container, false);
         int userId = BaseActivity.userId;
 
         ProcessPosts processPosts = new ProcessPosts("https://skooter.herokuapp.com/hot/" + userId + ".json");

@@ -5,15 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.GetSkootData;
@@ -31,10 +36,26 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     protected ListView mListPosts;
     protected Context mContext;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
+    protected LinearLayout mLinearLayout;
+
+    private static final int STATE_ONSCREEN = 0;
+    private static final int STATE_OFFSCREEN = 1;
+    private static final int STATE_RETURNING = 2;
+    private int mState = STATE_ONSCREEN;
+    private int mScrollY;
+    private int mMinRawY = 0;
+
+    private View mHeader;
+    private TextView mQuickReturnView;
+    private View mPlaceHolder;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        mHeader = inflater.inflate(R.layout.header, null);
+//        mQuickReturnView = (TextView) view.findViewById(R.id.sticky);
+//        mPlaceHolder = mHeader.findViewById(R.id.placeholder);
     }
 
     @Override
@@ -46,6 +67,20 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 Log.v("Main Activity", "Refreshed");
             }
         }, 5000);
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        mLinearLayout.requestFocus();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        mLinearLayout.requestFocus();
     }
 
     @Override
@@ -81,7 +116,37 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 startActivity(intent);
             }
         });
-        ViewCompat.setElevation(rootView, 50);
+
+        mListPosts.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+//                        mQuickReturnHeight = mQuickReturnView.getHeight();
+//                        mListView.computeScrollY();
+//                        mCachedVerticalScrollRange = mListPosts.getListHeight();
+                    }
+                }
+        );
+        mListPosts.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                mScrollY = 0;
+                int translationY = 0;
+
+            }
+        });
+
+        EditText postSkoot = (EditText) rootView.findViewById(R.id.skootText);
+        mLinearLayout = (LinearLayout) rootView.findViewById(R.id.focusLayout);
+        mLinearLayout.requestFocus();
+
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(postSkoot.getWindowToken(), 0);
 
         // Inflate the layout for this fragment
         return rootView;
