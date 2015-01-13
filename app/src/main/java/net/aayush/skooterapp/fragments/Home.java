@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import net.aayush.skooterapp.BaseActivity;
+import net.aayush.skooterapp.ComposeActivity;
 import net.aayush.skooterapp.GetSkootData;
 import net.aayush.skooterapp.PostAdapter;
 import net.aayush.skooterapp.R;
@@ -141,12 +141,19 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
             }
         });
 
-        EditText postSkoot = (EditText) rootView.findViewById(R.id.skootText);
+        final EditText postSkoot = (EditText) rootView.findViewById(R.id.skootText);
         mLinearLayout = (LinearLayout) rootView.findViewById(R.id.focusLayout);
         mLinearLayout.requestFocus();
 
-        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(postSkoot.getWindowToken(), 0);
+        postSkoot.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    Intent intent = new Intent(getActivity(), ComposeActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
         // Inflate the layout for this fragment
         return rootView;
