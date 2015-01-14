@@ -4,9 +4,10 @@
       tools:context=".MainActivity">
 
     <item
-        android:id="@+id/score"
-        android:title="@string/score"
+        android:id="@+id/action_alerts"
+        android:title="@string/alerts"
         android:orderInCategory="1"
+        android:icon="@android:drawable/ic_dialog_alert"
         skooter:showAsAction="always"/>
 
     <item

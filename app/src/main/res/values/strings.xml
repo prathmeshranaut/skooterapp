@@ -26,5 +26,6 @@
     <string name="enter_a_skoot">Enter a skoot...</string>
     <string name="title_activity_me_posts">MePostsActivity</string>
     <string name="title_activity_me_comments">MeCommentsActivity</string>
+    <string name="alerts">alerts</string>
 
 </resources>

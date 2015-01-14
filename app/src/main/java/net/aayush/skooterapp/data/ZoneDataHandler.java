@@ -18,8 +18,8 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
     private static final String COLUMN_ZONE_NAME = "name";
     private static final String COLUMN_ZONE_IS_FOLLOWING = "is_following";
 
-    public ZoneDataHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, factory, version);
+    public ZoneDataHandler(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
 
@@ -27,7 +27,7 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_ZONE_TABLE = "CREATE TABLE " +
                 TABLE_ZONES + "("
-                + COLUMN_ZONE_ID + " INTEGER PRIMARY KEY," + COLUMN_ZONE_NAME
+                + COLUMN_ZONE_ID + " INTEGER PRIMARY KEY AUTO_INCREMENT," + COLUMN_ZONE_NAME
                 + " TEXT," + COLUMN_ZONE_IS_FOLLOWING + " INTEGER" + ")";
         db.execSQL(CREATE_ZONE_TABLE);
     }
@@ -49,7 +49,7 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
     }
 
     public ArrayList<Zone> getAllZones() {
-        ArrayList<Zone> zones = new ArrayList<Zone>();
+        ArrayList<Zone> zones = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
 
         Zone zone = new Zone();

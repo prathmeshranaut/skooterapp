@@ -37,4 +37,13 @@ public class Zone {
     public void setIsFollowing(boolean isFollowing) {
         mIsFollowing = isFollowing;
     }
+
+    @Override
+    public String toString() {
+        return "Zone{" +
+                "mZoneId=" + mZoneId +
+                ", mZoneName='" + mZoneName + '\'' +
+                ", mIsFollowing=" + mIsFollowing +
+                '}';
+    }
 }

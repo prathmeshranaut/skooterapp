@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -88,6 +91,16 @@ public class Me extends Fragment implements LocationSource, LocationListener {
         setUpMapIfNeeded();
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menu.clear();
+        inflater.inflate(R.menu.menu_me, menu);
+        MenuItem menuItem = menu.findItem(R.id.score);
+        menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore() + 2));
+        super.onCreateOptionsMenu(menu,inflater);
     }
 
     @Override

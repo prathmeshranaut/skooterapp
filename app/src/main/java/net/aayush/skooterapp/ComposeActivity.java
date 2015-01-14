@@ -64,7 +64,6 @@ public class ComposeActivity extends BaseActivity {
                             nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
                             nameValuePairs.add(new BasicNameValuePair("handle", skootHandle.getText().toString()));
                             nameValuePairs.add(new BasicNameValuePair("content", skootText.getText().toString()));
-                            nameValuePairs.add(new BasicNameValuePair("zone_id", "1"));
                             nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
                             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 

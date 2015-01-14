@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import net.aayush.skooterapp.fragments.Home;
 import net.aayush.skooterapp.fragments.Me;
+import net.aayush.skooterapp.fragments.Peek;
 import net.aayush.skooterapp.fragments.Trending;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
@@ -33,7 +34,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new Trending();
             case 2:
-                return new Trending();
+                return new Peek();
             case 3:
                 return new Me();
             default:

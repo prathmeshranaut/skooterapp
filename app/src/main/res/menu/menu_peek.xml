@@ -2,8 +2,10 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="net.aayush.skooterapp.PeekActivity">
-    <item android:id="@+id/action_settings"
+
+    <item android:id="@+id/action_add_zone"
           android:title="@string/action_settings"
-          android:orderInCategory="100"
-          app:showAsAction="never"/>
+          android:orderInCategory="1"
+          android:icon="@android:drawable/ic_input_add"
+          app:showAsAction="always"/>
 </menu>

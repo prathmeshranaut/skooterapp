@@ -5,8 +5,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
-    android:id="@+id/focusLayout"
     skooter:context="net.aayush.skooterapp.fragments.Home"
     >
 
@@ -21,9 +19,15 @@
         >
         <ListView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:id="@+id/list_posts"
-            />
+            android:layout_height="match_parent"
+            android:id="@+id/list_zones" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:id="@+id/addZonesText"
+            android:gravity="center_horizontal"
+            android:padding="20dp"
+            android:text="Add zones by clicking on +"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>
