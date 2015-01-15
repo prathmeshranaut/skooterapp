@@ -28,7 +28,7 @@
 
         <activity
             android:name=".LoadingActivity"
-            android:label="@string/title_activity_loading" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -94,6 +94,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MeActivity" />
+        </activity>
+        <activity
+            android:name=".FlagActivity"
+            android:label="@string/title_activity_flag"
+            android:parentActivityName=".ViewPostActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.aayush.skooterapp.ViewPostActivity" />
         </activity>
     </application>
 

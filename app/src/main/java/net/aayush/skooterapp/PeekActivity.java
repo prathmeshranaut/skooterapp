@@ -3,11 +3,13 @@ package net.aayush.skooterapp;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import net.aayush.skooterapp.data.Group;
-import net.aayush.skooterapp.data.GroupData;
+import net.aayush.skooterapp.data.Zone;
+import net.aayush.skooterapp.data.ZoneDataHandler;
 
 import java.util.List;
 
@@ -22,11 +24,30 @@ public class PeekActivity extends BaseActivity {
 
         activateToolbarWithHomeEnabled();
 
-        List<Group> mGroups = new GroupData().getGroups();
-        ArrayAdapter<Group> mGroupsAdapter = new ArrayAdapter<Group>(this, android.R.layout.simple_list_item_1, mGroups);
+        final ZoneDataHandler zoneDataHandler = new ZoneDataHandler(this);
+        zoneDataHandler.getAllZones();
 
-        ListView listGroups = (ListView) findViewById(R.id.list_groups);
-        listGroups.setAdapter(mGroupsAdapter);
+        final List<Zone> zones = zoneDataHandler.getAllZones();
+        final ArrayAdapter<Zone> zonesArrayAdapter = new ArrayAdapter<Zone>(this, android.R.layout.simple_list_item_1, zones);
+
+        ListView listZones = (ListView) findViewById(R.id.list_zones);
+        listZones.setAdapter(zonesArrayAdapter);
+        listZones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Zone zone = zones.get(position);
+                if(zone.getIsFollowing()) {
+                    zoneDataHandler.unFollowZoneById(zone.getZoneId());
+                    zones.get(position).setIsFollowing(false);
+                    zoneDataHandler.getAllZones();
+                } else {
+                    zoneDataHandler.followZoneById(zone.getZoneId());
+                    zones.get(position).setIsFollowing(true);
+                    zoneDataHandler.getAllZones();
+                }
+                zonesArrayAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
 
@@ -45,7 +66,8 @@ public class PeekActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            finish();
             return true;
         }
 

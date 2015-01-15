@@ -13,6 +13,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import net.aayush.skooterapp.data.Zone;
+import net.aayush.skooterapp.data.ZoneDataHandler;
+
+import java.util.List;
+
 
 public class LoadingActivity extends BaseActivity {
 
@@ -44,6 +49,15 @@ public class LoadingActivity extends BaseActivity {
             });
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
+        }
+
+        ZoneDataHandler dataHandler = new ZoneDataHandler(this);
+        List<Zone> zones = dataHandler.getAllZones();
+
+        if(zones.size() == 0) {
+            dataHandler.addZone(new Zone("IIT Delhi", false));
+            dataHandler.addZone(new Zone("DTU", false));
+            dataHandler.addZone(new Zone("NSIT", false));
         }
 
         if (userId == 0) {

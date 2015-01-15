@@ -37,6 +37,7 @@ public class ViewPostActivity extends BaseActivity {
     protected List<Comment> mCommentsList = new ArrayList<Comment>();
     protected ArrayAdapter<Comment> mCommentsAdapter;
     protected ListView mListComments;
+    protected Post mPost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +47,16 @@ public class ViewPostActivity extends BaseActivity {
         activateToolbarWithHomeEnabled();
 
         Intent intent = getIntent();
-        Post post = (Post) intent.getSerializableExtra(SKOOTER_POST);
+        mPost = (Post) intent.getSerializableExtra(SKOOTER_POST);
         List<Post> postList = new ArrayList<Post>();
-        postList.add(post);
+        postList.add(mPost);
 
         ArrayAdapter<Post> postAdapter = new PostAdapter(this, R.layout.list_view_post_row, postList);
         ListView listPosts = (ListView) findViewById(R.id.list_posts);
         listPosts.setAdapter(postAdapter);
 
         //Get the comments via JSON API
-        ProcessComments processComments = new ProcessComments("https://skooter.herokuapp.com/skoot/" + getUserId() + "/" + post.getId() + ".json", post.getId());
+        ProcessComments processComments = new ProcessComments("https://skooter.herokuapp.com/skoot/" + getUserId() + "/" + mPost.getId() + ".json", mPost.getId());
         processComments.execute();
 
         List<Comment> comments = new CommentData().getComments();
@@ -75,7 +76,7 @@ public class ViewPostActivity extends BaseActivity {
         Button commentBtn = (Button) findViewById(R.id.commentSkoot);
         final TextView commentText = (TextView) findViewById(R.id.commentText);
         final TextView commentHandle = (TextView) findViewById(R.id.commentHandle);
-        final int postId = post.getId();
+        final int postId = mPost.getId();
 
         commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +152,10 @@ public class ViewPostActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_flag) {
+            Intent intent = new Intent(ViewPostActivity.this, FlagActivity.class);
+            intent.putExtra(BaseActivity.SKOOTER_POST, mPost);
+            startActivity(intent);
             return true;
         } else if(id == android.R.id.home) {
             this.finish();
