@@ -13,27 +13,31 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.data.Comment;
 import net.aayush.skooterapp.data.CommentData;
 import net.aayush.skooterapp.data.Post;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ViewPostActivity extends BaseActivity {
 
+    private static final String LOG_TAG = ViewPostActivity.class.getSimpleName();
     protected List<Comment> mCommentsList = new ArrayList<Comment>();
     protected ArrayAdapter<Comment> mCommentsAdapter;
     protected ListView mListComments;
@@ -55,15 +59,64 @@ public class ViewPostActivity extends BaseActivity {
         ListView listPosts = (ListView) findViewById(R.id.list_posts);
         listPosts.setAdapter(postAdapter);
 
-        //Get the comments via JSON API
-        ProcessComments processComments = new ProcessComments("https://skooter.herokuapp.com/skoot/" + getUserId() + "/" + mPost.getId() + ".json", mPost.getId());
-        processComments.execute();
-
+        String tag = "load_comments";
         List<Comment> comments = new CommentData().getComments();
         mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_post_row, mCommentsList);
         mListComments = (ListView) findViewById(R.id.list_comments);
         mListComments.setAdapter(mCommentsAdapter);
 
+        String url = "https://skooter.herokuapp.com/skoot/" + getUserId() + "/" + mPost.getId() + ".json";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                final String SKOOTS = "skoot";
+                final String SKOOT_ID = "id";
+                final String SKOOT_POST = "content";
+                final String SKOOT_COMMENTS = "comments";
+                final String SKOOT_HANDLE = "handle";
+                final String SKOOT_CREATED_AT = "created_at";
+                final String SKOOT_UPVOTES = "upvotes";
+                final String SKOOT_DOWNVOTES = "downvotes";
+                final String SKOOT_IF_USER_VOTED = "if_user_voted";
+                final String SKOOT_USER_VOTE = "user_vote";
+                final String SKOOT_USER_COMMENT = "user_comment";
+
+                try {
+                    JSONArray jsonArray = response.getJSONArray(SKOOT_COMMENTS);
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonComment = jsonArray.getJSONObject(i);
+                        int id = jsonComment.getInt(SKOOT_ID);
+                        String comment = jsonComment.getString(SKOOT_POST);
+                        String handle = jsonComment.getString(SKOOT_HANDLE);
+                        int upvotes = jsonComment.getInt(SKOOT_UPVOTES);
+                        int downvotes = jsonComment.getInt(SKOOT_DOWNVOTES);
+                        boolean if_user_voted = jsonComment.getBoolean(SKOOT_IF_USER_VOTED);
+                        boolean user_vote = false;
+                        if (if_user_voted) {
+                            user_vote = jsonComment.getBoolean(SKOOT_USER_VOTE);
+                        }
+                        boolean user_skoot = jsonComment.getBoolean(SKOOT_USER_COMMENT);
+                        String timestamp = jsonComment.getString(SKOOT_CREATED_AT);
+
+                        Comment commentObject = new Comment(id, mPost.getId(), comment, handle, upvotes, downvotes, if_user_voted, user_vote, user_skoot, timestamp);
+                        mCommentsList.add(commentObject);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(LOG_TAG, "Error processing JSON data");
+                }
+                mCommentsAdapter.notifyDataSetChanged();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
         //Setup the item click listeners
         listPosts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -79,35 +132,35 @@ public class ViewPostActivity extends BaseActivity {
         final int postId = mPost.getId();
 
         commentBtn.setOnClickListener(new View.OnClickListener() {
+            String tag = "post_comment";
             @Override
             public void onClick(View v) {
                 if (commentText.getText().length() > 0 && commentText.getText().length() < 250) {
-                    new Thread(new Runnable() {
+                    String url = "https://skooter.herokuapp.com/comment";
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("user_id", Integer.toString(BaseActivity.userId));
+                    params.put("handle", commentHandle.getText().toString());
+                    params.put("content", commentText.getText().toString());
+                    params.put("location_id", "1");
+                    params.put("post_id", Integer.toString(postId));
+
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
                         @Override
-                        public void run() {
-                            HttpClient httpclient = new DefaultHttpClient();
-                            HttpPost httppost = new HttpPost("https://skooter.herokuapp.com/comment");
-
-                            try {
-                                // Add your data
-                                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(6);
-                                nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
-                                nameValuePairs.add(new BasicNameValuePair("handle", commentHandle.getText().toString()));
-                                nameValuePairs.add(new BasicNameValuePair("content", commentText.getText().toString()));
-                                nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
-                                nameValuePairs.add(new BasicNameValuePair("post_id", Integer.toString(postId)));
-                                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                                // Execute HTTP Post Request
-                                HttpResponse response = httpclient.execute(httppost);
-                                Log.v("Posted Skoot Comment", response.toString());
-                            } catch (ClientProtocolException e) {
-                                // TODO Auto-generated catch block
-                            } catch (IOException e) {
-                                // TODO Auto-generated catch block
-                            }
+                        public void onResponse(JSONObject response) {
+                            Log.d(LOG_TAG, response.toString());
+                            commentText.setText("");
+                            commentHandle.setText("");
+                            Toast.makeText(ViewPostActivity.this, "Woot! Comment posted!", Toast.LENGTH_SHORT).show();
                         }
-                    }).start();
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+                        }
+                    });
+
+                    AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
+
                 } else if (commentText.getText().length() > 250) {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
                     alertDialogBuilder.setMessage("You cannot simply skoot with more than 250! For that you would have login through Facebook.");
@@ -157,32 +210,10 @@ public class ViewPostActivity extends BaseActivity {
             intent.putExtra(BaseActivity.SKOOTER_POST, mPost);
             startActivity(intent);
             return true;
-        } else if(id == android.R.id.home) {
+        } else if (id == android.R.id.home) {
             this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public class ProcessComments extends GetSkootComments {
-
-        public ProcessComments(String mRawUrl, int mPostId) {
-            super(mRawUrl, mPostId);
-        }
-
-        public void execute() {
-            super.execute();
-            ProcessData processData = new ProcessData();
-            processData.execute();
-        }
-
-        public class ProcessData extends DownloadJsonData {
-            protected void onPostExecute(String webData) {
-                super.onPostExecute(webData);
-                mCommentsList = getComments();
-                mCommentsAdapter.addAll(mCommentsList);
-                mCommentsAdapter.notifyDataSetChanged();
-            }
-        }
     }
 }

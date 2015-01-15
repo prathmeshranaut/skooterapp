@@ -2,8 +2,6 @@ package net.aayush.skooterapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,25 +10,25 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+
 import net.aayush.skooterapp.data.Post;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class FlagActivity extends BaseActivity {
 
+    private static final String LOG_TAG = FlagActivity.class.getSimpleName();
     protected Post mPost;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,33 +55,26 @@ public class FlagActivity extends BaseActivity {
         btnFlagPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(new Runnable() {
+                String url = "http://skooter.herokuapp.com/flag/skoot";
+
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", Integer.toString(BaseActivity.userId));
+                params.put("post_id", Integer.toString(mPost.getId()));
+                params.put("type", Integer.toString(spinner.getSelectedItemPosition()));
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
                     @Override
-                    public void run() {
-                        HttpClient httpclient = new DefaultHttpClient();
-                        HttpPost httppost = new HttpPost("https://skooter.herokuapp.com/flag/skoot");
-
-                        try {
-                            // Add your data
-                            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
-                            nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
-                            nameValuePairs.add(new BasicNameValuePair("post_id", Integer.toString(mPost.getId())));
-                            nameValuePairs.add(new BasicNameValuePair("type", Integer.toString(spinner.getSelectedItemPosition() + 1)));
-                            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                            // Execute HTTP Post Request
-                            HttpResponse response = httpclient.execute(httppost);
-                            Log.v("Flag Activity", response.toString());
-                        } catch (ClientProtocolException e) {
-                            // TODO Auto-generated catch block
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                        }
-                        Looper.prepare();
-                        Toast.makeText(getApplicationContext(), "Post has been successfully flagged", Toast.LENGTH_SHORT).show();
-                        Looper.loop();
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(FlagActivity.this, "Post has been successfully flagged", Toast.LENGTH_SHORT).show();
                     }
-                }).start();
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+                    }
+                });
+
+                AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_post");
                 finish();
             }
         });
