@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="net.aayush.skooterapp.FlagActivity">
+
+    <include android:id="@+id/app_bar" layout="@layout/toolbar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_bar"
+        android:text="@string/flags_reason_prompt"
+        android:padding="30dp"
+        android:gravity="center_horizontal"
+        android:id="@+id/reasonToFlag"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/flagSpinner"
+        android:layout_below="@+id/reasonToFlag"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:entries="@array/flag_reasons"
+        android:prompt="@string/flags_reason_prompt"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Flag Post"
+        android:id="@+id/btnFlagPost"
+        android:layout_below="@+id/flagSpinner"
+        android:layout_centerHorizontal="true"/>
+
+
+</RelativeLayout>

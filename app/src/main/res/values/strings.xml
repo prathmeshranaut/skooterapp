@@ -12,10 +12,12 @@
     <string name="action_peek">Peek</string>
     <string name="title_activity_peek">Peek</string>
 
-    <string-array name="navigation_drawer_items_array">
-        <item>Create</item>
-        <item>Read</item>
-        <item>Help</item>
+    <string name="flags_reason_prompt">Reason to Flag</string>
+
+    <string-array name="flag_reasons">
+        <item>Offensive Content</item>
+        <item>Spam</item>
+        <item>Another option</item>
     </string-array>
 
     <string name="title_activity_map">Map</string>
@@ -27,5 +29,7 @@
     <string name="title_activity_me_posts">MePostsActivity</string>
     <string name="title_activity_me_comments">MeCommentsActivity</string>
     <string name="alerts">alerts</string>
+    <string name="action_flag">Flag</string>
+    <string name="title_activity_flag">Flag Post</string>
 
 </resources>
