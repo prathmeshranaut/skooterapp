@@ -59,10 +59,9 @@ public class Peek extends Fragment {
         else {
             ListView listView = (ListView) rootView.findViewById(R.id.list_zones);
             final ArrayAdapter<Zone> zoneArrayAdapter = new ArrayAdapter<Zone>(mContext, android.R.layout.simple_list_item_1, zones);
-            listView.setAdapter(zoneArrayAdapter);
-
             View header = getLayoutInflater(savedInstanceState).inflate(R.layout.list_header_text_view, null);
             listView.addHeaderView(header);
+            listView.setAdapter(zoneArrayAdapter);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
