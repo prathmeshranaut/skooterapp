@@ -1,12 +1,9 @@
 package net.aayush.skooterapp.fragments;
 
-import android.animation.ObjectAnimator;
+import android.animation.IntEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -23,14 +21,13 @@ import android.widget.ListView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 
 import net.aayush.skooterapp.BaseActivity;
+import net.aayush.skooterapp.GPSLocator;
 import net.aayush.skooterapp.MeCommentsActivity;
 import net.aayush.skooterapp.MePostsActivity;
 import net.aayush.skooterapp.R;
@@ -39,16 +36,15 @@ import net.aayush.skooterapp.data.Post;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Me extends Fragment implements LocationSource, LocationListener {
+public class Me extends Fragment {
     protected List<Post> mPostsList = new ArrayList<Post>();
     protected ArrayAdapter<Post> mPostsAdapter;
     protected ListView mListPosts;
     protected Context mContext;
     private SupportMapFragment mSupportMapFragment;
     private GoogleMap mMap;
-    LocationManager myLocationManager = null;
-    LocationSource.OnLocationChangedListener myLocationListener = null;
-    Criteria myCriteria;
+    protected GPSLocator mLocator;
+    Circle circle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,13 +99,14 @@ public class Me extends Fragment implements LocationSource, LocationListener {
         inflater.inflate(R.menu.menu_me, menu);
         MenuItem menuItem = menu.findItem(R.id.score);
         menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore() + 2));
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         FragmentManager fm = getChildFragmentManager();
+        mLocator = new GPSLocator(getActivity());
         mSupportMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
         if (mSupportMapFragment == null) {
             mSupportMapFragment = SupportMapFragment.newInstance();
@@ -125,49 +122,35 @@ public class Me extends Fragment implements LocationSource, LocationListener {
             mMap.getUiSettings().setCompassEnabled(false);
             mMap.getUiSettings().setZoomControlsEnabled(false);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
-            CameraUpdate update = getLastKnownLocation();
-            LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            String provider = lm.getBestProvider(criteria, true);
-            if (provider == null) {
 
-            } else {
-                Location loc = lm.getLastKnownLocation(provider);
-                if (loc != null) {
-                    CircleOptions circleOptions = new CircleOptions()
-                            .center(new LatLng(loc.getLatitude(), loc.getLongitude()))
-                            .radius(100)   //set radius in meters
-                            .fillColor(0x400000aa)  //default
-                            .strokeColor(R.color.md_light_blue_600)
-                            .strokeWidth(3);
-
-                    Circle circle = mMap.addCircle(circleOptions);
-
-                    ObjectAnimator anim = ObjectAnimator.ofFloat(mMap, "alpha", 1.0f, 0.25f, 0.75f, 0.15f, 0.5f, 0.0f);
-                    anim.setDuration(3000); //make animation 3 seconds long
-                    anim.start();
+            if (mLocator.canGetLocation()) {
+                CameraUpdate update = CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(new LatLng(mLocator.getLatitude(), mLocator.getLongitude()), 15.0f));
+                if (update != null) {
+                    mMap.moveCamera(update);
                 }
-            }
-            if (update != null) {
-                mMap.moveCamera(update);
+                if(circle == null) {
+                    //animateCircle();
+                }
             }
         }
     }
 
-    private CameraUpdate getLastKnownLocation() {
-        LocationManager lm = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        String provider = lm.getBestProvider(criteria, true);
-        if (provider == null) {
-            return null;
-        }
-        Location loc = lm.getLastKnownLocation(provider);
-        if (loc != null) {
-            return CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 14.0f));
-        }
-        return null;
+    public void animateCircle() {
+        ValueAnimator vAnimator = ValueAnimator.ofInt(70, 100);
+        vAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        vAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        vAnimator.setEvaluator(new IntEvaluator());
+        vAnimator.setDuration(500);
+
+        vAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        vAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int animatedValue = (Integer) valueAnimator.getAnimatedValue();
+                circle.setRadius(animatedValue);
+            }
+        });
+        vAnimator.start();
     }
 
     @Override
@@ -175,44 +158,7 @@ public class Me extends Fragment implements LocationSource, LocationListener {
         super.onResume();
         if (mMap == null) {
             mMap = mSupportMapFragment.getMap();
-            setUpMapIfNeeded();
         }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        if (myLocationListener != null) {
-            myLocationListener.onLocationChanged(location);
-
-            CameraUpdate update = CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 11.0f));
-            if (update != null) {
-                mMap.moveCamera(update);
-            }
-        }
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    public void activate(LocationSource.OnLocationChangedListener listener) {
-        myLocationListener = listener;
-    }
-
-    @Override
-    public void deactivate() {
-        myLocationListener = null;
+        setUpMapIfNeeded();
     }
 }

@@ -32,6 +32,7 @@ public class MeActivity extends BaseActivity implements LocationSource, Location
     LocationManager myLocationManager = null;
     OnLocationChangedListener myLocationListener = null;
     Criteria myCriteria;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +53,7 @@ public class MeActivity extends BaseActivity implements LocationSource, Location
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = null;
-                switch(position) {
+                switch (position) {
                     case 0:
                         intent = new Intent(MeActivity.this, MePostsActivity.class);
                         startActivity(intent);

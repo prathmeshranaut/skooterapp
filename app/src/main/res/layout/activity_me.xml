@@ -15,11 +15,22 @@
             android:layout_height="wrap_content"
             android:id="@+id/myListLayout">
 
-            <LinearLayout
-                android:id="@+id/map"
-                android:orientation="horizontal"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/map"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"/>
+
+                <net.aayush.skooterapp.RippleView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
 
             <ListView
                 android:id="@+id/myList"

@@ -22,18 +22,29 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.ComposeActivity;
-import net.aayush.skooterapp.GetSkootData;
 import net.aayush.skooterapp.PostAdapter;
 import net.aayush.skooterapp.R;
 import net.aayush.skooterapp.ViewPostActivity;
 import net.aayush.skooterapp.data.Post;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+    private static final String LOG_TAG = Home.class.getSimpleName();
     protected List<Post> mPostsList = new ArrayList<Post>();
     protected ArrayAdapter<Post> mPostsAdapter;
     protected ListView mListPosts;
@@ -73,15 +84,13 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
         mLinearLayout.requestFocus();
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         mLinearLayout.requestFocus();
     }
@@ -101,8 +110,57 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        ProcessPosts processPosts = new ProcessPosts("https://skooter.herokuapp.com/latest/" + userId + ".json");
-        processPosts.execute();
+        String url = "https://skooter.herokuapp.com/latest/" + userId + ".json";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                final String SKOOTS = "skoots";
+                final String SKOOT_ID = "id";
+                final String SKOOT_POST = "content";
+                final String SKOOT_HANDLE = "handle";
+                final String SKOOT_UPVOTES = "upvotes";
+                final String SKOOT_DOWNVOTES = "downvotes";
+                final String SKOOT_IF_USER_VOTED = "if_user_voted";
+                final String SKOOT_USER_VOTE = "user_vote";
+                final String SKOOT_USER_SCOOT = "user_skoot";
+                final String SKOOT_CREATED_AT = "created_at";
+                final String SKOOT_COMMENTS_COUNT = "comments_count";
+
+                try {
+                    JSONArray jsonArray = response.getJSONArray(SKOOTS);
+
+                    Log.v(LOG_TAG, jsonArray.toString());
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonPost = jsonArray.getJSONObject(i);
+                        int id = jsonPost.getInt(SKOOT_ID);
+                        String post = jsonPost.getString(SKOOT_POST);
+                        String handle = jsonPost.getString(SKOOT_HANDLE);
+                        int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
+                        int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);
+                        int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
+                        boolean skoot_if_user_voted = jsonPost.getBoolean(SKOOT_IF_USER_VOTED);
+                        boolean user_vote = jsonPost.getBoolean(SKOOT_USER_VOTE);
+                        boolean user_skoot = jsonPost.getBoolean(SKOOT_USER_SCOOT);
+                        String created_at = jsonPost.getString(SKOOT_CREATED_AT);
+
+                        Post postObject = new Post(id, handle, post, commentsCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, created_at);
+                        mPostsList.add(postObject);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(LOG_TAG, "Error processing Json Data");
+                }
+                mPostsAdapter.notifyDataSetChanged();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "home_page");
 
         mPostsAdapter = new PostAdapter(mContext, R.layout.list_view_post_row, mPostsList);
         mListPosts = (ListView) rootView.findViewById(R.id.list_posts);
@@ -151,7 +209,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         postSkoot.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus) {
+                if (hasFocus) {
                     Intent intent = new Intent(getActivity(), ComposeActivity.class);
                     startActivity(intent);
                 }
@@ -169,28 +227,6 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         inflater.inflate(R.menu.menu_main, menu);
         MenuItem menuItem = menu.findItem(R.id.score);
         menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore() + 2));
-        super.onCreateOptionsMenu(menu,inflater);
-    }
-
-    public class ProcessPosts extends GetSkootData {
-
-        public ProcessPosts(String mRawUrl) {
-            super(mRawUrl);
-        }
-
-        public void execute() {
-            super.execute();
-            ProcessData processData = new ProcessData();
-            processData.execute();
-        }
-
-        public class ProcessData extends DownloadJsonData {
-            protected void onPostExecute(String webData) {
-                super.onPostExecute(webData);
-                mPostsList = getPosts();
-                mPostsAdapter.addAll(mPostsList);
-                mPostsAdapter.notifyDataSetChanged();
-            }
-        }
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }
