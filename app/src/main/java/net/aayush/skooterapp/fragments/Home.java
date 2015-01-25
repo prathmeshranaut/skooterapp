@@ -41,7 +41,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String LOG_TAG = Home.class.getSimpleName();
@@ -110,7 +112,10 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        String url = "https://skooter.herokuapp.com/latest/" + userId + ".json";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(userId));
+
+        String url = BaseActivity.substituteString(getResources().getString(R.string.home), params);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

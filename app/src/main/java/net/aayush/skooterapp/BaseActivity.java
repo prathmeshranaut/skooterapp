@@ -8,6 +8,7 @@ import net.aayush.skooterapp.data.User;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 public class BaseActivity extends ActionBarActivity {
     private Toolbar mToolbar;
@@ -25,6 +26,15 @@ public class BaseActivity extends ActionBarActivity {
     public static Date currentDate() {
         Calendar calendar = Calendar.getInstance();
         return calendar.getTime();
+    }
+
+    public static String substituteString(String template, Map<String, String> substitutions) {
+        String result = AppController.getInstance().getResources().getString(R.string.main_url) + template;
+        for (Map.Entry<String, String> substitution : substitutions.entrySet()) {
+            String pattern = "{" + substitution.getKey() + "}";
+            result = result.replace(pattern, substitution.getValue());
+        }
+        return result;
     }
 
     public static String getTimeAgo(long time) {
