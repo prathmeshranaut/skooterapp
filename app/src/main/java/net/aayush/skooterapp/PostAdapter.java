@@ -69,10 +69,10 @@ public class PostAdapter extends ArrayAdapter<Post> {
             upvoteBtn.setEnabled(false);
             downvoteBtn.setEnabled(false);
             if (post.isUserVote()) {
-                upvoteBtn.setAlpha(0.8f);
+                upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
                 downvoteBtn.setAlpha(0.3f);
             } else {
-                downvoteBtn.setAlpha(0.8f);
+                upvoteBtn.setBackground(mContext.getDrawable(R.drawable.vote_down_active));
                 upvoteBtn.setAlpha(0.3f);
             }
         } else {

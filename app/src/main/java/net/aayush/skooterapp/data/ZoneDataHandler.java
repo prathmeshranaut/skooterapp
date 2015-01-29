@@ -16,6 +16,10 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
 
     private static final String COLUMN_ZONE_ID = "id";
     private static final String COLUMN_ZONE_NAME = "name";
+    private static final String COLUMN_LATITUDE_MINIMUM = "latitude_minimum";
+    private static final String COLUMN_LATITUDE_MAXIMUM = "latitude_maximum";
+    private static final String COLUMN_LONGITUDE_MINIMUM = "longitude_minimum";
+    private static final String COLUMN_LONGITUDE_MAXIMUM = "longitude_maximum";
     private static final String COLUMN_ZONE_IS_FOLLOWING = "is_following";
 
     public ZoneDataHandler(Context context) {
@@ -27,8 +31,13 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_ZONE_TABLE = "CREATE TABLE " +
                 TABLE_ZONES + "("
-                + COLUMN_ZONE_ID + " INTEGER PRIMARY KEY," + COLUMN_ZONE_NAME
-                + " TEXT," + COLUMN_ZONE_IS_FOLLOWING + " INTEGER" + ")";
+                + COLUMN_ZONE_ID + " INTEGER PRIMARY KEY,"
+                + COLUMN_ZONE_NAME + " TEXT,"
+                + COLUMN_LATITUDE_MINIMUM + " FLOAT,"
+                + COLUMN_LATITUDE_MAXIMUM + " FLOAT,"
+                + COLUMN_LONGITUDE_MINIMUM + " FLOAT,"
+                + COLUMN_LONGITUDE_MAXIMUM + " FLOAT,"
+                + COLUMN_ZONE_IS_FOLLOWING + " INTEGER" + ")";
         db.execSQL(CREATE_ZONE_TABLE);
     }
 
@@ -40,7 +49,12 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
 
     public void addZone(Zone zone) {
         ContentValues values = new ContentValues();
+        values.put(COLUMN_ZONE_ID, zone.getZoneId());
         values.put(COLUMN_ZONE_NAME, zone.getZoneName());
+        values.put(COLUMN_LATITUDE_MINIMUM, zone.getLatitudeMinimum());
+        values.put(COLUMN_LATITUDE_MAXIMUM, zone.getLatitudeMaximum());
+        values.put(COLUMN_LONGITUDE_MINIMUM, zone.getLongitudeMinimum());
+        values.put(COLUMN_LONGITUDE_MAXIMUM, zone.getLongitudeMaximum());
         values.put(COLUMN_ZONE_IS_FOLLOWING, zone.getIsFollowing());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -58,7 +72,11 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
             Zone zone = new Zone();
             zone.setZoneId(c.getInt(0));
             zone.setZoneName(c.getString(1));
-            zone.setIsFollowing("1".equals(c.getString(2)));
+            zone.setLatitudeMinimum(c.getFloat(2));
+            zone.setLatitudeMaximum(c.getFloat(3));
+            zone.setLongitudeMinimum(c.getFloat(4));
+            zone.setLongitudeMaximum(c.getFloat(5));
+            zone.setIsFollowing("1".equals(c.getString(6)));
             zones.add(zone);
         }
         c.close();

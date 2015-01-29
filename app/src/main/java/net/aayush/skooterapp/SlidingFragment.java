@@ -30,10 +30,11 @@ public class SlidingFragment extends Fragment {
     void setUpPager(View view){
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
-        mViewPager.setAdapter(new TabsPagerAdapter(getFragmentManager()));
+        mViewPager.setAdapter(new TabsPagerAdapter(getActivity().getBaseContext(), getFragmentManager()));
         mViewPager.setBackgroundColor(getResources().getColor(R.color.skooterBackgroundColor));
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setDistributeEvenly(true);
+        mSlidingTabLayout.setCustomTabView(R.layout.image_slider_tab, 0);
         mSlidingTabLayout.setViewPager(mViewPager);
         mSlidingTabLayout.setCustomTabColorizer(new TabColorizer() {
             @Override

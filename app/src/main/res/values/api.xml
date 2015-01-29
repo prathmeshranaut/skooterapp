@@ -4,7 +4,17 @@
     <string name="home">latest/{user_id}.json</string>
     <string name="hot">hot/{user_id}.json</string>
     <string name="peek">sneakpeek/{user_id}.json</string>
+
     <string name="skoot_single">skoot/{user_id}/{post_id}.json</string>
     <string name="skoot_new">skoot</string>
     <string name="skoot_delete">skoot/{post_id}</string>
+
+    <string name="zones">zones/{user_id}</string>
+    <string name="zones_follow">zone/follow</string>
+    <string name="zones_unfollow">zone/unfollow</string>
+
+    <string name="user">user/{user_id}</string>
+    <string name="user_new">user</string>
+    <string name="user_zones">user/zones/{user_id}</string>
+    <string name="user_location">location</string>
 </resources>

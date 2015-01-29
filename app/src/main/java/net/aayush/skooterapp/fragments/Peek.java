@@ -20,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.AppController;
@@ -57,6 +58,8 @@ public class Peek extends Fragment {
         mContext = container.getContext();
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_peek, container, false);
+
+        downloadZones();
 
         //Get all the zones
         final ZoneDataHandler dataHandler = new ZoneDataHandler(mContext);
@@ -141,15 +144,14 @@ public class Peek extends Fragment {
                     startActivity(intent);
                 }
             });
-        }
-        else {
+        } else {
             mListView = (ListView) rootView.findViewById(R.id.list_zones);
             final ArrayAdapter<Zone> zoneArrayAdapter = new ArrayAdapter<Zone>(mContext, android.R.layout.simple_list_item_1, zones);
             View header = getLayoutInflater(savedInstanceState).inflate(R.layout.list_header_text_view, null);
             mListView.addHeaderView(header);
             mListView.setAdapter(zoneArrayAdapter);
 
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     dataHandler.followZoneById(position + 1);
@@ -158,6 +160,57 @@ public class Peek extends Fragment {
         }
 
         return rootView;
+    }
+
+    private void downloadZones() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(BaseActivity.userId));
+
+        final String url = BaseActivity.substituteString(getResources().getString(R.string.zones), params);
+        final ZoneDataHandler dataHandler = new ZoneDataHandler(mContext);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                final String ZONE_ID = "id";
+                final String NAME = "name";
+                final String LATITUDE_MINIMUM = "lat_min";
+                final String LATITUDE_MAXIMUM = "lat_max";
+                final String LONGITUDE_MINIMUM = "long_min";
+                final String LONGITUDE_MAXIMUM = "long_max";
+
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        int zoneId = jsonObject.getInt(ZONE_ID);
+                        String name = jsonObject.getString(NAME);
+                        float latitudeMinimum = (float) jsonObject.getDouble(LATITUDE_MINIMUM);
+                        float latitudeMaximum = (float) jsonObject.getDouble(LATITUDE_MAXIMUM);
+                        float longitudeMinimum = (float) jsonObject.getDouble(LONGITUDE_MINIMUM);
+                        float longitudeMaximum = (float) jsonObject.getDouble(LONGITUDE_MAXIMUM);
+
+                        Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, false);
+
+                        List<Zone> zones = dataHandler.getAllZones();
+
+                        Log.v(LOG_TAG, zone.toString());
+                        Log.v(LOG_TAG, zones.toString());
+                        if(!zones.contains(zone)) {
+                            dataHandler.addZone(zone);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, error.networkResponse);
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(jsonArrayRequest, "zones");
     }
 
     private void findZonesFollowedByUser(List<Zone> zones) {
@@ -175,7 +228,7 @@ public class Peek extends Fragment {
         ZoneDataHandler dataHandler = new ZoneDataHandler(mContext);
         List<Zone> zones = dataHandler.getAllZones();
         findZonesFollowedByUser(zones);
-        if(zoneArrayAdapter != null) {
+        if (zoneArrayAdapter != null) {
             zoneArrayAdapter.notifyDataSetChanged();
         }
     }
@@ -185,7 +238,7 @@ public class Peek extends Fragment {
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
         inflater.inflate(R.menu.menu_peek, menu);
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -195,7 +248,7 @@ public class Peek extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == R.id.action_add_zone) {
+        if (id == R.id.action_add_zone) {
             Intent intent = new Intent(mContext, PeekActivity.class);
             startActivity(intent);
         }

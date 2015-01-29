@@ -56,7 +56,7 @@ public class PostUserLogin extends PostRawData {
             return;
         }
 
-        final String SKOOT_USER_ID = "id";
+        final String SKOOT_USER_ID = "user_id";
 
         try {
             JSONObject jsonObject = new JSONObject(getData());

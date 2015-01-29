@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.data.Comment;
@@ -68,15 +69,6 @@ public class LoadingActivity extends BaseActivity {
             alertDialog.show();
         }
 
-        ZoneDataHandler dataHandler = new ZoneDataHandler(this);
-        List<Zone> zones = dataHandler.getAllZones();
-
-        if (zones.size() == 0) {
-            dataHandler.addZone(new Zone("IIT Delhi", false));
-            dataHandler.addZone(new Zone("DTU", false));
-            dataHandler.addZone(new Zone("NSIT", false));
-        }
-
         if (userId == 0) {
             loginUser();
         } else {
@@ -84,8 +76,56 @@ public class LoadingActivity extends BaseActivity {
         }
     }
 
+    private void downloadZones() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(BaseActivity.userId));
+
+        final String url = BaseActivity.substituteString(getResources().getString(R.string.zones), params);
+        final ZoneDataHandler dataHandler = new ZoneDataHandler(this);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                final String ZONE_ID = "id";
+                final String NAME = "name";
+                final String LATITUDE_MINIMUM = "lat_min";
+                final String LATITUDE_MAXIMUM = "lat_max";
+                final String LONGITUDE_MINIMUM = "long_min";
+                final String LONGITUDE_MAXIMUM = "long_max";
+
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        int zoneId = jsonObject.getInt(ZONE_ID);
+                        String name = jsonObject.getString(NAME);
+                        float latitudeMinimum = (float) jsonObject.getDouble(LATITUDE_MINIMUM);
+                        float latitudeMaximum = (float) jsonObject.getDouble(LATITUDE_MAXIMUM);
+                        float longitudeMinimum = (float) jsonObject.getDouble(LONGITUDE_MINIMUM);
+                        float longitudeMaximum = (float) jsonObject.getDouble(LONGITUDE_MAXIMUM);
+
+                        Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, false);
+
+                        List<Zone> zones = dataHandler.getAllZones();
+                        if(!zones.contains(zone)) {
+                            dataHandler.addZone(zone);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, error.networkResponse);
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(jsonArrayRequest, "zones");
+    }
+
     public void addUserLocation() {
-        String url = "http://skooter.herokuapp.com/location";
+        String url = BaseActivity.substituteString(getResources().getString(R.string.user_location), new HashMap<String, String>());
 
         if (mLocator.canGetLocation()) {
             double latitude = mLocator.getLatitude();
@@ -100,7 +140,7 @@ public class LoadingActivity extends BaseActivity {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    final String LOCATION_ID = "id";
+                    final String LOCATION_ID = "location_id";
 
                     try {
                         response.getInt(LOCATION_ID);
@@ -124,7 +164,10 @@ public class LoadingActivity extends BaseActivity {
     }
 
     public void getUserDetails() {
-        String url = "https://skooter.herokuapp.com/user/" + userId + ".json";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(userId));
+
+        String url = BaseActivity.substituteString(getResources().getString(R.string.user), params);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -177,6 +220,7 @@ public class LoadingActivity extends BaseActivity {
                     }
                     mUser = new User(userId, score, posts, comments);
                     addUserLocation();
+                    downloadZones();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");

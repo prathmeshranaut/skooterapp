@@ -7,23 +7,23 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ComposeActivity extends BaseActivity {
 
+    protected static final String LOG_TAG = ComposeActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,32 +51,32 @@ public class ComposeActivity extends BaseActivity {
         if (id == R.id.action_send) {
             final TextView skootText = (TextView) findViewById(R.id.skootText);
             final TextView skootHandle = (TextView) findViewById(R.id.skootHandle);
+
             if (skootText.getText().length() > 0 && skootText.getText().length() <= 250) {
-                new Thread(new Runnable() {
+                String url = BaseActivity.substituteString(getResources().getString(R.string.skoot_new), new HashMap<String, String>());
+
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", Integer.toString(BaseActivity.userId));
+                params.put("handle", skootHandle.getText().toString());
+                params.put("content", skootText.getText().toString());
+                params.put("location_id", "1");
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
                     @Override
-                    public void run() {
-                        HttpClient httpclient = new DefaultHttpClient();
-                        HttpPost httppost = new HttpPost("https://skooter.herokuapp.com/skoot");
-
-                        try {
-                            // Add your data
-                            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
-                            nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
-                            nameValuePairs.add(new BasicNameValuePair("handle", skootHandle.getText().toString()));
-                            nameValuePairs.add(new BasicNameValuePair("content", skootText.getText().toString()));
-                            nameValuePairs.add(new BasicNameValuePair("location_id", "1"));
-                            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                            // Execute HTTP Post Request
-                            HttpResponse response = httpclient.execute(httppost);
-                            Log.v("Posted Skoot", response.toString());
-                        } catch (ClientProtocolException e) {
-                            // TODO Auto-generated catch block
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                        }
+                    public void onResponse(JSONObject response) {
+                        Log.d(LOG_TAG, response.toString());
+                        skootText.setText("");
+                        skootHandle.setText("");
+                        Toast.makeText(ComposeActivity.this, "Woot! Comment posted!", Toast.LENGTH_SHORT).show();
                     }
-                }).start();
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+                    }
+                });
+
+                AppController.getInstance().addToRequestQueue(jsonObjectRequest, "compose_skoot");
                 finish();
             } else if (skootText.getText().length() > 250) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);

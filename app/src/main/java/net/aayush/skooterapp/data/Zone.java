@@ -3,7 +3,21 @@ package net.aayush.skooterapp.data;
 public class Zone {
     private int mZoneId;
     private String mZoneName;
+    private float mLatitudeMinimum;
+    private float mLongitudeMinimum;
+    private float mLatitudeMaximum;
+    private float mLongitudeMaximum;
     private boolean mIsFollowing;
+
+    public Zone(int zoneId, String zoneName, float latitudeMinimum, float longitudeMinimum, float latitudeMaximum, float longitudeMaximum, boolean isFollowing) {
+        mZoneId = zoneId;
+        mZoneName = zoneName;
+        mLatitudeMinimum = latitudeMinimum;
+        mLongitudeMinimum = longitudeMinimum;
+        mLatitudeMaximum = latitudeMaximum;
+        mLongitudeMaximum = longitudeMaximum;
+        mIsFollowing = isFollowing;
+    }
 
     public Zone() {
 
@@ -26,6 +40,38 @@ public class Zone {
         return mZoneName;
     }
 
+    public float getLatitudeMinimum() {
+        return mLatitudeMinimum;
+    }
+
+    public void setLatitudeMinimum(float latitudeMinimum) {
+        mLatitudeMinimum = latitudeMinimum;
+    }
+
+    public float getLongitudeMinimum() {
+        return mLongitudeMinimum;
+    }
+
+    public void setLongitudeMinimum(float longitudeMinimum) {
+        mLongitudeMinimum = longitudeMinimum;
+    }
+
+    public float getLatitudeMaximum() {
+        return mLatitudeMaximum;
+    }
+
+    public void setLatitudeMaximum(float latitudeMaximum) {
+        mLatitudeMaximum = latitudeMaximum;
+    }
+
+    public float getLongitudeMaximum() {
+        return mLongitudeMaximum;
+    }
+
+    public void setLongitudeMaximum(float longitudeMaximum) {
+        mLongitudeMaximum = longitudeMaximum;
+    }
+
     public void setZoneName(String zoneName) {
         mZoneName = zoneName;
     }
@@ -43,6 +89,10 @@ public class Zone {
         return "Zone{" +
                 "mZoneId=" + mZoneId +
                 ", mZoneName='" + mZoneName + '\'' +
+                ", mLatitudeMinimum=" + mLatitudeMinimum +
+                ", mLongitudeMinimum=" + mLongitudeMinimum +
+                ", mLatitudeMaximum=" + mLatitudeMaximum +
+                ", mLongitudeMaximum=" + mLongitudeMaximum +
                 ", mIsFollowing=" + mIsFollowing +
                 '}';
     }

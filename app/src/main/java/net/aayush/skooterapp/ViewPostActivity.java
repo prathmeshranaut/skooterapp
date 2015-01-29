@@ -65,7 +65,11 @@ public class ViewPostActivity extends BaseActivity {
         mListComments = (ListView) findViewById(R.id.list_comments);
         mListComments.setAdapter(mCommentsAdapter);
 
-        String url = "https://skooter.herokuapp.com/skoot/" + getUserId() + "/" + mPost.getId() + ".json";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(userId));
+        params.put("post_id", Integer.toString(mPost.getId()));
+
+        String url = BaseActivity.substituteString(getResources().getString(R.string.skoot_single), params);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
