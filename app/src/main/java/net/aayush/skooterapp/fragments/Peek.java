@@ -193,9 +193,15 @@ public class Peek extends Fragment {
 
                         List<Zone> zones = dataHandler.getAllZones();
 
-                        Log.v(LOG_TAG, zone.toString());
-                        Log.v(LOG_TAG, zones.toString());
-                        if(!zones.contains(zone)) {
+                        boolean flag = false;
+                        for(Zone z: zones) {
+                            if(z.getZoneId() == zone.getZoneId()) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(!flag) {
+                            //Add
                             dataHandler.addZone(zone);
                         }
                     }

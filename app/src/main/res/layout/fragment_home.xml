@@ -31,12 +31,11 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:text="Skoot!"
             android:id="@+id/commentSkoot"
             android:layout_alignParentRight="true"
-            />
+            android:background="@drawable/post_icon"/>
 
         <EditText
             android:layout_width="fill_parent"

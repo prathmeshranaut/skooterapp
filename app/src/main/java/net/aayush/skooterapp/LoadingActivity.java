@@ -106,7 +106,15 @@ public class LoadingActivity extends BaseActivity {
                         Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, false);
 
                         List<Zone> zones = dataHandler.getAllZones();
-                        if(!zones.contains(zone)) {
+                        boolean flag = false;
+                        for(Zone z: zones) {
+                            if(z.getZoneId() == zone.getZoneId()) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if(!flag) {
+                            //Add
                             dataHandler.addZone(zone);
                         }
                     }
