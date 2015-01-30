@@ -20,7 +20,7 @@
         <item name="android:textColorPrimary">@color/skooterPrimaryTextColor</item>
         <item name="android:actionMenuTextColor">@color/skooterPrimaryTextColor</item>
         <item name="android:textColorSecondary">@color/skooterPrimaryTextColor</item>
-        <item name="android:background">@color/skooterPrimaryBackgroundColor</item>
+        <item name="android:background">@color/skooterNPrimaryTextColor</item>
     </style>
 
     <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">

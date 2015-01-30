@@ -244,7 +244,7 @@ public class LoadingActivity extends BaseActivity {
         String androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         String[] data = {"phone", androidId};
 
-        LoginUser loginUser = new LoginUser("https://skooter.herokuapp.com/user", data);
+        LoginUser loginUser = new LoginUser("http://skooter.elasticbeanstalk.com/user", data);
         loginUser.execute();
     }
 

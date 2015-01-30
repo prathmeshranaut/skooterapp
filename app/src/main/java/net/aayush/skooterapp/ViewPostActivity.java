@@ -140,7 +140,7 @@ public class ViewPostActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (commentText.getText().length() > 0 && commentText.getText().length() < 250) {
-                    String url = "https://skooter.herokuapp.com/comment";
+                    String url = "http://skooter.elasticbeanstalk.com/comment";
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("user_id", Integer.toString(BaseActivity.userId));
                     params.put("handle", commentHandle.getText().toString());

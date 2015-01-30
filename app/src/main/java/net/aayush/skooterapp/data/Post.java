@@ -112,7 +112,7 @@ public class Post implements Serializable {
             @Override
             public void run() {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost("https://skooter.herokuapp.com/skoot/" + Post.this.getId());
+                HttpPost httppost = new HttpPost("http://skooter.elasticbeanstalk.com/skoot/" + Post.this.getId());
 
                 try {
                     // Add your data
@@ -142,7 +142,7 @@ public class Post implements Serializable {
             @Override
             public void run() {
                 HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost("https://skooter.herokuapp.com/skoot/" + Post.this.getId());
+                HttpPost httppost = new HttpPost("http://skooter.elasticbeanstalk.com/skoot/" + Post.this.getId());
 
                 try {
                     // Add your data

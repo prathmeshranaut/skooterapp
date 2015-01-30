@@ -8,15 +8,45 @@
                 android:paddingRight="10dp"
                 android:paddingBottom="10dp">
 
-
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
-        android:id="@+id/timestamp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="5dp"/>
+        android:orientation="horizontal">
+
+        <ImageView
+            android:src="@drawable/time_icon"
+            android:scaleType="fitXY"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="3dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:textColor="@color/skooterNPrimaryTextColor"
+            android:id="@+id/timestamp"/>
+
+        <ImageView
+            android:scaleType="fitXY"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/comment_inactive"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="3dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text=""
+            android:id="@+id/commentsCount"
+            />
+    </LinearLayout>
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,17 +99,4 @@
         android:layout_alignLeft="@+id/upvote"
         android:background="@drawable/ic_action_expand"
         />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text=""
-        android:id="@+id/commentsCount"
-        android:layout_alignTop="@+id/timestamp"
-        android:layout_toRightOf="@+id/timestamp"
-        android:layout_toEndOf="@+id/timestamp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="15dp"/>
 </RelativeLayout>

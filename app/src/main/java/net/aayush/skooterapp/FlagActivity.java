@@ -55,7 +55,7 @@ public class FlagActivity extends BaseActivity {
         btnFlagPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://skooter.herokuapp.com/flag/skoot";
+                String url = "http://skooter.elasticbeanstalk.com/flag/skoot";
 
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("user_id", Integer.toString(BaseActivity.userId));

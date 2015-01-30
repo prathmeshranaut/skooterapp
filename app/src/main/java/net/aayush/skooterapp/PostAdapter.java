@@ -51,7 +51,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         voteCount.setText(Integer.toString(post.getVoteCount()));
 
         TextView commentsCount = (TextView) convertView.findViewById(R.id.commentsCount);
-        commentsCount.setText(Integer.toString(post.getCommentsCount()) + " comments");
+        commentsCount.setText(Integer.toString(post.getCommentsCount()));
 
 
         Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
@@ -72,7 +72,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
                 downvoteBtn.setAlpha(0.3f);
             } else {
-                upvoteBtn.setBackground(mContext.getDrawable(R.drawable.vote_down_active));
+                downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
                 upvoteBtn.setAlpha(0.3f);
             }
         } else {
@@ -89,7 +89,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
                     voteCount.setText(Integer.toString(post.getVoteCount() + 1));
                     upvoteBtn.setEnabled(false);
                     downvoteBtn.setEnabled(false);
-                    upvoteBtn.setAlpha(0.8f);
+                    upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
                     downvoteBtn.setAlpha(0.3f);
                 }
             });
@@ -108,8 +108,8 @@ public class PostAdapter extends ArrayAdapter<Post> {
                     voteCount.setText(Integer.toString(post.getVoteCount() - 1));
                     upvoteBtn.setEnabled(false);
                     downvoteBtn.setEnabled(false);
+                    downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
                     upvoteBtn.setAlpha(0.3f);
-                    downvoteBtn.setAlpha(0.8f);
                 }
             });
         }

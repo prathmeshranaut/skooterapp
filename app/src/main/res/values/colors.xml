@@ -7,4 +7,5 @@
     <color name="skooterPrimaryTextColor">@color/md_white_1000</color>
     <color name="skooterSecondaryTextColor">@color/md_yellow_800</color>
 
+    <color name="skooterNPrimaryTextColor">#55acee</color>
 </resources>
