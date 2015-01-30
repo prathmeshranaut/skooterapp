@@ -36,7 +36,7 @@
             android:layout_height="20dp"
             android:src="@drawable/comment_inactive"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="3dp" />
+            android:layout_marginRight="3dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,55 +48,73 @@
     </LinearLayout>
 
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Large Text"
-        android:id="@+id/handleText"
-        android:textColor="@color/skooterSecondaryTextColor"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        />
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Large Text"
-        android:id="@+id/postText"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/handleText"
-        />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15">
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/upvote"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/ic_action_collapse"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Large Text"
+                android:id="@+id/handleText"
+                android:textColor="@color/skooterSecondaryTextColor"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="0"
-        android:id="@+id/voteCount"
-        android:layout_marginRight="15dp"
-        android:layout_below="@+id/upvote"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Large Text"
+                android:id="@+id/postText"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/handleText"
+                />
+        </RelativeLayout>
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/downvote"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/voteCount"
-        android:layout_alignLeft="@+id/upvote"
-        android:background="@drawable/ic_action_expand"
-        />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.85">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/upvote"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ic_action_collapse"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="0"
+                android:id="@+id/voteCount"
+                android:layout_marginRight="15dp"
+                android:layout_below="@+id/upvote"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/downvote"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/voteCount"
+                android:layout_alignLeft="@+id/upvote"
+                android:background="@drawable/ic_action_expand"
+                />
+        </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>
