@@ -8,14 +8,26 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+
 import net.aayush.skooterapp.data.Zone;
 import net.aayush.skooterapp.data.ZoneDataHandler;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class PeekActivity extends BaseActivity {
 
+
+    private static final String LOG_TAG = PeekActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +49,12 @@ public class PeekActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Zone zone = zones.get(position);
                 if(zone.getIsFollowing()) {
+                    unfollowZone(zone);
                     zoneDataHandler.unFollowZoneById(zone.getZoneId());
                     zones.get(position).setIsFollowing(false);
                     zoneDataHandler.getAllZones();
                 } else {
+                    followZone(zone);
                     zoneDataHandler.followZoneById(zone.getZoneId());
                     zones.get(position).setIsFollowing(true);
                     zoneDataHandler.getAllZones();
@@ -50,6 +64,49 @@ public class PeekActivity extends BaseActivity {
         });
     }
 
+    protected void unfollowZone(Zone zone) {
+        String url = BaseActivity.substituteString(getResources().getString(R.string.zones_unfollow), new HashMap<String, String>());
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(BaseActivity.userId));
+        params.put("zone_id", Integer.toString(zone.getZoneId()));
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "unfollow_zone");
+    }
+
+    protected void followZone(Zone zone) {
+        String url = BaseActivity.substituteString(getResources().getString(R.string.zones_follow), new HashMap<String, String>());
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(BaseActivity.userId));
+        params.put("zone_id", Integer.toString(zone.getZoneId()));
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "unfollow_zone");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

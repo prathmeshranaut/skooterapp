@@ -87,7 +87,7 @@ public class Peek extends Fragment {
                     final String SKOOT_HANDLE = "handle";
                     final String SKOOT_UPVOTES = "upvotes";
                     final String SKOOT_DOWNVOTES = "downvotes";
-                    final String SKOOT_IF_USER_VOTED = "if_user_voted";
+                    final String SKOOT_IF_USER_VOTED = "user_voted";
                     final String SKOOT_USER_VOTE = "user_vote";
                     final String SKOOT_USER_SCOOT = "user_skoot";
                     final String SKOOT_CREATED_AT = "created_at";
