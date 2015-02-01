@@ -9,6 +9,6 @@
         <item name="android:colorControlHighlight">@color/skooterBackgroundColor</item>
         <item name="android:actionMenuTextColor">@color/skooterPrimaryTextColor</item>
         <item name="android:textColorSecondary">@color/skooterPrimaryTextColor</item>
-        <item name="android:background">@color/skooterPrimaryBackgroundColor</item>
+        <item name="android:background">@color/skooterNPrimaryTextColor</item>
     </style>
 </resources>

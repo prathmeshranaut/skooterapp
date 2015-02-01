@@ -39,7 +39,7 @@ public class SlidingFragment extends Fragment {
         mSlidingTabLayout.setCustomTabColorizer(new TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-                return SlidingFragment.this.getResources().getColor(R.color.md_light_blue_300);
+                return SlidingFragment.this.getResources().getColor(R.color.skooterNPrimaryTextColor);
             }
         });
     }

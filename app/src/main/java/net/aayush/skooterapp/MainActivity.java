@@ -48,6 +48,9 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
 
             return true;
+        } else if (id == R.id.action_alerts) {
+            Intent intent = new Intent(MainActivity.this, NotificationsActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

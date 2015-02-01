@@ -11,7 +11,6 @@
     <string name="action_me">Me</string>
     <string name="action_peek">Peek</string>
     <string name="title_activity_peek">Peek</string>
-
     <string name="flags_reason_prompt">Reason to Flag</string>
 
     <string-array name="flag_reasons">
@@ -31,5 +30,7 @@
     <string name="alerts">alerts</string>
     <string name="action_flag">Flag</string>
     <string name="title_activity_flag">Flag Post</string>
+    <string name="title_activity_notifications">Notifications</string>
+    <string name="title_activity_favorites">FavoritesActivity</string>
 
 </resources>

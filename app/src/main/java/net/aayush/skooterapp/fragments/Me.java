@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 
 import net.aayush.skooterapp.BaseActivity;
+import net.aayush.skooterapp.FavoritesActivity;
 import net.aayush.skooterapp.GPSLocator;
 import net.aayush.skooterapp.MeCommentsActivity;
 import net.aayush.skooterapp.MePostsActivity;
@@ -64,6 +65,7 @@ public class Me extends Fragment {
         ArrayList<String> testData = new ArrayList<String>(3);
         testData.add("My Skoots");
         testData.add("My Replies");
+        testData.add("My Favorites");
         testData.add("Settings");
 
         myList.setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, testData));
@@ -82,6 +84,10 @@ public class Me extends Fragment {
                         startActivity(intent);
                         break;
                     case 2:
+                        intent = new Intent(getActivity(), FavoritesActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 3:
                         break;
                 }
             }

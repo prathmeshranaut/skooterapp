@@ -14,6 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -64,6 +68,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     private View mHeader;
     private TextView mQuickReturnView;
     private View mPlaceHolder;
+    protected View mSkootHolder;
 
 
     @Override
@@ -183,6 +188,8 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
             }
         });
 
+        mSkootHolder = rootView.findViewById(R.id.post_skoot_holder);
+
         mListPosts.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
@@ -193,33 +200,132 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                     }
                 }
         );
-        mListPosts.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
+        mListPosts.setOnScrollListener(
+            new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+                    AnimationSet animation = new AnimationSet(true);
+                    Animation anim;
+                    switch (scrollState) {
+                        case 2: // SCROLL_STATE_FLING
+                            //hide button here
+                            anim = new TranslateAnimation(0,0,0,1000);
+                            anim.setDuration(1000);
+                            animation.addAnimation(anim);
 
+                            anim = new AlphaAnimation(1.0f, 0.0f);
+                            anim.setDuration(1000);
+                            animation.addAnimation(anim);
+
+                            mSkootHolder.startAnimation(animation);
+                            animation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    mSkootHolder.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                            break;
+
+                        case 1: // SCROLL_STATE_TOUCH_SCROLL
+                            //hide button here
+                            anim = new TranslateAnimation(0,0,0,1000);
+                            anim.setDuration(1000);
+                            animation.addAnimation(anim);
+
+                            anim = new AlphaAnimation(1.0f, 0.0f);
+                            anim.setDuration(1000);
+                            animation.addAnimation(anim);
+
+                            mSkootHolder.startAnimation(animation);
+                            animation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    mSkootHolder.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                            break;
+
+                        case 0: // SCROLL_STATE_IDLE
+                            //show button here
+                            anim = new TranslateAnimation(0,0,1000,0);
+                            anim.setDuration(1000);
+                            animation.addAnimation(anim);
+
+                            anim = new AlphaAnimation(0.0f, 1.0f);
+                            anim.setDuration(1000);
+                            animation.addAnimation(anim);
+
+                            mSkootHolder.startAnimation(animation);
+                            animation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    mSkootHolder.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                                     int totalItemCount) {
+                    mScrollY = 0;
+                    int translationY = 0;
+
+                }
             }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                mScrollY = 0;
-                int translationY = 0;
-
-            }
-        });
+        );
 
         final EditText postSkoot = (EditText) rootView.findViewById(R.id.skootText);
         mLinearLayout = (LinearLayout) rootView.findViewById(R.id.focusLayout);
         mLinearLayout.requestFocus();
 
-        postSkoot.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    Intent intent = new Intent(getActivity(), ComposeActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
+        postSkoot.setOnFocusChangeListener(new View.OnFocusChangeListener()
+
+                                           {
+                                               @Override
+                                               public void onFocusChange(View v, boolean hasFocus) {
+                                                   if (hasFocus) {
+                                                       Intent intent = new Intent(getActivity(), ComposeActivity.class);
+                                                       startActivity(intent);
+                                                   }
+                                               }
+                                           }
+
+        );
 
         // Inflate the layout for this fragment
         return rootView;

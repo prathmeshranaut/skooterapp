@@ -8,4 +8,5 @@
     <color name="skooterSecondaryTextColor">@color/md_yellow_800</color>
 
     <color name="skooterNPrimaryTextColor">#55acee</color>
+    <color name="skooterNSecondaryBackgroundColor">#449bdd</color>
 </resources>

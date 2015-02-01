@@ -16,5 +16,7 @@
     <string name="user">user/{user_id}</string>
     <string name="user_new">user</string>
     <string name="user_zones">user/zones/{user_id}</string>
+    <string name="user_notifications">notifications/{user_id}</string>
+    <string name="user_favorites">favorites/{user_id}</string>
     <string name="user_location">location</string>
 </resources>

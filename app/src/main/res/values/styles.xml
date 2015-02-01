@@ -6,8 +6,8 @@
     </style>
 
     <style name="Theme.Base" parent="AppTheme">
-        <item name="colorPrimary">@color/skooterPrimaryBackgroundColor</item>
-        <item name="colorPrimaryDark">@color/skooterSecondaryBackgroundColor</item>
+        <item name="colorPrimary">@color/skooterNPrimaryTextColor</item>
+        <item name="colorPrimaryDark">@color/skooterNSecondaryBackgroundColor</item>
         <item name="colorAccent">@color/skooterColorBackgroundAccent</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
@@ -16,12 +16,12 @@
 
     <style name="Theme.Skooter" parent="Theme.Base" />
 
-    <style name="ActionBarThemeOverlay" parent="">
-        <item name="android:textColorPrimary">@color/skooterPrimaryTextColor</item>
-        <item name="android:actionMenuTextColor">@color/skooterPrimaryTextColor</item>
-        <item name="android:textColorSecondary">@color/skooterPrimaryTextColor</item>
-        <item name="android:background">@color/skooterNPrimaryTextColor</item>
-    </style>
+    <!--<style name="ActionBarThemeOverlay" parent="">-->
+        <!--<item name="android:textColorPrimary">@color/skooterPrimaryTextColor</item>-->
+        <!--<item name="android:actionMenuTextColor">@color/skooterPrimaryTextColor</item>-->
+        <!--<item name="android:textColorSecondary">@color/skooterPrimaryTextColor</item>-->
+        <!--<item name="android:background">@color/skooterNPrimaryTextColor</item>-->
+    <!--</style>-->
 
     <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/skooterPrimaryTextColor</item>

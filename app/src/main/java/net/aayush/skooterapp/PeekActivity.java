@@ -1,6 +1,7 @@
 package net.aayush.skooterapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,10 +72,10 @@ public class PeekActivity extends BaseActivity {
         params.put("user_id", Integer.toString(BaseActivity.userId));
         params.put("zone_id", Integer.toString(zone.getZoneId()));
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                Log.v(LOG_TAG, response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -96,7 +97,7 @@ public class PeekActivity extends BaseActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                Log.v(LOG_TAG, response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
