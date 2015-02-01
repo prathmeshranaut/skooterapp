@@ -184,13 +184,18 @@ public class LoadingActivity extends BaseActivity {
                 final String SKOOT_POST = "skoots";
                 final String SKOOT_COMMENT = "comments";
                 final String SKOOT_ID = "id";
-                final String SKOOT_HANDLE = "handle";
+                final String SKOOT_HANDLE = "channel";
                 final String SKOOT_CONTENT = "content";
                 final String SKOOT_UPVOTES = "upvotes";
                 final String SKOOT_DOWNVOTES = "downvotes";
                 final String SKOOT_CREATED_AT = "created_at";
                 final String SKOOT_COMMENTS_COUNT = "comments_count";
-                final String SKOOT_POST_ID = "post_id";
+                final String SKOOT_POST_ID = "id";
+                final String SKOOT_FAVORITE_COUNT = "favorites_count";
+                final String SKOOT_USER_FAVORITED = "user_favorited";
+                final String SKOOT_USER_COMMENTED = "user_commented";
+                final String SKOOT_IF_USER_VOTED = "user_voted";
+                final String SKOOT_USER_VOTE = "user_vote";
 
                 try {
                     int score = response.getInt(SKOOT_SCORE);
@@ -206,9 +211,14 @@ public class LoadingActivity extends BaseActivity {
                         int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
                         int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
                         int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);
+                        boolean skoot_if_user_voted = jsonPost.getBoolean(SKOOT_IF_USER_VOTED);
+                        boolean user_vote = jsonPost.getBoolean(SKOOT_USER_VOTE);
+                        boolean user_favorited = jsonPost.getBoolean(SKOOT_USER_FAVORITED);
+                        boolean user_commented = jsonPost.getBoolean(SKOOT_USER_COMMENTED);
+                        int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
                         String created_at = jsonPost.getString(SKOOT_CREATED_AT);
 
-                        Post postObject = new Post(id, handle, post, commentsCount, upvotes, downvotes, false, false, true, created_at);
+                        Post postObject = new Post(id, handle, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, true, user_favorited, user_commented, created_at);
                         posts.add(postObject);
                     }
 

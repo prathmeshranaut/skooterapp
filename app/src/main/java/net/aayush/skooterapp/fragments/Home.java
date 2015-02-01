@@ -128,7 +128,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 final String SKOOTS = "skoots";
                 final String SKOOT_ID = "id";
                 final String SKOOT_POST = "content";
-                final String SKOOT_HANDLE = "handle";
+                final String SKOOT_HANDLE = "channel";
                 final String SKOOT_UPVOTES = "upvotes";
                 final String SKOOT_DOWNVOTES = "downvotes";
                 final String SKOOT_IF_USER_VOTED = "user_voted";
@@ -136,11 +136,14 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 final String SKOOT_USER_SCOOT = "user_skoot";
                 final String SKOOT_CREATED_AT = "created_at";
                 final String SKOOT_COMMENTS_COUNT = "comments_count";
+                final String SKOOT_FAVORITE_COUNT = "favorites_count";
+                final String SKOOT_USER_FAVORITED = "user_favorited";
+                final String SKOOT_USER_COMMENTED = "user_commented";
 
                 try {
                     JSONArray jsonArray = response.getJSONArray(SKOOTS);
 
-                    mPostsList.clear();
+                    //mPostsList.clear();
                     Log.v(LOG_TAG, jsonArray.toString());
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonPost = jsonArray.getJSONObject(i);
@@ -153,9 +156,12 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                         boolean skoot_if_user_voted = jsonPost.getBoolean(SKOOT_IF_USER_VOTED);
                         boolean user_vote = jsonPost.getBoolean(SKOOT_USER_VOTE);
                         boolean user_skoot = jsonPost.getBoolean(SKOOT_USER_SCOOT);
+                        boolean user_favorited = jsonPost.getBoolean(SKOOT_USER_FAVORITED);
+                        boolean user_commented = jsonPost.getBoolean(SKOOT_USER_COMMENTED);
+                        int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
                         String created_at = jsonPost.getString(SKOOT_CREATED_AT);
 
-                        Post postObject = new Post(id, handle, post, commentsCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, created_at);
+                        Post postObject = new Post(id, handle, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at);
                         mPostsList.add(postObject);
                     }
                 } catch (JSONException e) {
@@ -202,129 +208,130 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 }
         );
         mListPosts.setOnScrollListener(
-            new AbsListView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(AbsListView view, int scrollState) {
-                    AnimationSet animation = new AnimationSet(true);
-                    Animation anim;
-                    switch (scrollState) {
-                        case 2: // SCROLL_STATE_FLING
-                            //hide button here
-                            anim = new TranslateAnimation(0,0,0,1000);
-                            anim.setDuration(1000);
-                            animation.addAnimation(anim);
+                new AbsListView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+                        AnimationSet animation = new AnimationSet(true);
+                        Animation anim;
+                        switch (scrollState) {
+                            case 2: // SCROLL_STATE_FLING
+                                //hide button here
+                                anim = new TranslateAnimation(0, 0, 0, 1000);
+                                anim.setDuration(1000);
+                                animation.addAnimation(anim);
 
-                            anim = new AlphaAnimation(1.0f, 0.0f);
-                            anim.setDuration(1000);
-                            animation.addAnimation(anim);
+                                anim = new AlphaAnimation(1.0f, 0.0f);
+                                anim.setDuration(1000);
+                                animation.addAnimation(anim);
 
-                            mSkootHolder.startAnimation(animation);
-                            animation.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
+                                mSkootHolder.startAnimation(animation);
+                                animation.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    mSkootHolder.setVisibility(View.GONE);
-                                }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        mSkootHolder.setVisibility(View.GONE);
+                                    }
 
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
 
-                                }
-                            });
-                            break;
+                                    }
+                                });
+                                break;
 
-                        case 1: // SCROLL_STATE_TOUCH_SCROLL
-                            //hide button here
-                            anim = new TranslateAnimation(0,0,0,1000);
-                            anim.setDuration(1000);
-                            animation.addAnimation(anim);
+                            case 1: // SCROLL_STATE_TOUCH_SCROLL
+                                //hide button here
+                                anim = new TranslateAnimation(0, 0, 0, 1000);
+                                anim.setDuration(1000);
+                                animation.addAnimation(anim);
 
-                            anim = new AlphaAnimation(1.0f, 0.0f);
-                            anim.setDuration(1000);
-                            animation.addAnimation(anim);
+                                anim = new AlphaAnimation(1.0f, 0.0f);
+                                anim.setDuration(1000);
+                                animation.addAnimation(anim);
 
-                            mSkootHolder.startAnimation(animation);
-                            animation.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
+                                mSkootHolder.startAnimation(animation);
+                                animation.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    mSkootHolder.setVisibility(View.GONE);
-                                }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        mSkootHolder.setVisibility(View.GONE);
+                                    }
 
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
 
-                                }
-                            });
-                            break;
+                                    }
+                                });
+                                break;
 
-                        case 0: // SCROLL_STATE_IDLE
-                            //show button here
-                            anim = new TranslateAnimation(0,0,1000,0);
-                            anim.setDuration(1000);
-                            animation.addAnimation(anim);
+                            case 0: // SCROLL_STATE_IDLE
+                                //show button here
+                                anim = new TranslateAnimation(0, 0, 1000, 0);
+                                anim.setDuration(1000);
+                                animation.addAnimation(anim);
 
-                            anim = new AlphaAnimation(0.0f, 1.0f);
-                            anim.setDuration(1000);
-                            animation.addAnimation(anim);
+                                anim = new AlphaAnimation(0.0f, 1.0f);
+                                anim.setDuration(1000);
+                                animation.addAnimation(anim);
 
-                            mSkootHolder.startAnimation(animation);
-                            animation.setAnimationListener(new Animation.AnimationListener() {
-                                @Override
-                                public void onAnimationStart(Animation animation) {
+                                mSkootHolder.startAnimation(animation);
+                                animation.setAnimationListener(new Animation.AnimationListener() {
+                                    @Override
+                                    public void onAnimationStart(Animation animation) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onAnimationEnd(Animation animation) {
-                                    mSkootHolder.setVisibility(View.VISIBLE);
-                                }
+                                    @Override
+                                    public void onAnimationEnd(Animation animation) {
+                                        mSkootHolder.setVisibility(View.VISIBLE);
+                                    }
 
-                                @Override
-                                public void onAnimationRepeat(Animation animation) {
+                                    @Override
+                                    public void onAnimationRepeat(Animation animation) {
 
-                                }
-                            });
-                            break;
+                                    }
+                                });
+                                break;
 
-                        default:
-                            break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                                         int totalItemCount) {
+                        mScrollY = 0;
+                        int translationY = 0;
+
                     }
                 }
-
-                @Override
-                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                                     int totalItemCount) {
-                    mScrollY = 0;
-                    int translationY = 0;
-
-                }
-            }
         );
 
         final EditText postSkoot = (EditText) rootView.findViewById(R.id.skootText);
         mLinearLayout = (LinearLayout) rootView.findViewById(R.id.focusLayout);
         mLinearLayout.requestFocus();
 
-        postSkoot.setOnFocusChangeListener(new View.OnFocusChangeListener()
+        postSkoot.setOnFocusChangeListener(
+                new View.OnFocusChangeListener()
 
-                                           {
-                                               @Override
-                                               public void onFocusChange(View v, boolean hasFocus) {
-                                                   if (hasFocus) {
-                                                       Intent intent = new Intent(getActivity(), ComposeActivity.class);
-                                                       startActivity(intent);
-                                                   }
-                                               }
-                                           }
+                {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (hasFocus) {
+                            Intent intent = new Intent(getActivity(), ComposeActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                }
 
         );
 

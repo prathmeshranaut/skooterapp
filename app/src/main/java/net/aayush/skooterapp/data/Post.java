@@ -15,10 +15,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Post implements Serializable {
@@ -32,8 +29,11 @@ public class Post implements Serializable {
     private int mUpvotes;
     private int mDownvotes;
     private int mCommentsCount;
+    private int mFavoriteCount;
     private boolean mIfUserVoted;
     private boolean mUserVote;
+    private boolean mUserFavorited;
+    private boolean mUserCommented;
     private boolean mUserSkoot;
 
     public int getId() {
@@ -69,25 +69,43 @@ public class Post implements Serializable {
     }
 
     public String getTimestamp() {
-        SimpleDateFormat formatter;
-        formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        String time = null;
-        try {
-            Date date = formatter.parse(mTimestamp.substring(0, 24));
-            time = BaseActivity.getTimeAgo(date.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return time;
+        return BaseActivity.getTimeAgo(mTimestamp);
+    }
+
+    public boolean isUserCommented() {
+        return mUserCommented;
+    }
+
+    public void setUserCommented(boolean userCommented) {
+        mUserCommented = userCommented;
+    }
+
+    public boolean isUserFavorited() {
+        return mUserFavorited;
+    }
+
+    public void setUserFavorited(boolean userFavorited) {
+        mUserFavorited = userFavorited;
+    }
+
+    public int getFavoriteCount() {
+        return mFavoriteCount;
+    }
+
+    public void setFavoriteCount(int favoriteCount) {
+        mFavoriteCount = favoriteCount;
     }
 
     private String mTimestamp;
 
-    public Post(int id, String handle, String content, int commentsCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, String timestamp) {
+    public Post(int id, String handle, String content, int commentsCount, int favoriteCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, boolean userFavorited, boolean userCommented,   String timestamp) {
         mId = id;
         mHandle = handle;
         mContent = content;
         mCommentsCount = commentsCount;
+        mFavoriteCount = favoriteCount;
+        mUserFavorited = userFavorited;
+        mUserCommented = userCommented;
         mUpvotes = upvotes;
         mDownvotes = downvotes;
         mIfUserVoted = ifUserVoted;

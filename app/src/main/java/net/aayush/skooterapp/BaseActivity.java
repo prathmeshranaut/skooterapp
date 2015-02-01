@@ -6,9 +6,12 @@ import android.support.v7.widget.Toolbar;
 
 import net.aayush.skooterapp.data.User;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class BaseActivity extends ActionBarActivity {
     private Toolbar mToolbar;
@@ -37,34 +40,46 @@ public class BaseActivity extends ActionBarActivity {
         return result;
     }
 
-    public static String getTimeAgo(long time) {
-        if (time < 1000000000000L) {
+    public static String getTimeAgo(String time) {
+        SimpleDateFormat formatter;
+        formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        long t = 0;
+        try {
+            Date date = formatter.parse(time.substring(0, 24));
+            t = date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (t < 1000000000000L) {
             // if timestamp given in seconds, convert to millis
-            time *= 1000;
+            t *= 1000;
         }
 
         Date curDate = currentDate();
         long now = curDate.getTime();
 
-        if (time > now || time <= 0) {
+        if (t > now || t <= 0) {
             return null;
         }
 
-        final long diff = now - time;
+        final long diff = now - t;
         if (diff < MINUTE_MILLIS) {
             return "just now";
         } else if (diff < 2 * MINUTE_MILLIS) {
-            return "a minute ago";
+            return "a minute";
         } else if (diff < 50 * MINUTE_MILLIS) {
-            return diff / MINUTE_MILLIS + " minutes ago";
+            return diff / MINUTE_MILLIS + " minutes";
         } else if (diff < 90 * MINUTE_MILLIS) {
-            return "an hour ago";
+            return "an hour";
         } else if (diff < 24 * HOUR_MILLIS) {
-            return diff / HOUR_MILLIS + " hours ago";
+            return diff / HOUR_MILLIS + " hours";
         } else if (diff < 48 * HOUR_MILLIS) {
             return "Yesterday";
         } else {
-            return diff / DAY_MILLIS + " days ago";
+            return diff / DAY_MILLIS + " days";
         }
     }
 

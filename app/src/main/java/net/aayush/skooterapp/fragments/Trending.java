@@ -23,7 +23,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
-import net.aayush.skooterapp.GetSkootData;
 import net.aayush.skooterapp.PostAdapter;
 import net.aayush.skooterapp.R;
 import net.aayush.skooterapp.ViewPostActivity;
@@ -70,7 +69,7 @@ public class Trending extends Fragment {
                 final String SKOOTS = "skoots";
                 final String SKOOT_ID = "id";
                 final String SKOOT_POST = "content";
-                final String SKOOT_HANDLE = "handle";
+                final String SKOOT_HANDLE = "channel";
                 final String SKOOT_UPVOTES = "upvotes";
                 final String SKOOT_DOWNVOTES = "downvotes";
                 final String SKOOT_IF_USER_VOTED = "user_voted";
@@ -78,6 +77,9 @@ public class Trending extends Fragment {
                 final String SKOOT_USER_SCOOT = "user_skoot";
                 final String SKOOT_CREATED_AT = "created_at";
                 final String SKOOT_COMMENTS_COUNT = "comments_count";
+                final String SKOOT_FAVORITE_COUNT = "favorites_count";
+                final String SKOOT_USER_FAVORITED = "user_favorited";
+                final String SKOOT_USER_COMMENTED = "user_commented";
 
                 try {
                     JSONArray jsonArray = response.getJSONArray(SKOOTS);
@@ -95,9 +97,12 @@ public class Trending extends Fragment {
                         boolean skoot_if_user_voted = jsonPost.getBoolean(SKOOT_IF_USER_VOTED);
                         boolean user_vote = jsonPost.getBoolean(SKOOT_USER_VOTE);
                         boolean user_skoot = jsonPost.getBoolean(SKOOT_USER_SCOOT);
+                        boolean user_favorited = jsonPost.getBoolean(SKOOT_USER_FAVORITED);
+                        boolean user_commented = jsonPost.getBoolean(SKOOT_USER_COMMENTED);
+                        int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
                         String created_at = jsonPost.getString(SKOOT_CREATED_AT);
 
-                        Post postObject = new Post(id, handle, post, commentsCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, created_at);
+                        Post postObject = new Post(id, handle, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at);
                         mPostsList.add(postObject);
                     }
                 } catch (JSONException e) {
@@ -143,27 +148,5 @@ public class Trending extends Fragment {
         MenuItem menuItem = menu.findItem(R.id.score);
         menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore() + 2));
         super.onCreateOptionsMenu(menu,inflater);
-    }
-
-    public class ProcessPosts extends GetSkootData {
-
-        public ProcessPosts(String mRawUrl) {
-            super(mRawUrl);
-        }
-
-        public void execute() {
-            super.execute();
-            ProcessData processData = new ProcessData();
-            processData.execute();
-        }
-
-        public class ProcessData extends DownloadJsonData {
-            protected void onPostExecute(String webData) {
-                super.onPostExecute(webData);
-                mPostsList = getPosts();
-                mPostsAdapter.addAll(mPostsList);
-                mPostsAdapter.notifyDataSetChanged();
-            }
-        }
     }
 }

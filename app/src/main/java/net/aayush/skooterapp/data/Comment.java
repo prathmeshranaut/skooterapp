@@ -15,10 +15,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Comment implements Serializable {
@@ -81,16 +78,7 @@ public class Comment implements Serializable {
     }
 
     public String getTimestamp() {
-        SimpleDateFormat formatter;
-        formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        String time = null;
-        try {
-            Date date = formatter.parse(mTimestamp.substring(0, 24));
-            time = BaseActivity.getTimeAgo(date.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return time;
+        return BaseActivity.getTimeAgo(mTimestamp);
     }
 
     @Override
