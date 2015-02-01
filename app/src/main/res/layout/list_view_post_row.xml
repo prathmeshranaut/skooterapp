@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/upvote"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/ic_action_collapse"/>
+                android:background="@drawable/vote_up_inactive"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -113,7 +113,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_below="@+id/voteCount"
                 android:layout_alignLeft="@+id/upvote"
-                android:background="@drawable/ic_action_expand"
+                android:background="@drawable/vote_down_inactive"
                 />
         </RelativeLayout>
     </LinearLayout>
