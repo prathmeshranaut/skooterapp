@@ -17,8 +17,8 @@
         <ImageView
             android:src="@drawable/time_icon"
             android:scaleType="fitXY"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_marginRight="3dp"
             />
 
@@ -32,8 +32,8 @@
 
         <ImageView
             android:scaleType="fitXY"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:src="@drawable/comment_inactive"
             android:id="@+id/commentImage"
             android:layout_marginLeft="15dp"
@@ -49,8 +49,8 @@
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:id="@+id/favorite"
             android:layout_alignParentRight="true"
             android:background="@drawable/favorite_icon_inactive"

@@ -19,4 +19,7 @@
     <string name="user_notifications">notifications/{user_id}</string>
     <string name="user_favorites">favorites/{user_id}</string>
     <string name="user_location">location</string>
+
+    <string name="favorite_post">favorite/{post_id}</string>
+    <string name="unfavorite_post">unfavorite/{post_id}</string>
 </resources>

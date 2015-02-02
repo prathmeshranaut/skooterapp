@@ -2,7 +2,15 @@ package net.aayush.skooterapp.data;
 
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
+import net.aayush.skooterapp.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -12,15 +20,19 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final String LOG_TAG = Post.class.getSimpleName();
 
     private int mId;
     private String mHandle;
@@ -98,7 +110,7 @@ public class Post implements Serializable {
 
     private String mTimestamp;
 
-    public Post(int id, String handle, String content, int commentsCount, int favoriteCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, boolean userFavorited, boolean userCommented,   String timestamp) {
+    public Post(int id, String handle, String content, int commentsCount, int favoriteCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, boolean userFavorited, boolean userCommented, String timestamp) {
         mId = id;
         mHandle = handle;
         mContent = content;
@@ -187,5 +199,53 @@ public class Post implements Serializable {
 
     public int getCommentsCount() {
         return mCommentsCount;
+    }
+
+    public void favoritePost() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("post_id", Integer.toString(getId()));
+
+        String url = BaseActivity.substituteString(AppController.getInstance().getResources().getString(R.string.favorite_post), params);
+
+        params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(BaseActivity.userId));
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, error.getMessage());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "favorite_post");
+    }
+
+    public void unFavoritePost() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("post_id", Integer.toString(getId()));
+
+        String url = BaseActivity.substituteString(AppController.getInstance().getResources().getString(R.string.unfavorite_post), params);
+
+        params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(BaseActivity.userId));
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, error.getMessage());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "unfavorite_post");
     }
 }

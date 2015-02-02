@@ -227,13 +227,12 @@ public class LoadingActivity extends BaseActivity {
                         JSONObject jsonComment = jsonComments.getJSONObject(i);
                         int id = jsonComment.getInt(SKOOT_ID);
                         String post = jsonComment.getString(SKOOT_CONTENT);
-                        String handle = jsonComment.getString(SKOOT_HANDLE);
                         int upvotes = jsonComment.getInt(SKOOT_UPVOTES);
                         int downvotes = jsonComment.getInt(SKOOT_DOWNVOTES);
                         int postId = jsonComment.getInt(SKOOT_POST_ID);
                         String created_at = jsonComment.getString(SKOOT_CREATED_AT);
 
-                        Comment commentObject = new Comment(id, postId, post, handle, upvotes, downvotes, false, false, true, created_at);
+                        Comment commentObject = new Comment(id, postId, post, upvotes, downvotes, false, false, true, created_at);
                         comments.add(commentObject);
                     }
                     mUser = new User(userId, score, posts, comments);

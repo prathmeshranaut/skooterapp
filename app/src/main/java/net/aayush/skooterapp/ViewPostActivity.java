@@ -22,7 +22,6 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.data.Comment;
-import net.aayush.skooterapp.data.CommentData;
 import net.aayush.skooterapp.data.Post;
 
 import org.json.JSONArray;
@@ -55,12 +54,12 @@ public class ViewPostActivity extends BaseActivity {
         List<Post> postList = new ArrayList<Post>();
         postList.add(mPost);
 
-        ArrayAdapter<Post> postAdapter = new PostAdapter(this, R.layout.list_view_post_row, postList);
+        ArrayAdapter<Post> postAdapter = new PostAdapter(this, R.layout.list_view_comment_post_row, postList);
         ListView listPosts = (ListView) findViewById(R.id.list_posts);
         listPosts.setAdapter(postAdapter);
 
         String tag = "load_comments";
-        List<Comment> comments = new CommentData().getComments();
+
         mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_post_row, mCommentsList);
         mListComments = (ListView) findViewById(R.id.list_comments);
         mListComments.setAdapter(mCommentsAdapter);
@@ -78,7 +77,6 @@ public class ViewPostActivity extends BaseActivity {
                 final String SKOOT_ID = "id";
                 final String SKOOT_POST = "content";
                 final String SKOOT_COMMENTS = "comments";
-                final String SKOOT_HANDLE = "handle";
                 final String SKOOT_CREATED_AT = "created_at";
                 final String SKOOT_UPVOTES = "upvotes";
                 final String SKOOT_DOWNVOTES = "downvotes";
@@ -93,7 +91,6 @@ public class ViewPostActivity extends BaseActivity {
                         JSONObject jsonComment = jsonArray.getJSONObject(i);
                         int id = jsonComment.getInt(SKOOT_ID);
                         String comment = jsonComment.getString(SKOOT_POST);
-                        String handle = jsonComment.getString(SKOOT_HANDLE);
                         int upvotes = jsonComment.getInt(SKOOT_UPVOTES);
                         int downvotes = jsonComment.getInt(SKOOT_DOWNVOTES);
                         boolean if_user_voted = jsonComment.getBoolean(SKOOT_IF_USER_VOTED);
@@ -104,7 +101,7 @@ public class ViewPostActivity extends BaseActivity {
                         boolean user_skoot = jsonComment.getBoolean(SKOOT_USER_COMMENT);
                         String timestamp = jsonComment.getString(SKOOT_CREATED_AT);
 
-                        Comment commentObject = new Comment(id, mPost.getId(), comment, handle, upvotes, downvotes, if_user_voted, user_vote, user_skoot, timestamp);
+                        Comment commentObject = new Comment(id, mPost.getId(), comment, upvotes, downvotes, if_user_voted, user_vote, user_skoot, timestamp);
                         mCommentsList.add(commentObject);
                     }
                 } catch (JSONException e) {

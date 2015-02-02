@@ -24,7 +24,6 @@ public class Comment implements Serializable {
     private int mId;
     private int mPostId;
     private String mContent;
-    private String mHandle;
     private int mUpvotes;
     private int mDownvotes;
     private boolean mIfUserVoted;
@@ -32,11 +31,10 @@ public class Comment implements Serializable {
     private boolean mUserComment;
     private String mTimestamp;
 
-    public Comment(int id, int postId, String content, String handle, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userComment, String timestamp) {
+    public Comment(int id, int postId, String content, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userComment, String timestamp) {
         mId = id;
         mPostId = postId;
         mContent = content;
-        mHandle = handle;
         mUpvotes = upvotes;
         mDownvotes = downvotes;
         mIfUserVoted = ifUserVoted;
@@ -51,10 +49,6 @@ public class Comment implements Serializable {
 
     public String getContent() {
         return mContent;
-    }
-
-    public String getHandle() {
-        return mHandle;
     }
 
     public int getUpvotes() {

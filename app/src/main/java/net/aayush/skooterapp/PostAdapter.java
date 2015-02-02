@@ -59,11 +59,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         ImageView commentImage = (ImageView) convertView.findViewById(R.id.commentImage);
 
-        Button favoriteBtn = (Button) convertView.findViewById(R.id.favorite);
+        final Button favoriteBtn = (Button) convertView.findViewById(R.id.favorite);
         Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
         Button downvoteBtn = (Button) convertView.findViewById(R.id.downvote);
 
-        favoriteBtn.setTag(favoriteBtn);
+        favoriteBtn.setTag(post);
         upvoteBtn.setTag(post);
         downvoteBtn.setTag(post);
 
@@ -80,11 +80,26 @@ public class PostAdapter extends ArrayAdapter<Post> {
             favoriteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.favorite_icon_inactive));
         }
 
+        favoriteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Post post = (Post) favoriteBtn.getTag();
+
+                if (post.isUserFavorited()) {
+                    favoriteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.favorite_icon_inactive));
+                    post.favoritePost();
+                } else {
+                    favoriteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.favorite_icon_active));
+                    post.unFavoritePost();
+                }
+            }
+        });
+
         //Commented
         if (post.isUserCommented()) {
-            commentImage.setBackground(mContext.getResources().getDrawable(R.drawable.comment_active));
+            commentImage.setImageResource(R.drawable.comment_active);
         } else {
-            commentImage.setBackground(mContext.getResources().getDrawable(R.drawable.comment_inactive));
+            commentImage.setImageResource(R.drawable.comment_inactive);
         }
 
         if (post.isIfUserVoted()) {
@@ -95,6 +110,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 downvoteBtn.setAlpha(0.3f);
             } else {
                 downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
+                downvoteBtn.setAlpha(0.7f);
                 upvoteBtn.setAlpha(0.3f);
             }
         } else {
