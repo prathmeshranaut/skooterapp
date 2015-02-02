@@ -54,13 +54,12 @@ public class ViewPostActivity extends BaseActivity {
         List<Post> postList = new ArrayList<Post>();
         postList.add(mPost);
 
-        ArrayAdapter<Post> postAdapter = new PostAdapter(this, R.layout.list_view_comment_post_row, postList);
+        ArrayAdapter<Post> postAdapter = new PostAdapter(this, R.layout.list_view_post_row, postList);
         ListView listPosts = (ListView) findViewById(R.id.list_posts);
         listPosts.setAdapter(postAdapter);
 
         String tag = "load_comments";
-
-        mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_post_row, mCommentsList);
+        mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_comment_post_row, mCommentsList);
         mListComments = (ListView) findViewById(R.id.list_comments);
         mListComments.setAdapter(mCommentsAdapter);
 

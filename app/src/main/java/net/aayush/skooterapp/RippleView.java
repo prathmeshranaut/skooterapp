@@ -39,7 +39,7 @@ public class RippleView extends View {
         if(mAnimation == null) {
             createAnimation(canvas);
         }
-        canvas.drawCircle(getWidth()/2,getHeight()/2,150, mPaint);
+        canvas.drawCircle(getWidth()/2,getHeight()/2,75, mPaint);
     }
 
     private void createAnimation(Canvas canvas) {
