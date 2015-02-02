@@ -39,6 +39,10 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         Post post = data.get(position);
 
+        View is_user_post_view = convertView.findViewById(R.id.is_user_post);
+        if(post.isUserSkoot()) {
+            is_user_post_view.setAlpha(1.0f);
+        }
         TextView postContent = (TextView) convertView.findViewById(R.id.postText);
         postContent.setText(post.getContent());
 
@@ -85,7 +89,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
             public void onClick(View v) {
                 Post post = (Post) favoriteBtn.getTag();
 
-                if (post.isUserFavorited()) {
+                if (!post.isUserFavorited()) {
                     favoriteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.favorite_icon_active));
                     post.favoritePost();
                 } else {
@@ -114,6 +118,9 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 upvoteBtn.setAlpha(0.3f);
             }
         } else {
+            upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_inactive));
+            downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_inactive));
+
             upvoteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

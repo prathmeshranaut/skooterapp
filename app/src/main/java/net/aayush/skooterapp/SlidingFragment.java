@@ -36,6 +36,8 @@ public class SlidingFragment extends Fragment {
         mSlidingTabLayout.setDistributeEvenly(true);
         mSlidingTabLayout.setCustomTabView(R.layout.image_slider_tab, 0);
         mSlidingTabLayout.setViewPager(mViewPager);
+        mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.skooterBackgroundColor));
+        //mSlidingTabLayout.setBackground(getResources().getDrawable(R.drawable.drop_shadow));
         mSlidingTabLayout.setCustomTabColorizer(new TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {

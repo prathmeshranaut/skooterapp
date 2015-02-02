@@ -107,7 +107,7 @@ public class Peek extends Fragment {
                             String post = jsonPost.getString(SKOOT_POST);
                             String channel = "";
                             if (!jsonPost.isNull(SKOOT_HANDLE)) {
-                                channel = jsonPost.getString(SKOOT_HANDLE);
+                                channel = "@" + jsonPost.getString(SKOOT_HANDLE);
                             }
                             int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
                             int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);

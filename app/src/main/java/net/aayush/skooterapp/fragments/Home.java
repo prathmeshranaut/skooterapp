@@ -151,7 +151,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
                         String channel = "";
                         if (!jsonPost.isNull(SKOOT_HANDLE)) {
-                            channel = jsonPost.getString(SKOOT_HANDLE);
+                            channel = "@" + jsonPost.getString(SKOOT_HANDLE);
                         }
 
                         int upvotes = jsonPost.getInt(SKOOT_UPVOTES);

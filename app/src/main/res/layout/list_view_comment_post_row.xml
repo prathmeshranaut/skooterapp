@@ -47,18 +47,6 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Large Text"
-                android:id="@+id/handleText"
-                android:textColor="@color/skooterSecondaryTextColor"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Large Text"
                 android:id="@+id/postText"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/handleText"

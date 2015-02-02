@@ -15,14 +15,16 @@ import net.aayush.skooterapp.fragments.Peek;
 import net.aayush.skooterapp.fragments.Trending;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
-    String tabs[] = {"Home", "Hot", "Peek", "Me"};
+    String tabs[] = {"Home", "Hot", "Peek",
+            //"Me"
+    };
 
     Context mContext;
     private int[] imageResId = {
             R.drawable.home_active,
             R.drawable.trending_inactive,
             R.drawable.peek_inactive,
-            R.drawable.me_inactive
+            //R.drawable.me_inactive
     };
 
     public TabsPagerAdapter(Context mContext, FragmentManager fm) {

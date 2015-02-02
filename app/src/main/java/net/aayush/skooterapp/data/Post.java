@@ -201,6 +201,7 @@ public class Post implements Serializable {
     }
 
     public void favoritePost() {
+        setUserFavorited(true);
         Map<String, String> params = new HashMap<String, String>();
         params.put("post_id", Integer.toString(getId()));
 
@@ -212,7 +213,7 @@ public class Post implements Serializable {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                Log.d(LOG_TAG, "Follow: " + response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -225,6 +226,7 @@ public class Post implements Serializable {
     }
 
     public void unFavoritePost() {
+        setUserFavorited(false);
         Map<String, String> params = new HashMap<String, String>();
         params.put("post_id", Integer.toString(getId()));
 
@@ -236,7 +238,7 @@ public class Post implements Serializable {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                Log.d(LOG_TAG, "UnFollow: " + response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
