@@ -57,7 +57,7 @@ public class ComposeActivity extends BaseActivity {
 
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("user_id", Integer.toString(BaseActivity.userId));
-                params.put("handle", skootHandle.getText().toString());
+                params.put("channel", skootHandle.getText().toString());
                 params.put("content", skootText.getText().toString());
                 params.put("location_id", "1");
 

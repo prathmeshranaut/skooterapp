@@ -20,7 +20,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
-        android:hint="@string/handle"
+        android:hint="@string/channel"
         android:ems="1"
         android:id="@+id/skootHandle"
         android:layout_below="@+id/skootText" />

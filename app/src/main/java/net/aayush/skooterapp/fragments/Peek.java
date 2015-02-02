@@ -105,7 +105,10 @@ public class Peek extends Fragment {
                             JSONObject jsonPost = jsonArray.getJSONObject(i);
                             int id = jsonPost.getInt(SKOOT_ID);
                             String post = jsonPost.getString(SKOOT_POST);
-                            String handle = jsonPost.getString(SKOOT_HANDLE);
+                            String channel = "";
+                            if (!jsonPost.isNull(SKOOT_HANDLE)) {
+                                channel = jsonPost.getString(SKOOT_HANDLE);
+                            }
                             int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
                             int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);
                             int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
@@ -117,7 +120,7 @@ public class Peek extends Fragment {
                             int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
                             String created_at = jsonPost.getString(SKOOT_CREATED_AT);
 
-                            Post postObject = new Post(id, handle, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at);
+                            Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at);
                             mPostsList.add(postObject);
                         }
                     } catch (JSONException e) {

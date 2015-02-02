@@ -35,8 +35,7 @@ public class Post implements Serializable {
     private static final String LOG_TAG = Post.class.getSimpleName();
 
     private int mId;
-    private String mHandle;
-
+    private String mChannel;
     private String mContent;
     private int mUpvotes;
     private int mDownvotes;
@@ -52,8 +51,8 @@ public class Post implements Serializable {
         return mId;
     }
 
-    public String getHandle() {
-        return mHandle;
+    public String getChannel() {
+        return mChannel;
     }
 
     public String getContent() {
@@ -110,9 +109,9 @@ public class Post implements Serializable {
 
     private String mTimestamp;
 
-    public Post(int id, String handle, String content, int commentsCount, int favoriteCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, boolean userFavorited, boolean userCommented, String timestamp) {
+    public Post(int id, String channel, String content, int commentsCount, int favoriteCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, boolean userFavorited, boolean userCommented, String timestamp) {
         mId = id;
-        mHandle = handle;
+        mChannel = channel;
         mContent = content;
         mCommentsCount = commentsCount;
         mFavoriteCount = favoriteCount;

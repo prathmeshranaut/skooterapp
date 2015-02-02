@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -149,7 +148,12 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                         JSONObject jsonPost = jsonArray.getJSONObject(i);
                         int id = jsonPost.getInt(SKOOT_ID);
                         String post = jsonPost.getString(SKOOT_POST);
-                        String handle = jsonPost.getString(SKOOT_HANDLE);
+
+                        String channel = "";
+                        if (!jsonPost.isNull(SKOOT_HANDLE)) {
+                            channel = jsonPost.getString(SKOOT_HANDLE);
+                        }
+
                         int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
                         int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);
                         int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
@@ -161,7 +165,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                         int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
                         String created_at = jsonPost.getString(SKOOT_CREATED_AT);
 
-                        Post postObject = new Post(id, handle, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at);
+                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at);
                         mPostsList.add(postObject);
                     }
                 } catch (JSONException e) {
@@ -197,16 +201,16 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
         mSkootHolder = rootView.findViewById(R.id.post_skoot_holder);
 
-        mListPosts.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
+//        mListPosts.getViewTreeObserver().addOnGlobalLayoutListener(
+//                new ViewTreeObserver.OnGlobalLayoutListener() {
+//                    @Override
+//                    public void onGlobalLayout() {
 //                        mQuickReturnHeight = mQuickReturnView.getHeight();
 //                        mListView.computeScrollY();
 //                        mCachedVerticalScrollRange = mListPosts.getListHeight();
-                    }
-                }
-        );
+//                    }
+//                }
+//        );
         mListPosts.setOnScrollListener(
                 new AbsListView.OnScrollListener() {
                     @Override

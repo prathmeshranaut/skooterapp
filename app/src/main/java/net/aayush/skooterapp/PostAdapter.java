@@ -43,7 +43,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         postContent.setText(post.getContent());
 
         TextView handleContent = (TextView) convertView.findViewById(R.id.handleText);
-        handleContent.setText(post.getHandle());
+        handleContent.setText(post.getChannel());
 
         TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         timestamp.setText(post.getTimestamp());
