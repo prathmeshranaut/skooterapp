@@ -92,7 +92,7 @@ public class Peek extends Fragment {
                     final String SKOOT_USER_SCOOT = "user_skoot";
                     final String SKOOT_CREATED_AT = "created_at";
                     final String SKOOT_COMMENTS_COUNT = "comments_count";
-                    final String SKOOT_FAVORITE_COUNT = "favs_count";
+                    final String SKOOT_FAVORITE_COUNT = "favorites_count";
                     final String SKOOT_USER_FAVORITED = "user_favorited";
                     final String SKOOT_USER_COMMENTED = "user_commented";
 
@@ -100,7 +100,6 @@ public class Peek extends Fragment {
                         JSONArray jsonArray = response.getJSONArray(SKOOTS);
 
                         mPostsList.clear();
-                        Log.v(LOG_TAG, jsonArray.toString());
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonPost = jsonArray.getJSONObject(i);
                             int id = jsonPost.getInt(SKOOT_ID);
