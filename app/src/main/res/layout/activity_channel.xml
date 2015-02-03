@@ -8,11 +8,12 @@
         layout="@layout/toolbar"
         android:id="@+id/app_bar"/>
 
-    <TextView
-        android:text="@string/hello_world"
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_below="@+id/app_bar"/>
+        android:id="@+id/list_channels"
+        android:layout_below="@id/app_bar">
+
+    </ListView>
 
 </RelativeLayout>

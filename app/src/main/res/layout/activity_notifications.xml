@@ -5,10 +5,12 @@
                 tools:context="net.aayush.skooterapp.NotificationsActivity">
 
     <include layout="@layout/toolbar" android:id="@+id/app_bar" />
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/notifications_list">
+        android:id="@+id/notifications_list"
+        android:layout_below="@id/app_bar">
 
     </ListView>
 

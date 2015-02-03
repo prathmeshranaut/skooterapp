@@ -8,6 +8,7 @@
     <string name="skoot_single">skoot/{user_id}/{post_id}.json</string>
     <string name="skoot_new">skoot</string>
     <string name="skoot_delete">skoot/{post_id}</string>
+    <string name="skoot_channel">channel/{user_id}/{channel}</string>
 
     <string name="zones">zones/{user_id}</string>
     <string name="zones_follow">zone/follow</string>

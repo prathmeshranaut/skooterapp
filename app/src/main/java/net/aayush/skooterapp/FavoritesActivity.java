@@ -41,7 +41,6 @@ public class FavoritesActivity extends BaseActivity {
 
         mListView = (ListView) findViewById(R.id.list_favorites);
 
-
         Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", Integer.toString(BaseActivity.userId));
 
@@ -63,7 +62,7 @@ public class FavoritesActivity extends BaseActivity {
                 final String SKOOT_FAVORITE_COUNT = "favorites_count";
                 final String SKOOT_USER_FAVORITED = "user_favorited";
                 final String SKOOT_USER_COMMENTED = "user_commented";
-                final String SKOOT_IMAGE_URL = "image_url";
+                final String SKOOT_IMAGE_URL = "zone_image";
 
                 try {
                     mPostsList.clear();
