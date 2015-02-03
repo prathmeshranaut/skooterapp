@@ -10,6 +10,7 @@
     <string name="skoot_delete">skoot/{post_id}</string>
     <string name="skoot_channel">channel/{user_id}/{channel}</string>
 
+
     <string name="zones">zones/{user_id}</string>
     <string name="zones_follow">zone/follow</string>
     <string name="zones_unfollow">zone/unfollow</string>
@@ -23,4 +24,6 @@
 
     <string name="favorite_post">favorite/{post_id}</string>
     <string name="unfavorite_post">unfavorite/{post_id}</string>
+
+    <string name="notification_delete">notification</string>
 </resources>

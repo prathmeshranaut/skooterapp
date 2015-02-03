@@ -9,9 +9,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.data.Notification;
 import net.aayush.skooterapp.data.Post;
@@ -133,7 +135,7 @@ public class NotificationsActivity extends BaseActivity {
         mNotificationList.setAdapter(mNotificationAdapter);
         mNotificationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 Notification notification = mNotificationArrayList.get(position);
                 if(notification.isPostRedirect()) {
                     Intent intent = new Intent(NotificationsActivity.this, ViewPostActivity.class);
@@ -141,6 +143,25 @@ public class NotificationsActivity extends BaseActivity {
                     startActivity(intent);
 
                     //TODO Delete notification
+                    String url = BaseActivity.substituteString(getResources().getString(R.string.notification_delete), new HashMap<String, String>());
+
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("user_id", Integer.toString(BaseActivity.userId));
+                    params.put("notification_id", Integer.toString(notification.getId()));
+
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            mNotificationArrayList.remove(position);
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    });
+
+                    AppController.getInstance().addToRequestQueue(jsonObjectRequest, "delete_notification");
                 }
             }
         });
@@ -165,6 +186,8 @@ public class NotificationsActivity extends BaseActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == android.R.id.home) {
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
