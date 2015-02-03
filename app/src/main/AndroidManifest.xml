@@ -120,6 +120,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MainActivity" />
         </activity>
+        <activity
+            android:name=".ChannelActivity"
+            android:label="@string/title_activity_channel"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.aayush.skooterapp.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

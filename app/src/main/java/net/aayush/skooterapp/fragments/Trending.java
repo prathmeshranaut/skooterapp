@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,13 +38,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Trending extends Fragment {
+public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     protected static final String LOG_TAG = Trending.class.getSimpleName();
     protected List<Post> mPostsList = new ArrayList<Post>();
     protected ArrayAdapter<Post> mPostsAdapter;
     protected ListView mListPosts;
     protected Context mContext;
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,10 +58,45 @@ public class Trending extends Fragment {
         mContext = container.getContext();
 
         View rootView = inflater.inflate(R.layout.fragment_trending, container, false);
-        int userId = BaseActivity.userId;
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        getTrendingSkoots();
+
+        mPostsAdapter = new PostAdapter(mContext, R.layout.list_view_post_row, mPostsList);
+        mListPosts = (ListView) rootView.findViewById(R.id.list_posts);
+        mListPosts.setAdapter(mPostsAdapter);
+
+        mListPosts.setOnItemClickListener(new ListView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Context context = view.getContext();
+
+                Intent intent = new Intent(getActivity(), ViewPostActivity.class);
+                intent.putExtra(BaseActivity.SKOOTER_POST, mPostsList.get(position));
+                startActivity(intent);
+            }
+        });
+
+        // Inflate the layout for this fragment
+        return rootView;
+    }
+
+
+    @Override
+    public void onRefresh() {
+        getTrendingSkoots();
+    }
+
+    public void getTrendingSkoots() {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("user_id", Integer.toString(userId));
+        params.put("user_id", Integer.toString(BaseActivity.userId));
 
         String url = BaseActivity.substituteString(getResources().getString(R.string.hot), params);
 
@@ -124,25 +161,6 @@ public class Trending extends Fragment {
         });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "home_page");
-
-        mPostsAdapter = new PostAdapter(mContext, R.layout.list_view_post_row, mPostsList);
-        mListPosts = (ListView) rootView.findViewById(R.id.list_posts);
-        mListPosts.setAdapter(mPostsAdapter);
-
-        mListPosts.setOnItemClickListener(new ListView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Context context = view.getContext();
-
-                Intent intent = new Intent(getActivity(), ViewPostActivity.class);
-                intent.putExtra(BaseActivity.SKOOTER_POST, mPostsList.get(position));
-                startActivity(intent);
-            }
-        });
-
-        // Inflate the layout for this fragment
-        return rootView;
     }
 
     @Override
@@ -152,6 +170,6 @@ public class Trending extends Fragment {
         inflater.inflate(R.menu.menu_main, menu);
         MenuItem menuItem = menu.findItem(R.id.score);
         menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore() + 2));
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }

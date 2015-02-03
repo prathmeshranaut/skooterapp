@@ -2,6 +2,7 @@ package net.aayush.skooterapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +47,21 @@ public class PostAdapter extends ArrayAdapter<Post> {
         TextView postContent = (TextView) convertView.findViewById(R.id.postText);
         postContent.setText(post.getContent());
 
-        TextView handleContent = (TextView) convertView.findViewById(R.id.handleText);
+        final TextView handleContent = (TextView) convertView.findViewById(R.id.handleText);
         handleContent.setText(post.getChannel());
+        handleContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CharSequence channel = handleContent.getText();
+                Intent intent = new Intent(mContext, ChannelActivity.class);
+                intent.putExtra("CHANNEL_NAME", channel.toString());
+                mContext.startActivity(intent);
+            }
+        });
+        handleContent.setVisibility(View.VISIBLE);
+        if(post.getChannel().equals("")) {
+            handleContent.setVisibility(View.GONE);
+        }
 
         TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         timestamp.setText(post.getTimestamp());

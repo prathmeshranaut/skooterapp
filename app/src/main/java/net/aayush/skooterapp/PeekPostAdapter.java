@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -118,6 +117,9 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
             }
         });
 
+        upvoteBtn.setEnabled(false);
+        downvoteBtn.setEnabled(false);
+
         //Commented
         if (post.isUserCommented()) {
             commentImage.setImageResource(R.drawable.comment_active);
@@ -139,43 +141,6 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
         } else {
             upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_inactive));
             downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_inactive));
-
-            upvoteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RelativeLayout rl = (RelativeLayout) v.getParent();
-                    Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
-                    Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
-                    Post post = (Post) upvoteBtn.getTag();
-
-                    //Call the upvote method
-                    post.upvotePost();
-                    voteCount.setText(Integer.toString(post.getVoteCount() + 1));
-                    upvoteBtn.setEnabled(false);
-                    downvoteBtn.setEnabled(false);
-                    upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
-                    downvoteBtn.setAlpha(0.3f);
-                }
-            });
-
-            downvoteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RelativeLayout rl = (RelativeLayout) v.getParent();
-                    Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
-                    Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
-
-                    Post post = (Post) downvoteBtn.getTag();
-
-                    //Call the upvote method
-                    post.downvotePost();
-                    voteCount.setText(Integer.toString(post.getVoteCount() - 1));
-                    upvoteBtn.setEnabled(false);
-                    downvoteBtn.setEnabled(false);
-                    downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
-                    upvoteBtn.setAlpha(0.3f);
-                }
-            });
         }
         favoriteBtn.setFocusable(false);
         upvoteBtn.setFocusable(false);

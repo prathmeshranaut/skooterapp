@@ -72,10 +72,11 @@ public class PeekActivity extends BaseActivity {
         params.put("user_id", Integer.toString(BaseActivity.userId));
         params.put("zone_id", Integer.toString(zone.getZoneId()));
 
+        Log.d(LOG_TAG, params.toString());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.v(LOG_TAG, response.toString());
+                Log.v(LOG_TAG, "UnFollow" +response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -97,7 +98,7 @@ public class PeekActivity extends BaseActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.v(LOG_TAG, response.toString());
+                Log.v(LOG_TAG, "Follow" + response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -106,7 +107,7 @@ public class PeekActivity extends BaseActivity {
             }
         });
 
-        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "unfollow_zone");
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "follow_zone");
     }
 
     @Override
@@ -128,7 +129,6 @@ public class PeekActivity extends BaseActivity {
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

@@ -38,9 +38,9 @@
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.15">
+            android:layout_weight="0.85">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -54,9 +54,9 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.85">
+            android:layout_weight="0.15">
 
             <Button
                 style="?android:attr/buttonStyleSmall"
