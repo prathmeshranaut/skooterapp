@@ -128,7 +128,6 @@ public class ViewPostActivity extends BaseActivity {
 
         Button commentBtn = (Button) findViewById(R.id.commentSkoot);
         final TextView commentText = (TextView) findViewById(R.id.commentText);
-        final TextView commentHandle = (TextView) findViewById(R.id.commentHandle);
         final int postId = mPost.getId();
 
         commentBtn.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +138,6 @@ public class ViewPostActivity extends BaseActivity {
                     String url = "http://skooter.elasticbeanstalk.com/comment";
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("user_id", Integer.toString(BaseActivity.userId));
-                    params.put("handle", commentHandle.getText().toString());
                     params.put("content", commentText.getText().toString());
                     params.put("location_id", "1");
                     params.put("post_id", Integer.toString(postId));
@@ -149,7 +147,6 @@ public class ViewPostActivity extends BaseActivity {
                         public void onResponse(JSONObject response) {
                             Log.d(LOG_TAG, response.toString());
                             commentText.setText("");
-                            commentHandle.setText("");
                             Toast.makeText(ViewPostActivity.this, "Woot! Comment posted!", Toast.LENGTH_SHORT).show();
                         }
                     }, new Response.ErrorListener() {

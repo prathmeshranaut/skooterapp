@@ -26,7 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.PeekActivity;
-import net.aayush.skooterapp.PostAdapter;
+import net.aayush.skooterapp.PeekPostAdapter;
 import net.aayush.skooterapp.R;
 import net.aayush.skooterapp.ViewPostActivity;
 import net.aayush.skooterapp.data.Post;
@@ -49,7 +49,7 @@ public class Peek extends Fragment {
     protected ListView mListView;
     protected ArrayAdapter<Zone> zoneArrayAdapter;
     protected ArrayList<Zone> followingZones = new ArrayList<Zone>();
-    private PostAdapter mPostsAdapter;
+    private PeekPostAdapter mPostsAdapter;
     private ListView mListPosts;
     private ArrayList<Post> mPostsList = new ArrayList<Post>();
 
@@ -95,6 +95,7 @@ public class Peek extends Fragment {
                     final String SKOOT_FAVORITE_COUNT = "favorites_count";
                     final String SKOOT_USER_FAVORITED = "user_favorited";
                     final String SKOOT_USER_COMMENTED = "user_commented";
+                    final String SKOOT_IMAGE_URL = "zone_image";
 
                     try {
                         JSONArray jsonArray = response.getJSONArray(SKOOTS);
@@ -118,8 +119,9 @@ public class Peek extends Fragment {
                             boolean user_commented = jsonPost.getBoolean(SKOOT_USER_COMMENTED);
                             int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
                             String created_at = jsonPost.getString(SKOOT_CREATED_AT);
+                            String image_url = jsonPost.getString(SKOOT_IMAGE_URL);
 
-                            Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at);
+                            Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url);
                             mPostsList.add(postObject);
                         }
                     } catch (JSONException e) {
@@ -140,7 +142,7 @@ public class Peek extends Fragment {
             TextView addZonesTextView = (TextView) rootView.findViewById(R.id.addZonesText);
             addZonesTextView.setVisibility(View.GONE);
 
-            mPostsAdapter = new PostAdapter(mContext, R.layout.list_view_post_row, mPostsList);
+            mPostsAdapter = new PeekPostAdapter(mContext, R.layout.list_view_peek_row, mPostsList);
 
             mListView.setAdapter(mPostsAdapter);
 
@@ -181,12 +183,13 @@ public class Peek extends Fragment {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                final String ZONE_ID = "id";
+                final String ZONE_ID = "zone_id";
                 final String NAME = "name";
                 final String LATITUDE_MINIMUM = "lat_min";
                 final String LATITUDE_MAXIMUM = "lat_max";
                 final String LONGITUDE_MINIMUM = "long_min";
                 final String LONGITUDE_MAXIMUM = "long_max";
+                final String USER_FOLLOWS = "user_follows";
 
                 try {
                     for (int i = 0; i < response.length(); i++) {
@@ -197,8 +200,9 @@ public class Peek extends Fragment {
                         float latitudeMaximum = (float) jsonObject.getDouble(LATITUDE_MAXIMUM);
                         float longitudeMinimum = (float) jsonObject.getDouble(LONGITUDE_MINIMUM);
                         float longitudeMaximum = (float) jsonObject.getDouble(LONGITUDE_MAXIMUM);
+                        boolean userFollows = jsonObject.getBoolean(USER_FOLLOWS);
 
-                        Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, false);
+                        Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, userFollows);
 
                         List<Zone> zones = dataHandler.getAllZones();
 

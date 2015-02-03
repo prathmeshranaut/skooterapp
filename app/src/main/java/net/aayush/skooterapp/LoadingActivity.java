@@ -86,12 +86,13 @@ public class LoadingActivity extends BaseActivity {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                final String ZONE_ID = "id";
+                final String ZONE_ID = "zone_id";
                 final String NAME = "name";
                 final String LATITUDE_MINIMUM = "lat_min";
                 final String LATITUDE_MAXIMUM = "lat_max";
                 final String LONGITUDE_MINIMUM = "long_min";
                 final String LONGITUDE_MAXIMUM = "long_max";
+                final String USER_FOLLOWS = "user_follows";
 
                 try {
                     for (int i = 0; i < response.length(); i++) {
@@ -102,8 +103,9 @@ public class LoadingActivity extends BaseActivity {
                         float latitudeMaximum = (float) jsonObject.getDouble(LATITUDE_MAXIMUM);
                         float longitudeMinimum = (float) jsonObject.getDouble(LONGITUDE_MINIMUM);
                         float longitudeMaximum = (float) jsonObject.getDouble(LONGITUDE_MAXIMUM);
+                        boolean userFollows = jsonObject.getBoolean(USER_FOLLOWS);
 
-                        Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, false);
+                        Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, userFollows);
 
                         List<Zone> zones = dataHandler.getAllZones();
                         boolean flag = false;
@@ -196,6 +198,7 @@ public class LoadingActivity extends BaseActivity {
                 final String SKOOT_USER_COMMENTED = "user_commented";
                 final String SKOOT_IF_USER_VOTED = "user_voted";
                 final String SKOOT_USER_VOTE = "user_vote";
+                final String SKOOT_IMAGE_URL = "zone_image";
 
                 try {
                     int score = response.getInt(SKOOT_SCORE);
@@ -207,7 +210,7 @@ public class LoadingActivity extends BaseActivity {
                         JSONObject jsonPost = jsonPosts.getJSONObject(i);
                         int id = jsonPost.getInt(SKOOT_ID);
                         String post = jsonPost.getString(SKOOT_CONTENT);
-                        String handle = jsonPost.getString(SKOOT_HANDLE);
+                        String channel = jsonPost.getString(SKOOT_HANDLE);
                         int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
                         int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
                         int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);
@@ -217,8 +220,9 @@ public class LoadingActivity extends BaseActivity {
                         boolean user_commented = jsonPost.getBoolean(SKOOT_USER_COMMENTED);
                         int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
                         String created_at = jsonPost.getString(SKOOT_CREATED_AT);
+                        String image_url = jsonPost.getString(SKOOT_IMAGE_URL);
 
-                        Post postObject = new Post(id, handle, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, true, user_favorited, user_commented, created_at);
+                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, true, user_favorited, user_commented, created_at, image_url);
                         posts.add(postObject);
                     }
 

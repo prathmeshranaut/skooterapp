@@ -3,7 +3,6 @@ package net.aayush.skooterapp.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -80,13 +79,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(false);
-                Log.v("Main Activity", "Refreshed");
-            }
-        }, 5000);
+        getLatestSkoots();
     }
 
     @Override
@@ -116,72 +109,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("user_id", Integer.toString(userId));
-
-        String url = BaseActivity.substituteString(getResources().getString(R.string.home), params);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                final String SKOOTS = "skoots";
-                final String SKOOT_ID = "id";
-                final String SKOOT_POST = "content";
-                final String SKOOT_HANDLE = "channel";
-                final String SKOOT_UPVOTES = "upvotes";
-                final String SKOOT_DOWNVOTES = "downvotes";
-                final String SKOOT_IF_USER_VOTED = "user_voted";
-                final String SKOOT_USER_VOTE = "user_vote";
-                final String SKOOT_USER_SCOOT = "user_skoot";
-                final String SKOOT_CREATED_AT = "created_at";
-                final String SKOOT_COMMENTS_COUNT = "comments_count";
-                final String SKOOT_FAVORITE_COUNT = "favorites_count";
-                final String SKOOT_USER_FAVORITED = "user_favorited";
-                final String SKOOT_USER_COMMENTED = "user_commented";
-
-                try {
-                    JSONArray jsonArray = response.getJSONArray(SKOOTS);
-
-                    mPostsList.clear();
-                    Log.v(LOG_TAG, jsonArray.toString());
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonPost = jsonArray.getJSONObject(i);
-                        int id = jsonPost.getInt(SKOOT_ID);
-                        String post = jsonPost.getString(SKOOT_POST);
-
-                        String channel = "";
-                        if (!jsonPost.isNull(SKOOT_HANDLE)) {
-                            channel = "@" + jsonPost.getString(SKOOT_HANDLE);
-                        }
-
-                        int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
-                        int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);
-                        int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
-                        boolean skoot_if_user_voted = jsonPost.getBoolean(SKOOT_IF_USER_VOTED);
-                        boolean user_vote = jsonPost.getBoolean(SKOOT_USER_VOTE);
-                        boolean user_skoot = jsonPost.getBoolean(SKOOT_USER_SCOOT);
-                        boolean user_favorited = jsonPost.getBoolean(SKOOT_USER_FAVORITED);
-                        boolean user_commented = jsonPost.getBoolean(SKOOT_USER_COMMENTED);
-                        int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
-                        String created_at = jsonPost.getString(SKOOT_CREATED_AT);
-
-                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at);
-                        mPostsList.add(postObject);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e(LOG_TAG, "Error processing Json Data");
-                }
-                mPostsAdapter.notifyDataSetChanged();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
-            }
-        });
-
-        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "home_page");
+        getLatestSkoots();
 
         mPostsAdapter = new PostAdapter(mContext, R.layout.list_view_post_row, mPostsList);
         mListPosts = (ListView) rootView.findViewById(R.id.list_posts);
@@ -341,6 +269,78 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
         // Inflate the layout for this fragment
         return rootView;
+    }
+
+    public void getLatestSkoots() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(BaseActivity.userId));
+
+        String url = BaseActivity.substituteString(getResources().getString(R.string.home), params);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                final String SKOOTS = "skoots";
+                final String SKOOT_ID = "id";
+                final String SKOOT_POST = "content";
+                final String SKOOT_HANDLE = "channel";
+                final String SKOOT_UPVOTES = "upvotes";
+                final String SKOOT_DOWNVOTES = "downvotes";
+                final String SKOOT_IF_USER_VOTED = "user_voted";
+                final String SKOOT_USER_VOTE = "user_vote";
+                final String SKOOT_USER_SCOOT = "user_skoot";
+                final String SKOOT_CREATED_AT = "created_at";
+                final String SKOOT_COMMENTS_COUNT = "comments_count";
+                final String SKOOT_FAVORITE_COUNT = "favorites_count";
+                final String SKOOT_USER_FAVORITED = "user_favorited";
+                final String SKOOT_USER_COMMENTED = "user_commented";
+                final String SKOOT_IMAGE_URL = "zone_image";
+
+                try {
+                    JSONArray jsonArray = response.getJSONArray(SKOOTS);
+
+                    mPostsList.clear();
+                    Log.v(LOG_TAG, jsonArray.toString());
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonPost = jsonArray.getJSONObject(i);
+                        int id = jsonPost.getInt(SKOOT_ID);
+                        String post = jsonPost.getString(SKOOT_POST);
+
+                        String channel = "";
+                        if (!jsonPost.isNull(SKOOT_HANDLE)) {
+                            channel = "@" + jsonPost.getString(SKOOT_HANDLE);
+                        }
+
+                        int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
+                        int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);
+                        int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
+                        boolean skoot_if_user_voted = jsonPost.getBoolean(SKOOT_IF_USER_VOTED);
+                        boolean user_vote = jsonPost.getBoolean(SKOOT_USER_VOTE);
+                        boolean user_skoot = jsonPost.getBoolean(SKOOT_USER_SCOOT);
+                        boolean user_favorited = jsonPost.getBoolean(SKOOT_USER_FAVORITED);
+                        boolean user_commented = jsonPost.getBoolean(SKOOT_USER_COMMENTED);
+                        int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
+                        String created_at = jsonPost.getString(SKOOT_CREATED_AT);
+                        String image_url = jsonPost.getString(SKOOT_IMAGE_URL);
+
+                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url);
+                        mPostsList.add(postObject);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(LOG_TAG, "Error processing Json Data");
+                }
+                mPostsAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "home_page");
     }
 
     @Override

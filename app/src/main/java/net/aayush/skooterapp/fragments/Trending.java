@@ -80,6 +80,7 @@ public class Trending extends Fragment {
                 final String SKOOT_FAVORITE_COUNT = "favorites_count";
                 final String SKOOT_USER_FAVORITED = "user_favorited";
                 final String SKOOT_USER_COMMENTED = "user_commented";
+                final String SKOOT_IMAGE_URL = "zone_image";
 
                 try {
                     JSONArray jsonArray = response.getJSONArray(SKOOTS);
@@ -104,8 +105,9 @@ public class Trending extends Fragment {
                         boolean user_commented = jsonPost.getBoolean(SKOOT_USER_COMMENTED);
                         int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
                         String created_at = jsonPost.getString(SKOOT_CREATED_AT);
+                        String image_url = jsonPost.getString(SKOOT_IMAGE_URL);
 
-                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at);
+                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url);
                         mPostsList.add(postObject);
                     }
                 } catch (JSONException e) {

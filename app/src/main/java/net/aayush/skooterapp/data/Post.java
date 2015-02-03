@@ -46,6 +46,15 @@ public class Post implements Serializable {
     private boolean mUserFavorited;
     private boolean mUserCommented;
     private boolean mUserSkoot;
+    private String mImageUrl;
+
+    public String getImageUrl() {
+        return mImageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        mImageUrl = imageUrl;
+    }
 
     public int getId() {
         return mId;
@@ -109,7 +118,7 @@ public class Post implements Serializable {
 
     private String mTimestamp;
 
-    public Post(int id, String channel, String content, int commentsCount, int favoriteCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, boolean userFavorited, boolean userCommented, String timestamp) {
+    public Post(int id, String channel, String content, int commentsCount, int favoriteCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, boolean userFavorited, boolean userCommented, String timestamp, String imageUrl) {
         mId = id;
         mChannel = channel;
         mContent = content;
@@ -123,6 +132,7 @@ public class Post implements Serializable {
         mUserVote = userVote;
         mUserSkoot = userSkoot;
         mTimestamp = timestamp;
+        mImageUrl = imageUrl;
     }
 
     @Override
