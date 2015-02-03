@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +64,77 @@ public class ViewPostActivity extends BaseActivity {
         mListComments = (ListView) findViewById(R.id.list_comments);
         mListComments.setAdapter(mCommentsAdapter);
 
+        getCommentsForPostId(mPost, userId);
+        //Setup the item click listeners
+        listPosts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ViewPostActivity.this, MapActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button commentBtn = (Button) findViewById(R.id.commentSkoot);
+        final TextView commentText = (TextView) findViewById(R.id.commentText);
+        final int postId = mPost.getId();
+
+        commentBtn.setOnClickListener(new View.OnClickListener() {
+            String tag = "post_comment";
+            @Override
+            public void onClick(View v) {
+                if (commentText.getText().length() > 0 && commentText.getText().length() < 250) {
+                    String url = "http://skooter.elasticbeanstalk.com/comment";
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("user_id", Integer.toString(BaseActivity.userId));
+                    params.put("content", commentText.getText().toString());
+                    params.put("location_id", "1");
+                    params.put("post_id", Integer.toString(postId));
+
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(LOG_TAG, response.toString());
+                            commentText.setText("");
+                            Toast.makeText(ViewPostActivity.this, "Woot! Comment posted!", Toast.LENGTH_SHORT).show();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+                        }
+                    });
+
+                    AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
+
+                } else if (commentText.getText().length() > 200) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
+                    alertDialogBuilder.setMessage("You cannot simply skoot with more than 250! For that you would have login through Facebook.");
+                    alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
+                    alertDialogBuilder.setMessage("You cannot simply skoot with no content!");
+                    alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            }
+        });
+
+    }
+
+    public void getCommentsForPostId(Post post, int userId) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", Integer.toString(userId));
         params.put("post_id", Integer.toString(mPost.getId()));
@@ -116,73 +188,8 @@ public class ViewPostActivity extends BaseActivity {
             }
         });
 
-        AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
-        //Setup the item click listeners
-        listPosts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ViewPostActivity.this, MapActivity.class);
-                startActivity(intent);
-            }
-        });
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "view_comments");
 
-        Button commentBtn = (Button) findViewById(R.id.commentSkoot);
-        final TextView commentText = (TextView) findViewById(R.id.commentText);
-        final int postId = mPost.getId();
-
-        commentBtn.setOnClickListener(new View.OnClickListener() {
-            String tag = "post_comment";
-            @Override
-            public void onClick(View v) {
-                if (commentText.getText().length() > 0 && commentText.getText().length() < 250) {
-                    String url = "http://skooter.elasticbeanstalk.com/comment";
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("user_id", Integer.toString(BaseActivity.userId));
-                    params.put("content", commentText.getText().toString());
-                    params.put("location_id", "1");
-                    params.put("post_id", Integer.toString(postId));
-
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d(LOG_TAG, response.toString());
-                            commentText.setText("");
-                            Toast.makeText(ViewPostActivity.this, "Woot! Comment posted!", Toast.LENGTH_SHORT).show();
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
-                        }
-                    });
-
-                    AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
-
-                } else if (commentText.getText().length() > 250) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
-                    alertDialogBuilder.setMessage("You cannot simply skoot with more than 250! For that you would have login through Facebook.");
-                    alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
-
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                } else {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
-                    alertDialogBuilder.setMessage("You cannot simply skoot with no content!");
-                    alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
-
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                }
-            }
-        });
 
     }
 
@@ -203,14 +210,19 @@ public class ViewPostActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_flag) {
-            Intent intent = new Intent(ViewPostActivity.this, FlagActivity.class);
-            intent.putExtra(BaseActivity.SKOOTER_POST, mPost);
-            startActivity(intent);
+            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.flag_view);
+            linearLayout.setVisibility(View.VISIBLE);
+
             return true;
         } else if (id == android.R.id.home) {
             this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void dismissView(View view) {
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.flag_view);
+        linearLayout.setVisibility(View.GONE);
     }
 }

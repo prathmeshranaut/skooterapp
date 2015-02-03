@@ -1,54 +1,156 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="net.aayush.skooterapp.ViewPostActivity"
-    android:orientation="vertical">
-
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/toolbar"/>
-
-    <ListView
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="net.aayush.skooterapp.ViewPostActivity">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/list_posts"
-        android:layout_below="@+id/app_bar"
-        android:paddingBottom="20dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_height="match_parent"
+        tools:context="net.aayush.skooterapp.ViewPostActivity"
+        android:orientation="vertical">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/list_comments"
-        android:layout_below="@+id/list_posts"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_weight="1"/>
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/toolbar"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_posts"
+            android:layout_below="@+id/app_bar"
+            android:paddingBottom="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/list_comments"
+            android:layout_below="@+id/list_posts"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Skoot!"
+                android:id="@+id/commentSkoot"
+                android:layout_alignParentRight="true"
+                />
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="@string/enter_a_skoot"
+                android:id="@+id/commentText"
+                android:layout_toLeftOf="@id/commentSkoot"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="#ff555064"
+        android:id="@+id/flag_view"
+        android:alpha="0.9"
+        android:visibility="gone"
+        android:paddingTop="10dp">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Skoot!"
-            android:id="@+id/commentSkoot"
-            android:layout_alignParentRight="true"
-            />
-
-        <EditText
-            android:layout_width="fill_parent"
+            android:text="X"
+            android:textSize="40sp"
+            android:background="#00FFFFFF"
+            android:textColor="#FFFFFF"
+            android:onClick="dismissView"/>
+        
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="@string/enter_a_skoot"
-            android:id="@+id/commentText"
-            android:layout_toLeftOf="@id/commentSkoot"
+            android:text="Want to flag this skoot?"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/skooterPrimaryTextColor"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/flagText"
             />
 
-    </RelativeLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Abusive"
+            android:layout_gravity="center_horizontal"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:padding="20dp"
+            android:textColor="@color/skooterPrimaryTextColor"
+            android:background="#00ffffff"
+            android:layout_below="@id/flagText"
+            android:id="@+id/abusive" />
 
-</LinearLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bullying"
+            android:layout_gravity="center_horizontal"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:padding="20dp"
+            android:textColor="@color/skooterPrimaryTextColor"
+            android:background="#00ffffff"
+            android:layout_below="@id/abusive"
+            android:id="@+id/bullying" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Violence"
+            android:layout_gravity="center_horizontal"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:padding="20dp"
+            android:textColor="@color/skooterPrimaryTextColor"
+            android:background="#00ffffff"
+            android:id="@+id/violence"
+            android:layout_below="@id/bullying"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Spam"
+            android:layout_gravity="center_horizontal"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:padding="20dp"
+            android:textColor="@color/skooterPrimaryTextColor"
+            android:background="#00ffffff"
+            android:id="@+id/spam"
+            android:layout_below="@id/violence" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other"
+            android:layout_gravity="center_horizontal"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:padding="20dp"
+            android:textColor="@color/skooterPrimaryTextColor"
+            android:background="#00ffffff"
+            android:id="@+id/others"
+            android:layout_below="@id/spam" />
+    </LinearLayout>
+</FrameLayout>
