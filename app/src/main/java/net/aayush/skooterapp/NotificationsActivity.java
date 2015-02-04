@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -145,11 +147,9 @@ public class NotificationsActivity extends BaseActivity {
                     //TODO Delete notification
                     String url = BaseActivity.substituteString(getResources().getString(R.string.notification_delete), new HashMap<String, String>());
 
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("user_id", Integer.toString(BaseActivity.userId));
-                    params.put("notification_id", Integer.toString(notification.getId()));
-
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+                    final int notification_id = notification.getId();
+                    Log.d(LOG_TAG, Integer.toString(notification_id));
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             mNotificationArrayList.remove(position);
@@ -159,7 +159,24 @@ public class NotificationsActivity extends BaseActivity {
                         public void onErrorResponse(VolleyError error) {
 
                         }
-                    });
+                    }) {
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> headers = super.getHeaders();
+
+                            if (headers == null
+                                    || headers.equals(Collections.emptyMap())) {
+                                headers = new HashMap<String, String>();
+                            }
+
+                            headers.put("user_id", Integer.toString(BaseActivity.userId));
+                            headers.put("notification_id", Integer.toString(notification_id));
+
+                            Log.d(LOG_TAG, headers.toString());
+
+                            return headers;
+                        }
+                    };
 
                     AppController.getInstance().addToRequestQueue(jsonObjectRequest, "delete_notification");
                 }
