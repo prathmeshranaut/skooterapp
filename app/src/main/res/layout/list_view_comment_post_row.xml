@@ -1,92 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="10dp">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+    <View
+        android:layout_width="4dp"
+        android:alpha="0.0"
+        android:layout_height="match_parent"
+        android:background="@color/skooterNNotifyColor"
+        android:id="@+id/is_user_comment">
+    </View>
 
-        <ImageView
-            android:src="@drawable/time_icon"
-            android:scaleType="fitXY"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginRight="3dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
-            android:textColor="@color/skooterNPrimaryTextColor"
-            android:id="@+id/timestamp"/>
-    </LinearLayout>
-
-
-    <LinearLayout
+    <RelativeLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp">
 
-        <RelativeLayout
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.85">
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Large Text"
-                android:id="@+id/postText"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/handleText"
-                />
-        </RelativeLayout>
+                android:layout_weight="1">
 
-        <RelativeLayout
-            android:layout_width="0dp"
+                <ImageView
+                    android:src="@drawable/time_icon"
+                    android:scaleType="fitXY"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="3dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Small Text"
+                    android:textColor="@color/skooterNPrimaryTextColor"
+                    android:id="@+id/timestamp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                >
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:id="@+id/flagButton"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/flag_inactive"
+                    android:layout_marginLeft="15dp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.15">
+            android:orientation="horizontal">
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/upvote"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/vote_up_inactive"/>
+                android:layout_weight="0.85">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="0"
-                android:id="@+id/voteCount"
-                android:layout_marginRight="15dp"
-                android:layout_below="@+id/upvote"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Large Text"
+                    android:id="@+id/postText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/handleText"
+                    />
+            </RelativeLayout>
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/downvote"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@+id/voteCount"
-                android:layout_alignLeft="@+id/upvote"
-                android:background="@drawable/vote_down_inactive"
-                />
-        </RelativeLayout>
-    </LinearLayout>
-</RelativeLayout>
+                android:layout_weight="0.15">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/upvote"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/vote_up_inactive"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="0"
+                    android:id="@+id/voteCount"
+                    android:layout_marginRight="15dp"
+                    android:layout_below="@+id/upvote"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"/>
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/downvote"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/voteCount"
+                    android:layout_alignLeft="@+id/upvote"
+                    android:background="@drawable/vote_down_inactive"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>

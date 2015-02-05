@@ -43,8 +43,8 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_compose) {
-            Intent intent = new Intent(MainActivity.this, ComposeActivity.class);
+        if (id == R.id.action_me) {
+            Intent intent = new Intent(MainActivity.this, MeActivity.class);
             startActivity(intent);
 
             return true;

@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -30,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,12 +57,17 @@ public class ViewPostActivity extends BaseActivity {
         List<Post> postList = new ArrayList<Post>();
         postList.add(mPost);
 
-        ArrayAdapter<Post> postAdapter = new PostAdapter(this, R.layout.list_view_post_row, postList);
+        final LinearLayout flagView = (LinearLayout) findViewById(R.id.flag_view);
+        final LinearLayout deleteView = (LinearLayout) findViewById(R.id.delete_view);
+        final TextView typeIdView = (TextView) findViewById(R.id.type_id);
+        final TextView typeView = (TextView) findViewById(R.id.type);
+
+        ArrayAdapter<Post> postAdapter = new PostAdapter(this, R.layout.list_view_post_row, postList, true, flagView, deleteView, typeIdView, typeView);
         ListView listPosts = (ListView) findViewById(R.id.list_posts);
         listPosts.setAdapter(postAdapter);
 
         String tag = "load_comments";
-        mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_comment_post_row, mCommentsList);
+        mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_comment_post_row, mCommentsList, true, flagView, deleteView, typeIdView, typeView);
         mListComments = (ListView) findViewById(R.id.list_comments);
         mListComments.setAdapter(mCommentsAdapter);
 
@@ -224,5 +231,140 @@ public class ViewPostActivity extends BaseActivity {
     public void dismissView(View view) {
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.flag_view);
         linearLayout.setVisibility(View.GONE);
+        linearLayout = (LinearLayout) findViewById(R.id.delete_view);
+        linearLayout.setVisibility(View.GONE);
+    }
+
+    public void flagContent(View view) {
+        String type = (String) view.getTag();
+        TextView typeId = (TextView) findViewById(R.id.type_id);
+        TextView typeView = (TextView) findViewById(R.id.type);
+        LinearLayout flagView = (LinearLayout) findViewById(R.id.flag_view);
+
+        if(typeView.getText().equals("post")) {
+            //Flag a post
+            String url = BaseActivity.substituteString(getResources().getString(R.string.flag_skoot), new HashMap<String, String>());
+
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("user_id", Integer.toString(BaseActivity.userId));
+            params.put("post_id", typeId.getText().toString());
+            params.put("type_id", type);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d(LOG_TAG, response.toString());
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+                }
+            });
+
+            AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_skoot");
+        }
+        else if(typeView.getText().equals("comment")) {
+            //Flag a comment
+            String url = BaseActivity.substituteString(getResources().getString(R.string.flag_comment), new HashMap<String, String>());
+
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("user_id", Integer.toString(BaseActivity.userId));
+            params.put("comment_id", typeId.getText().toString());
+            params.put("type_id", type);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.d(LOG_TAG, response.toString());
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+                }
+            });
+
+            AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_comment");
+        }
+
+        flagView.setVisibility(View.GONE);
+
+    }
+
+    public void acceptDelete(View view) {
+        TextView typeId = (TextView) findViewById(R.id.type_id);
+        TextView typeView = (TextView) findViewById(R.id.type);
+        LinearLayout deleteView = (LinearLayout) findViewById(R.id.delete_view);
+
+        if(typeView.getText().equals("post")) {
+            //Delete a post
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("skoot_id", typeId.getText().toString());
+            String url = BaseActivity.substituteString(getResources().getString(R.string.skoot_delete), params);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.v(LOG_TAG, "Delete Post" +response.toString());
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(LOG_TAG, "Delete Post Error: " + error.getMessage());
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = super.getHeaders();
+
+                    if (headers == null
+                            || headers.equals(Collections.emptyMap())) {
+                        headers = new HashMap<String, String>();
+                    }
+
+                    headers.put("user_id", Integer.toString(BaseActivity.userId));
+
+                    return headers;
+                }
+            };
+
+            AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_content");
+        }
+        else if(typeView.getText().equals("comment")) {
+            //Delete a comment
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("comment_id", typeId.getText().toString());
+            String url = BaseActivity.substituteString(getResources().getString(R.string.comment_delete), params);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.v(LOG_TAG, "Delete Comment" +response.toString());
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(LOG_TAG, "Delete Comment Error: " + error.getMessage());
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = super.getHeaders();
+
+                    if (headers == null
+                            || headers.equals(Collections.emptyMap())) {
+                        headers = new HashMap<String, String>();
+                    }
+
+                    headers.put("user_id", Integer.toString(BaseActivity.userId));
+
+                    return headers;
+                }
+            };
+
+            AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_content");
+        }
+        deleteView.setVisibility(View.GONE);
     }
 }

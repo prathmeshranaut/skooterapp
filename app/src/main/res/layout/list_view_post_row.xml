@@ -7,7 +7,7 @@
         android:alpha="0.0"
         android:layout_height="match_parent"
         android:background="@color/skooterNNotifyColor"
-        android:id="@+id/is_user_post">
+        android:id="@+id/is_user_skoot">
     </View>
 
     <RelativeLayout
@@ -93,6 +93,23 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:text=""
                     android:id="@+id/favoritesCount"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                >
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:id="@+id/flagButton"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/flag_inactive"
+                    android:layout_marginLeft="15dp"
                     />
             </LinearLayout>
         </LinearLayout>

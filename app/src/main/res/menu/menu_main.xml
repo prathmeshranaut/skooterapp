@@ -5,15 +5,15 @@
 
     <item
         android:id="@+id/action_alerts"
-        android:title="@string/alerts"
+        android:title=""
         android:orderInCategory="1"
         android:icon="@drawable/notification_icon"
         skooter:showAsAction="always"/>
 
     <item
-        android:id="@+id/action_compose"
-        android:title="@string/compose"
-        android:orderInCategory="2"
-        android:icon="@drawable/ic_action_edit"
+        android:id="@+id/action_me"
+        android:title=""
+        android:orderInCategory="1"
+        android:icon="@drawable/profile_icon"
         skooter:showAsAction="always"/>
 </menu>

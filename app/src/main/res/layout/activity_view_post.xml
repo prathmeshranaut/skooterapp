@@ -3,6 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="net.aayush.skooterapp.ViewPostActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,7 +19,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/list_posts"
             android:layout_below="@+id/app_bar"
-            android:paddingBottom="20dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"/>
 
@@ -62,6 +62,7 @@
         android:orientation="vertical"
         android:background="#ff555064"
         android:id="@+id/flag_view"
+        android:clickable="true"
         android:alpha="0.9"
         android:visibility="gone"
         android:paddingTop="10dp">
@@ -74,7 +75,7 @@
             android:background="#00FFFFFF"
             android:textColor="#FFFFFF"
             android:onClick="dismissView"/>
-        
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,8 +99,9 @@
             android:padding="20dp"
             android:textColor="@color/skooterPrimaryTextColor"
             android:background="#00ffffff"
-            android:layout_below="@id/flagText"
-            android:id="@+id/abusive" />
+            android:tag="1"
+            android:onClick="flagContent"
+            android:id="@+id/abusive"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -111,8 +113,9 @@
             android:padding="20dp"
             android:textColor="@color/skooterPrimaryTextColor"
             android:background="#00ffffff"
-            android:layout_below="@id/abusive"
-            android:id="@+id/bullying" />
+            android:tag="2"
+            android:onClick="flagContent"
+            android:id="@+id/bullying"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -125,7 +128,8 @@
             android:textColor="@color/skooterPrimaryTextColor"
             android:background="#00ffffff"
             android:id="@+id/violence"
-            android:layout_below="@id/bullying"/>
+            android:onClick="flagContent"
+            android:tag="3"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -138,7 +142,8 @@
             android:textColor="@color/skooterPrimaryTextColor"
             android:background="#00ffffff"
             android:id="@+id/spam"
-            android:layout_below="@id/violence" />
+            android:onClick="flagContent"
+            android:tag="4"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -151,6 +156,66 @@
             android:textColor="@color/skooterPrimaryTextColor"
             android:background="#00ffffff"
             android:id="@+id/others"
-            android:layout_below="@id/spam" />
+            android:onClick="flagContent"
+            android:tag="5"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="#fff66867"
+        android:id="@+id/delete_view"
+        android:clickable="true"
+        android:alpha="0.9"
+        android:visibility="gone"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Are you sure you want to delete your skoot?"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/skooterPrimaryTextColor"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/deleteText"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="92dp"
+                android:layout_height="92dp"
+                android:background="@drawable/accept_icon"
+                android:id="@+id/acceptDelete"
+                android:onClick="acceptDelete" />
+
+            <Button
+                android:layout_width="92dp"
+                android:layout_height="92dp"
+                android:background="@drawable/cancel_icon"
+                android:onClick="dismissView"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/type_id"
+            android:text="" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/type"
+            android:text="" />
+
     </LinearLayout>
 </FrameLayout>

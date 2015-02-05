@@ -68,7 +68,7 @@ public class ComposeActivity extends BaseActivity {
                         Log.d(LOG_TAG, response.toString());
                         skootText.setText("");
                         skootHandle.setText("");
-                        Toast.makeText(ComposeActivity.this, "Woot! Comment posted!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ComposeActivity.this, "Woot! Skoot posted!", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
                     @Override

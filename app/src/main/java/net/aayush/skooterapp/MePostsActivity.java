@@ -25,7 +25,7 @@ public class MePostsActivity extends BaseActivity {
 
         ListView listView = (ListView) findViewById(R.id.list_posts);
 
-        final List<Post> postList = mUser.getSkoots();
+        final List<Post> postList = BaseActivity.mUser.getSkoots();
         if(postList.isEmpty()) {
             Toast.makeText(getApplicationContext(), "You don't have any skoots yet!", Toast.LENGTH_SHORT).show();
         } else {

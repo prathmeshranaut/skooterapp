@@ -24,11 +24,11 @@ public class MeCommentsActivity extends BaseActivity {
 
         ListView listView = (ListView) findViewById(R.id.list_posts);
 
-        List<Comment> commentsList = mUser.getComments();
+        List<Comment> commentsList = BaseActivity.mUser.getComments();
         if(commentsList.isEmpty()) {
             Toast.makeText(getApplicationContext(), "You don't have any comments yet!" , Toast.LENGTH_SHORT).show();
         } else {
-            listView.setAdapter(new CommentsAdapter(this, R.layout.list_view_post_row, commentsList));
+            listView.setAdapter(new CommentsAdapter(this, R.layout.list_view_comment_post_row, commentsList));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override

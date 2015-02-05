@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,12 +20,30 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
     protected Context mContext;
     protected int mLayoutResourceId;
     protected List<Comment> data = new ArrayList<Comment>();
+    LinearLayout mDeleteView;
+    LinearLayout mFlagView;
+    TextView mTypeIdView;
+    TextView mTypeView;
+    boolean mFlaggable;
 
     public CommentsAdapter(Context context, int resource, List<Comment> objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.mLayoutResourceId = resource;
         this.data = objects;
+        mFlaggable = false;
+    }
+
+    public CommentsAdapter(Context context, int resource, List<Comment> objects, boolean flaggable, LinearLayout flagView, LinearLayout deleteView, TextView typeIdView, TextView typeView) {
+        super(context, resource, objects);
+        this.mContext = context;
+        this.mLayoutResourceId = resource;
+        this.data = objects;
+        this.mFlagView = flagView;
+        this.mDeleteView = deleteView;
+        this.mTypeIdView = typeIdView;
+        this.mTypeView = typeView;
+        this.mFlaggable = flaggable;
     }
 
     @Override
@@ -57,6 +76,46 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         upvoteBtn.setAlpha(1.0f);
         downvoteBtn.setAlpha(1.0f);
 
+        View is_user_comment = convertView.findViewById(R.id.is_user_comment);
+        final Button flagButton = (Button) convertView.findViewById(R.id.flagButton);
+
+
+        if (comment.isUserComment()) {
+            is_user_comment.setVisibility(View.VISIBLE);
+            is_user_comment.setAlpha(1.0f);
+
+            flagButton.setBackground(mContext.getResources().getDrawable(R.drawable.delete));
+        } else {
+            is_user_comment.setVisibility(View.GONE);
+            is_user_comment.setAlpha(0.0f);
+
+            flagButton.setBackground(mContext.getResources().getDrawable(R.drawable.flag_inactive));
+        }
+
+        if (mFlaggable) {
+            flagButton.setTag(comment);
+
+            flagButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Comment comment = (Comment) flagButton.getTag();
+
+                    if (comment.isUserComment()) {
+                        //Deletable post
+                        mDeleteView.setVisibility(View.VISIBLE);
+                        mTypeIdView.setText(Integer.toString(comment.getId()));
+                        mTypeView.setText("comment");
+                    } else {
+                        //Flaggeble post
+                        mFlagView.setVisibility(View.VISIBLE);
+                        mTypeIdView.setText(Integer.toString(comment.getId()));
+                        mTypeView.setText("comment");
+                    }
+                }
+            });
+        } else {
+            flagButton.setVisibility(View.GONE);
+        }
         if (comment.isIfUserVoted()) {
             upvoteBtn.setEnabled(false);
             downvoteBtn.setEnabled(false);

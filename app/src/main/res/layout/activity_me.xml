@@ -4,6 +4,8 @@
                 android:layout_height="fill_parent"
                 skooter:context="net.aayush.skooterapp.MeActivity">
 
+    <include layout="@layout/toolbar" android:id="@id/app_bar" />
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

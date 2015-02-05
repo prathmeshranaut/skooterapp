@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,12 +23,38 @@ public class PostAdapter extends ArrayAdapter<Post> {
     Context mContext;
     int mLayoutResourceId;
     List<Post> data = new ArrayList<Post>();
+    boolean mFlaggable;
+    LinearLayout mDeleteView;
+    LinearLayout mFlagView;
+    TextView mTypeIdView;
+    TextView mTypeView;
+
+    public boolean isFlaggable() {
+        return mFlaggable;
+    }
+
+    public void setFlaggable(boolean flaggable) {
+        mFlaggable = flaggable;
+    }
 
     public PostAdapter(Context context, int resource, List<Post> objects) {
         super(context, resource, objects);
         mContext = context;
         mLayoutResourceId = resource;
         this.data = objects;
+        this.mFlaggable = false;
+    }
+
+    public PostAdapter(Context context, int resource, List<Post> objects, boolean flaggable, LinearLayout flagView, LinearLayout deleteView, TextView typeIdView, TextView typeView) {
+        super(context, resource, objects);
+        mContext = context;
+        mLayoutResourceId = resource;
+        this.data = objects;
+        this.mFlaggable = flaggable;
+        this.mFlagView = flagView;
+        this.mDeleteView = deleteView;
+        this.mTypeIdView = typeIdView;
+        this.mTypeView = typeView;
     }
 
     @Override
@@ -40,9 +67,13 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         Post post = data.get(position);
 
-        View is_user_post_view = convertView.findViewById(R.id.is_user_post);
-        if(post.isUserSkoot()) {
+        View is_user_post_view = convertView.findViewById(R.id.is_user_skoot);
+        if (post.isUserSkoot()) {
             is_user_post_view.setAlpha(1.0f);
+            is_user_post_view.setVisibility(View.VISIBLE);
+        } else {
+            is_user_post_view.setAlpha(0.0f);
+            is_user_post_view.setVisibility(View.GONE);
         }
         TextView postContent = (TextView) convertView.findViewById(R.id.postText);
         postContent.setText(post.getContent());
@@ -59,7 +90,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
             }
         });
         handleContent.setVisibility(View.VISIBLE);
-        if(post.getChannel().equals("")) {
+        if (post.getChannel().equals("")) {
             handleContent.setVisibility(View.GONE);
         }
 
@@ -74,6 +105,39 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         TextView favoritesCount = (TextView) convertView.findViewById(R.id.favoritesCount);
         favoritesCount.setText(Integer.toString(post.getFavoriteCount()));
+
+        final Button flagButton = (Button) convertView.findViewById(R.id.flagButton);
+
+        if (mFlaggable) {
+            flagButton.setVisibility(View.VISIBLE);
+            if (post.isUserSkoot()) {
+                flagButton.setBackground(mContext.getResources().getDrawable(R.drawable.delete));
+            } else {
+                flagButton.setBackground(mContext.getResources().getDrawable(R.drawable.flag_inactive));
+            }
+            flagButton.setTag(post);
+
+            flagButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Post post = (Post) flagButton.getTag();
+
+                    if (post.isUserSkoot()) {
+                        //Deletable post
+                        mDeleteView.setVisibility(View.VISIBLE);
+                        mTypeIdView.setText(Integer.toString(post.getId()));
+                        mTypeView.setText("post");
+                    } else {
+                        //Flaggeble post
+                        mFlagView.setVisibility(View.VISIBLE);
+                        mTypeIdView.setText(Integer.toString(post.getId()));
+                        mTypeView.setText("post");
+                    }
+                }
+            });
+        } else {
+            flagButton.setVisibility(View.GONE);
+        }
 
         ImageView commentImage = (ImageView) convertView.findViewById(R.id.commentImage);
 

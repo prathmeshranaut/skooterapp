@@ -16,7 +16,7 @@ import net.aayush.skooterapp.fragments.Trending;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
     String tabs[] = {"Home", "Hot", "Peek",
-            "Me"
+            //"Me"
     };
 
     Context mContext;
@@ -24,7 +24,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             R.drawable.home_active,
             R.drawable.trending_inactive,
             R.drawable.peek_inactive,
-            R.drawable.me_inactive
+            //R.drawable.profile_icon
     };
 
     public TabsPagerAdapter(Context mContext, FragmentManager fm) {
