@@ -3,13 +3,10 @@ package net.aayush.skooterapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,34 +32,6 @@ public class ComposeActivity extends BaseActivity {
         setContentView(R.layout.activity_compose);
 
         activateToolbarWithHomeEnabled();
-
-        final EditText editText = (EditText) findViewById(R.id.skootHandle);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String result = s.toString().replaceAll(" ", "");
-                if (!s.toString().equals(result)) {
-                    editText.setText(result);
-                    editText.setSelection(result.length());
-                    // alert the user
-                }
-                result = s.toString().replaceAll("@", "");
-                if (!s.toString().equals(result)) {
-                    editText.setText(result);
-                    editText.setSelection(result.length());
-                }
-            }
-        });
     }
 
 

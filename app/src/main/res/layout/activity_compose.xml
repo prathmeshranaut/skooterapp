@@ -15,6 +15,7 @@
         android:ems="1"
         android:hint="@string/enter_a_skoot"
         android:id="@+id/skootText"
+        android:digits="abcdefghijklmnopqrstuvwxyz1234567890-_"
         android:layout_below="@+id/app_bar" />
     <EditText
         android:layout_width="fill_parent"
