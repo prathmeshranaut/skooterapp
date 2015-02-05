@@ -3,8 +3,4 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="net.aayush.skooterapp.ViewPostActivity">
 
-    <item android:id="@+id/action_flag"
-          android:title="@string/action_flag"
-          android:orderInCategory="1"
-          app:showAsAction="always"/>
 </menu>
