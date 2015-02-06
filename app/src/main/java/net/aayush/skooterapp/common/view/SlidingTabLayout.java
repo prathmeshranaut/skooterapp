@@ -15,6 +15,8 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.aayush.skooterapp.TabsPagerAdapter;
+
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as to
  * the user's scroll progress.
@@ -280,8 +282,17 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 mTabStrip.onViewPagerPageChanged(position, 0f);
                 scrollToTab(position, 0);
             }
+            final TabsPagerAdapter adapter = (TabsPagerAdapter) mViewPager.getAdapter();
+
             for (int i = 0; i < mTabStrip.getChildCount(); i++) {
                 mTabStrip.getChildAt(i).setSelected(position == i);
+                TextView t = (TextView) mTabStrip.getChildAt(i);
+                if(i == position) {
+                    t.setText(adapter.getActivePageTitle(i));
+                }
+                else {
+                    t.setText(adapter.getPageTitle(i));
+                }
             }
             if (mViewPagerPageChangeListener != null) {
                 mViewPagerPageChangeListener.onPageSelected(position);

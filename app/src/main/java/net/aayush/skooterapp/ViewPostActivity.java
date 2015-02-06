@@ -216,12 +216,7 @@ public class ViewPostActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_flag) {
-            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.flag_view);
-            linearLayout.setVisibility(View.VISIBLE);
-
-            return true;
-        } else if (id == android.R.id.home) {
+        if (id == android.R.id.home) {
             this.finish();
             return true;
         }

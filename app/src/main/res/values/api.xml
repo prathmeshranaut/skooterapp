@@ -8,7 +8,6 @@
     <string name="skoot_single">skoot/{user_id}/{post_id}.json</string>
     <string name="skoot_new">skoot</string>
     <string name="skoot_delete">skoot/{skoot_id}</string>
-    <string name="skoot_channel">channel/{user_id}/{channel}</string>
     <string name="comment_delete">comment/{comment_id}</string>
 
 
@@ -30,4 +29,7 @@
 
     <string name="flag_skoot">flag/skoot</string>
     <string name="flag_comment">flag/comment</string>
+
+    <string name="channel_view">channel/{user_id}/{channel}</string>
+    <string name="channel_trending">channels/trending/{user_id}</string>
 </resources>

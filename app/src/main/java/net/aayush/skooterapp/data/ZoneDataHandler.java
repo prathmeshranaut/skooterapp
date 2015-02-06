@@ -91,6 +91,7 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
         String where= COLUMN_ZONE_ID+" = ?";
         SQLiteDatabase db = this.getWritableDatabase();
         db.update(TABLE_ZONES, updatedValues, where, new String[]{Integer.toString(i)});
+        db.close();
     }
 
     public void unFollowZoneById(int i) {
@@ -100,5 +101,6 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
         String where= COLUMN_ZONE_ID+" = ?";
         SQLiteDatabase db = this.getWritableDatabase();
         db.update(TABLE_ZONES, updatedValues, where, new String[]{Integer.toString(i)});
+        db.close();
     }
 }

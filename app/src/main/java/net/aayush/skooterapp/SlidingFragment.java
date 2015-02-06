@@ -1,20 +1,24 @@
 package net.aayush.skooterapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import net.aayush.skooterapp.common.view.SlidingTabLayout;
 
-import static net.aayush.skooterapp.common.view.SlidingTabLayout.*;
+import static net.aayush.skooterapp.common.view.SlidingTabLayout.TabColorizer;
 
-public class SlidingFragment extends Fragment {
+public class SlidingFragment extends Fragment implements ViewPager.OnPageChangeListener {
 
     private SlidingTabLayout mSlidingTabLayout;
-
+    private LinearLayout mTabsLinearLayout;
     private ViewPager mViewPager;
 
     @Override
@@ -46,4 +50,26 @@ public class SlidingFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onPageScrolled(int i, float v, int i2) {
+        //overriden method not used
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Log.d("Slider", Integer.toString(position));
+        for(int i=0; i < mSlidingTabLayout.getChildCount(); i++){
+            TextView tv = (TextView) mSlidingTabLayout.getChildAt(i);
+            if(i == position){
+                tv.setTextColor(Color.WHITE);
+            } else {
+                tv.setTextColor(Color.GRAY);
+            }
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
+        //overriden method not used
+    }
 }

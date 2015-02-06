@@ -1,10 +1,14 @@
 package net.aayush.skooterapp.fragments;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,10 +28,14 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
-import net.aayush.skooterapp.PostAdapter;
+import net.aayush.skooterapp.ChannelActivity;
+import net.aayush.skooterapp.ExampleAdapter;
 import net.aayush.skooterapp.R;
+import net.aayush.skooterapp.TrendingPostAdapter;
 import net.aayush.skooterapp.ViewPostActivity;
 import net.aayush.skooterapp.data.Post;
+import net.aayush.skooterapp.data.Zone;
+import net.aayush.skooterapp.data.ZoneDataHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,15 +49,17 @@ import java.util.Map;
 public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     protected static final String LOG_TAG = Trending.class.getSimpleName();
-    protected List<Post> mPostsList = new ArrayList<Post>();
-    protected ArrayAdapter<Post> mPostsAdapter;
+    protected List mPostsList = new ArrayList();
+    protected ArrayAdapter mPostsAdapter;
     protected ListView mListPosts;
     protected Context mContext;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
+    private List<String> items = new ArrayList<String>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -68,7 +78,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
         getTrendingSkoots();
 
-        mPostsAdapter = new PostAdapter(mContext, R.layout.list_view_post_row, mPostsList);
+        mPostsAdapter = new TrendingPostAdapter(mContext, R.layout.list_view_post_row, mPostsList);
         mListPosts = (ListView) rootView.findViewById(R.id.list_posts);
         mListPosts.setAdapter(mPostsAdapter);
 
@@ -76,13 +86,26 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Context context = view.getContext();
-
-                Intent intent = new Intent(getActivity(), ViewPostActivity.class);
-                intent.putExtra(BaseActivity.SKOOTER_POST, mPostsList.get(position));
-                startActivity(intent);
+                Log.d(LOG_TAG, Integer.toString(position));
+                if (position < 3) {
+                    Intent intent = new Intent(mContext, ChannelActivity.class);
+                    Log.d(LOG_TAG, mPostsList.get(position).toString());
+                    intent.putExtra("CHANNEL_NAME", mPostsList.get(position).toString());
+                    mContext.startActivity(intent);
+                } else {
+                    Log.d(LOG_TAG, mPostsList.get(position).toString());
+                    Intent intent = new Intent(getActivity(), ViewPostActivity.class);
+                    intent.putExtra(BaseActivity.SKOOTER_POST, (Post) mPostsList.get(position));
+                    startActivity(intent);
+                }
             }
         });
+
+        ZoneDataHandler zoneDataHandler = new ZoneDataHandler(getActivity());
+        List<Zone> zones = zoneDataHandler.getAllZones();
+        for (Zone zone : zones) {
+            items.add(zone.getZoneName());
+        }
 
         // Inflate the layout for this fragment
         return rootView;
@@ -91,6 +114,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
     @Override
     public void onRefresh() {
+
         getTrendingSkoots();
     }
 
@@ -104,6 +128,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
             @Override
             public void onResponse(JSONObject response) {
                 final String SKOOTS = "skoots";
+                final String SKOOT_CHANNELS = "channels";
                 final String SKOOT_ID = "id";
                 final String SKOOT_POST = "content";
                 final String SKOOT_HANDLE = "channel";
@@ -120,10 +145,10 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                 final String SKOOT_IMAGE_URL = "zone_image";
 
                 try {
+                    mPostsList.clear();
+                    JSONArray channels = response.getJSONArray(SKOOT_CHANNELS);
                     JSONArray jsonArray = response.getJSONArray(SKOOTS);
 
-                    mPostsList.clear();
-                    Log.v(LOG_TAG, jsonArray.toString());
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonPost = jsonArray.getJSONObject(i);
                         int id = jsonPost.getInt(SKOOT_ID);
@@ -147,11 +172,16 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                         Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url);
                         mPostsList.add(postObject);
                     }
+
+                    for (int i = 0; i < 3; i++) {
+                        mPostsList.add(i, channels.getString(i));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");
                 }
                 mPostsAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -160,16 +190,98 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
             }
         });
 
-        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "home_page");
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "trending");
     }
+
+//    public void getTrendingChannels() {
+//        Map<String, String> params = new HashMap<String, String>();
+//        params.put("user_id", Integer.toString(BaseActivity.userId));
+//
+//        String url = BaseActivity.substituteString(getResources().getString(R.string.channel_trending), params);
+//
+//        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+//            @Override
+//            public void onResponse(JSONArray response) {
+//                try {
+//                    mPostsList.clear();
+//                    for (int i = 0; i < 3; i++) {
+//                        mPostsList.add(i, response.getString(i));
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Log.e(LOG_TAG, "Error processing Json Data");
+//                }
+//                mPostsAdapter.notifyDataSetChanged();
+//                mSwipeRefreshLayout.setRefreshing(false);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+//            }
+//        });
+//        Log.d(LOG_TAG, mPostsList.toString());
+//        AppController.getInstance().addToRequestQueue(jsonArrayRequest, "trending_channels");
+//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
-        inflater.inflate(R.menu.menu_main, menu);
-        MenuItem menuItem = menu.findItem(R.id.score);
-        menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore() + 2));
+        final Menu m = menu;
+        inflater.inflate(R.menu.menu_trending, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView search = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                loadHistory(query, m);
+
+                return true;
+            }
+        });
+
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void loadHistory(String query, Menu menu) {
+        // Cursor
+        String[] columns = new String[]{"_id", "text"};
+        Object[] temp = new Object[]{0, "default"};
+
+        MatrixCursor cursor = new MatrixCursor(columns);
+
+        for (int i = 0; i < items.size(); i++) {
+
+            temp[0] = i;
+            temp[1] = items.get(i);
+
+            cursor.addRow(temp);
+        }
+
+        // SearchView
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView search = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        search.setSuggestionsAdapter(new ExampleAdapter(getActivity().getBaseContext(), cursor, items));
+    }
+
+    public void viewPost(View view){
+
     }
 }

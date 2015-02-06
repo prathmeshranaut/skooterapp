@@ -15,16 +15,18 @@ import net.aayush.skooterapp.fragments.Peek;
 import net.aayush.skooterapp.fragments.Trending;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
-    String tabs[] = {"Home", "Hot", "Peek",
-            //"Me"
-    };
 
     Context mContext;
     private int[] imageResId = {
-            R.drawable.home_active,
+            R.drawable.home_inactive,
             R.drawable.trending_inactive,
             R.drawable.peek_inactive,
-            //R.drawable.profile_icon
+    };
+
+    private int[] activeImageResId = {
+            R.drawable.home_active,
+            R.drawable.trending_active,
+            R.drawable.peek_active,
     };
 
     public TabsPagerAdapter(Context mContext, FragmentManager fm) {
@@ -34,12 +36,21 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return tabs.length;
+        return imageResId.length;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         Drawable image = mContext.getResources().getDrawable(imageResId[position]);
+        image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
+        SpannableString sb = new SpannableString(" ");
+        ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return sb;
+    }
+
+    public CharSequence getActivePageTitle(int position) {
+        Drawable image = mContext.getResources().getDrawable(activeImageResId[position]);
         image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
         SpannableString sb = new SpannableString(" ");
         ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);

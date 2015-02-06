@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
+
     <View
         android:layout_width="4dp"
         android:alpha="0.0"
@@ -59,7 +60,7 @@
                     android:src="@drawable/comment_inactive"
                     android:id="@+id/commentImage"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginRight="3dp"/>
+                    android:layout_marginRight="3dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -85,6 +86,7 @@
                     android:layout_alignParentRight="true"
                     android:background="@drawable/favorite_icon_inactive"
                     android:layout_marginLeft="15dp"
+                    android:focusable="false"
                     />
 
                 <TextView
@@ -110,6 +112,7 @@
                     android:layout_alignParentRight="true"
                     android:background="@drawable/flag_inactive"
                     android:layout_marginLeft="15dp"
+                    android:focusable="false"
                     />
             </LinearLayout>
         </LinearLayout>
@@ -161,7 +164,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/upvote"
                     android:layout_alignParentRight="true"
-                    android:background="@drawable/vote_up_inactive"/>
+                    android:background="@drawable/vote_up_inactive"
+                    android:focusable="false"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -183,6 +187,7 @@
                     android:layout_below="@+id/voteCount"
                     android:layout_alignLeft="@+id/upvote"
                     android:background="@drawable/vote_down_inactive"
+                    android:focusable="false"
                     />
             </RelativeLayout>
         </LinearLayout>

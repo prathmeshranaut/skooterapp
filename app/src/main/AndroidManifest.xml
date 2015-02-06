@@ -35,6 +35,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".ChannelActivity" />
+
         </activity>
         <activity
             android:name=".MainActivity"
@@ -124,10 +128,15 @@
             android:name=".ChannelActivity"
             android:label="@string/title_activity_channel"
             android:parentActivityName=".MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MainActivity" />
         </activity>
     </application>
-
 </manifest>

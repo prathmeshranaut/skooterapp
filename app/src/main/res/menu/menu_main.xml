@@ -5,15 +5,22 @@
 
     <item
         android:id="@+id/action_alerts"
-        android:title=""
+        android:title="Notifications"
         android:orderInCategory="1"
         android:icon="@drawable/notification_icon"
-        skooter:showAsAction="always"/>
+        skooter:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_me"
-        android:title=""
+        android:title="Me"
         android:orderInCategory="1"
         android:icon="@drawable/profile_icon"
-        skooter:showAsAction="always"/>
+        skooter:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        android:orderInCategory="1"
+        android:icon="@drawable/settings_icon"
+        skooter:showAsAction="ifRoom"/>
 </menu>

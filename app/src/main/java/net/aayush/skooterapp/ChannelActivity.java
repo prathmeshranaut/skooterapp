@@ -1,5 +1,6 @@
 package net.aayush.skooterapp;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class ChannelActivity extends BaseActivity {
     private ArrayList<Post> mPostsList = new ArrayList<Post>();
     private PostAdapter mPostsAdapter;
     private ListView mListView;
+    String mChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +41,18 @@ public class ChannelActivity extends BaseActivity {
 
         activateToolbarWithHomeEnabled();
 
+        handleIntent(getIntent());
+
         mListView = (ListView) findViewById(R.id.list_channels);
-        String channel = getIntent().getStringExtra("CHANNEL_NAME");
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", Integer.toString(BaseActivity.userId));
-        params.put("channel", channel.substring(1));
-
-        String url = BaseActivity.substituteString(getResources().getString(R.string.skoot_channel), params);
+        if(mChannel.charAt(0) == '@') {
+            params.put("channel", mChannel.substring(1));
+        } else {
+            params.put("channel", mChannel);
+        }
+        String url = BaseActivity.substituteString(getResources().getString(R.string.channel_view), params);
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
@@ -144,5 +150,21 @@ public class ChannelActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            mChannel = query;
+        }else {
+            mChannel = intent.getStringExtra("CHANNEL_NAME");
+        }
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
     }
 }
