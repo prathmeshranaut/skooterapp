@@ -23,8 +23,88 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.85">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text=""
+                    android:id="@+id/handleText"
+                    android:textColor="@color/skooterNSecondaryTextColor"
+                    android:textStyle="bold|italic"
+                    android:layout_marginBottom="2dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Large Text"
+                    android:id="@+id/postText"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/handleText"
+                    android:background="@color/md_amber_500"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15"
+                android:layout_gravity="center_vertical">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/upvote"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/vote_up_inactive"
+                    android:focusable="false"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="0"
+                    android:id="@+id/voteCount"
+                    android:layout_marginRight="15dp"
+                    android:layout_below="@+id/upvote"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"/>
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/downvote"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/voteCount"
+                    android:layout_alignLeft="@+id/upvote"
+                    android:background="@drawable/vote_down_inactive"
+                    android:focusable="false"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -118,78 +198,6 @@
         </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.85">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text=""
-                    android:id="@+id/handleText"
-                    android:textColor="@color/skooterNSecondaryTextColor"
-                    android:textStyle="bold|italic"
-                    android:layout_marginBottom="2dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Large Text"
-                    android:id="@+id/postText"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/handleText"
-                    />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.15">
-
-                <Button
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/upvote"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/vote_up_inactive"
-                    android:focusable="false"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="0"
-                    android:id="@+id/voteCount"
-                    android:layout_marginRight="15dp"
-                    android:layout_below="@+id/upvote"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"/>
-
-                <Button
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/downvote"
-                    android:layout_alignParentBottom="true"
-                    android:layout_below="@+id/voteCount"
-                    android:layout_alignLeft="@+id/upvote"
-                    android:background="@drawable/vote_down_inactive"
-                    android:focusable="false"
-                    />
-            </RelativeLayout>
-        </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

@@ -92,6 +92,7 @@ public class TrendingPostAdapter extends ArrayAdapter {
             favoritesCount.setText(Integer.toString(post.getFavoriteCount()));
 
             final Button flagButton = (Button) convertView.findViewById(R.id.flagButton);
+            flagButton.setVisibility(View.GONE);
 
             ImageView commentImage = (ImageView) convertView.findViewById(R.id.commentImage);
 

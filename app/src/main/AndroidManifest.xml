@@ -8,6 +8,7 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -23,6 +24,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Skooter" >
+        <meta-data android:name="LOCALYTICS_APP_KEY" android:value="ccdfa2471067886943f4461-be2fc62e-ab7e-11e4-a83e-005cf8cbabd8"/>
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAqJpoLKXl4xOpomB2mmBFWSQYa0xXcyks" />
@@ -35,10 +38,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".ChannelActivity" />
-
         </activity>
         <activity
             android:name=".MainActivity"
@@ -131,6 +134,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -138,5 +142,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MainActivity" />
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.aayush.skooterapp.MainActivity" />
+        </activity>
     </application>
+
 </manifest>

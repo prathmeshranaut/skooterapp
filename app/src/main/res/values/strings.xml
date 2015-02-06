@@ -33,5 +33,6 @@
     <string name="title_activity_notifications">Notifications</string>
     <string name="title_activity_favorites">FavoritesActivity</string>
     <string name="title_activity_channel">ChannelActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
 </resources>
