@@ -139,6 +139,7 @@ public class NotificationsActivity extends BaseActivity {
                     headers = new HashMap<String, String>();
                 }
 
+                headers.put("user_id", Integer.toString(BaseActivity.userId));
                 headers.put("access_token", BaseActivity.accessToken);
 
                 return headers;

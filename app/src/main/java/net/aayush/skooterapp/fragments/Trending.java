@@ -176,8 +176,10 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                         mPostsList.add(postObject);
                     }
 
-                    for (int i = 0; i < 3; i++) {
-                        mPostsList.add(i, channels.getString(i));
+                    if(channels.length() > 3) {
+                        for (int i = 0; i < 3; i++) {
+                            mPostsList.add(i, channels.getString(i));
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -201,6 +203,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                     headers = new HashMap<String, String>();
                 }
 
+                headers.put("user_id", Integer.toString(BaseActivity.userId));
                 headers.put("access_token", BaseActivity.accessToken);
 
                 return headers;

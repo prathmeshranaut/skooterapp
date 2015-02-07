@@ -143,6 +143,7 @@ public class LoadingActivity extends BaseActivity {
                     headers = new HashMap<String, String>();
                 }
 
+                headers.put("user_id", Integer.toString(BaseActivity.userId));
                 headers.put("access_token", BaseActivity.accessToken);
 
                 return headers;
@@ -150,6 +151,9 @@ public class LoadingActivity extends BaseActivity {
         };
 
         AppController.getInstance().addToRequestQueue(jsonArrayRequest, "zones");
+        Intent i = new Intent(LoadingActivity.this, MainActivity.class);
+        startActivity(i);
+        finish();
     }
 
     public void addUserLocation() {
@@ -175,6 +179,7 @@ public class LoadingActivity extends BaseActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    downloadZones();
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -192,6 +197,7 @@ public class LoadingActivity extends BaseActivity {
                         headers = new HashMap<String, String>();
                     }
 
+                    headers.put("user_id", Integer.toString(BaseActivity.userId));
                     headers.put("access_token", BaseActivity.accessToken);
 
                     return headers;
@@ -273,14 +279,10 @@ public class LoadingActivity extends BaseActivity {
                     }
                     mUser = new User(userId, score, posts, comments);
                     addUserLocation();
-                    downloadZones();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");
                 }
-                Intent i = new Intent(LoadingActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -297,7 +299,7 @@ public class LoadingActivity extends BaseActivity {
                         || headers.equals(Collections.emptyMap())) {
                     headers = new HashMap<String, String>();
                 }
-
+                headers.put("user_id", Integer.toString(BaseActivity.userId));
                 headers.put("access_token", BaseActivity.accessToken);
 
                 return headers;

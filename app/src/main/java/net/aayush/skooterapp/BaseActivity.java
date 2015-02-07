@@ -91,7 +91,7 @@ public class BaseActivity extends ActionBarActivity {
 
             if (mToolbar != null) {
                 setSupportActionBar(mToolbar);
-                mToolbar.setLogo(R.drawable.ic_launcher);
+                mToolbar.setLogo(R.drawable.action_bar_icon);
                 getSupportActionBar().setDisplayShowTitleEnabled(false);
             }
         }

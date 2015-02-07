@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -18,6 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,7 +64,7 @@ public class ComposeActivity extends BaseActivity {
                 params.put("channel", skootHandle.getText().toString());
                 params.put("content", skootText.getText().toString());
                 params.put("location_id", Integer.toString(BaseActivity.locationId));
-                params.put("zone_id", "2");
+                params.put("zone_id", "1");
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
                     @Override
@@ -77,7 +79,21 @@ public class ComposeActivity extends BaseActivity {
                     public void onErrorResponse(VolleyError error) {
                         VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
                     }
-                });
+                }){
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = super.getHeaders();
+
+                        if (headers == null
+                                || headers.equals(Collections.emptyMap())) {
+                            headers = new HashMap<String, String>();
+                        }
+
+                        headers.put("access_token", BaseActivity.accessToken);
+
+                        return headers;
+                    }
+                };
 
                 AppController.getInstance().addToRequestQueue(jsonObjectRequest, "compose_skoot");
                 finish();

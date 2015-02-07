@@ -23,6 +23,7 @@
         <!--<item name="android:background">@color/skooterNPrimaryTextColor</item>-->
     <!--</style>-->
 
+
     <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/skooterPrimaryTextColor</item>
         <item name="android:textSize">18sp</item>
