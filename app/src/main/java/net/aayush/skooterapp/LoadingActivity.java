@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -32,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +54,7 @@ public class LoadingActivity extends BaseActivity {
         mLoadingTextView = (TextView) findViewById(R.id.loadingText);
         mSettings = getSharedPreferences(PREFS_NAME, 0);
         userId = mSettings.getInt("userId", 0);
+        accessToken = mSettings.getString("access_token", "");
         mLocator = new GPSLocator(this);
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -79,6 +82,7 @@ public class LoadingActivity extends BaseActivity {
     private void downloadZones() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", Integer.toString(BaseActivity.userId));
+        params.put("location_id", Integer.toString(BaseActivity.locationId));
 
         final String url = BaseActivity.substituteString(getResources().getString(R.string.zones), params);
         final ZoneDataHandler dataHandler = new ZoneDataHandler(this);
@@ -129,7 +133,21 @@ public class LoadingActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.networkResponse);
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = super.getHeaders();
+
+                if (headers == null
+                        || headers.equals(Collections.emptyMap())) {
+                    headers = new HashMap<String, String>();
+                }
+
+                headers.put("access_token", BaseActivity.accessToken);
+
+                return headers;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(jsonArrayRequest, "zones");
     }
@@ -153,7 +171,7 @@ public class LoadingActivity extends BaseActivity {
                     final String LOCATION_ID = "location_id";
 
                     try {
-                        response.getInt(LOCATION_ID);
+                        BaseActivity.locationId = response.getInt(LOCATION_ID);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -164,7 +182,21 @@ public class LoadingActivity extends BaseActivity {
                     VolleyLog.d(LOG_TAG, error.getMessage());
                     mLoadingTextView.setText("We're having a hard time locating you!");
                 }
-            });
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = super.getHeaders();
+
+                    if (headers == null
+                            || headers.equals(Collections.emptyMap())) {
+                        headers = new HashMap<String, String>();
+                    }
+
+                    headers.put("access_token", BaseActivity.accessToken);
+
+                    return headers;
+                }
+            };
 
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "location");
         } else {
@@ -256,7 +288,21 @@ public class LoadingActivity extends BaseActivity {
                 VolleyLog.d(LOG_TAG, error.getMessage());
                 mLoadingTextView.setText("Darn! Looks like we couldn't log you in. Hold on we'll keep trying!");
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = super.getHeaders();
+
+                if (headers == null
+                        || headers.equals(Collections.emptyMap())) {
+                    headers = new HashMap<String, String>();
+                }
+
+                headers.put("access_token", BaseActivity.accessToken);
+
+                return headers;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "login_user");
     }
@@ -308,6 +354,7 @@ public class LoadingActivity extends BaseActivity {
             protected void onPostExecute(String webData) {
                 super.onPostExecute(webData);
                 BaseActivity.userId = getUserId();
+                BaseActivity.accessToken = getAccessToken();
                 if (BaseActivity.userId == 0) {
                     if (getmDownloadStatus() == DownloadStatus.FAILED_OR_EMPTY) {
                         mLoadingTextView.setText("Darn! Looks like we couldn't log you in. Hold on we'll keep trying!");
@@ -315,6 +362,7 @@ public class LoadingActivity extends BaseActivity {
                 } else {
                     SharedPreferences.Editor editor = mSettings.edit();
                     editor.putInt("userId", userId);
+                    editor.putString("access_token", accessToken);
                     editor.commit();
                     getUserDetails();
                 }

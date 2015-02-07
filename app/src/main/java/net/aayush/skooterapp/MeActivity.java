@@ -145,7 +145,7 @@ public class MeActivity extends BaseActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_me, menu);
         MenuItem menuItem = menu.findItem(R.id.score);
-        menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore() + 2));
+        menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore()));
         return true;
     }
 

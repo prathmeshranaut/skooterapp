@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -20,6 +21,7 @@ import net.aayush.skooterapp.data.Post;
 
 import org.json.JSONObject;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +74,21 @@ public class FlagActivity extends BaseActivity {
                     public void onErrorResponse(VolleyError error) {
                         VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
                     }
-                });
+                }) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = super.getHeaders();
+
+                        if (headers == null
+                                || headers.equals(Collections.emptyMap())) {
+                            headers = new HashMap<String, String>();
+                        }
+
+                        headers.put("access_token", BaseActivity.accessToken);
+
+                        return headers;
+                    }
+                };
 
                 AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_post");
                 finish();

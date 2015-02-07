@@ -129,7 +129,21 @@ public class NotificationsActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
 
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = super.getHeaders();
+
+                if (headers == null
+                        || headers.equals(Collections.emptyMap())) {
+                    headers = new HashMap<String, String>();
+                }
+
+                headers.put("access_token", BaseActivity.accessToken);
+
+                return headers;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(jsonArrayRequest, "notifications");
 
@@ -148,7 +162,6 @@ public class NotificationsActivity extends BaseActivity {
                     String url = BaseActivity.substituteString(getResources().getString(R.string.notification_delete), new HashMap<String, String>());
 
                     final int notification_id = notification.getId();
-                    Log.d(LOG_TAG, Integer.toString(notification_id));
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -171,6 +184,7 @@ public class NotificationsActivity extends BaseActivity {
 
                             headers.put("user_id", Integer.toString(BaseActivity.userId));
                             headers.put("notification_id", Integer.toString(notification_id));
+                            headers.put("access_token", BaseActivity.accessToken);
 
                             Log.d(LOG_TAG, headers.toString());
 

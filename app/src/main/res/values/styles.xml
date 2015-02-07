@@ -7,7 +7,7 @@
 
     <style name="Theme.Base" parent="AppTheme">
         <item name="colorPrimary">@color/skooterNPrimaryTextColor</item>
-        <item name="colorPrimaryDark">@color/skooterNSecondaryBackgroundColor</item>
+        <item name="colorPrimaryDark">@color/skooterNPrimaryTextColor</item>
         <item name="colorAccent">@color/skooterColorBackgroundAccent</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>

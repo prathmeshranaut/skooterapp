@@ -55,7 +55,6 @@
                     android:id="@+id/postText"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@+id/handleText"
-                    android:background="@color/md_amber_500"
                     />
             </RelativeLayout>
 

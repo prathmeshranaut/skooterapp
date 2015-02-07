@@ -61,7 +61,7 @@ public class ComposeActivity extends BaseActivity {
                 params.put("user_id", Integer.toString(BaseActivity.userId));
                 params.put("channel", skootHandle.getText().toString());
                 params.put("content", skootText.getText().toString());
-                params.put("location_id", "1");
+                params.put("location_id", Integer.toString(BaseActivity.locationId));
                 params.put("zone_id", "2");
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {

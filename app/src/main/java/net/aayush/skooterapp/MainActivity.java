@@ -7,16 +7,25 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.localytics.android.LocalyticsActivityLifecycleCallbacks;
+import com.localytics.android.LocalyticsAmpSession;
+
 import net.aayush.skooterapp.common.view.SlidingTabLayout;
 
 public class MainActivity extends BaseActivity {
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
+    private LocalyticsAmpSession localyticsSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.localyticsSession = new LocalyticsAmpSession(
+                this.getApplicationContext());
+        getApplication().registerActivityLifecycleCallbacks(
+                new LocalyticsActivityLifecycleCallbacks(this.localyticsSession));
 
         activateToolbar();
         if (savedInstanceState == null) {
@@ -26,6 +35,8 @@ public class MainActivity extends BaseActivity {
             transaction.replace(R.id.sample_content_fragment, fragment);
             transaction.commit();
         }
+
+
     }
 
     @Override

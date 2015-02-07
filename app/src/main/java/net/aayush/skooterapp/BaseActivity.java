@@ -16,6 +16,8 @@ import java.util.TimeZone;
 public class BaseActivity extends ActionBarActivity {
     private Toolbar mToolbar;
     public static int userId;
+    public static String accessToken;
+    public static int locationId;
     public static User mUser;
 
     public static final String SKOOTER_POST = "SKOOTER_POST";

@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,6 @@ public class SlidingFragment extends Fragment implements ViewPager.OnPageChangeL
 
     @Override
     public void onPageSelected(int position) {
-        Log.d("Slider", Integer.toString(position));
         for(int i=0; i < mSlidingTabLayout.getChildCount(); i++){
             TextView tv = (TextView) mSlidingTabLayout.getChildAt(i);
             if(i == position){

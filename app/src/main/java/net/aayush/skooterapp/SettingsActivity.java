@@ -60,6 +60,12 @@ public class SettingsActivity extends BaseActivity {
                         break;
                     case 2:
                         //Feedback
+                        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
+                        sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"skooter@gmail.com"});
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "PRESET TEXT");
+                        sendIntent.setType("text/plain");
+                        startActivity(Intent.createChooser(sendIntent, "Send feedback"));
 
                         break;
                     case 3:

@@ -117,7 +117,21 @@ public class PeekActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = super.getHeaders();
+
+                if (headers == null
+                        || headers.equals(Collections.emptyMap())) {
+                    headers = new HashMap<String, String>();
+                }
+
+                headers.put("access_token", BaseActivity.accessToken);
+
+                return headers;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "follow_zone");
     }

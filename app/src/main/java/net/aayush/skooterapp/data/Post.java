@@ -2,6 +2,7 @@ package net.aayush.skooterapp.data;
 
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -230,7 +232,21 @@ public class Post implements Serializable {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.getMessage());
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = super.getHeaders();
+
+                if (headers == null
+                        || headers.equals(Collections.emptyMap())) {
+                    headers = new HashMap<String, String>();
+                }
+
+                headers.put("access_token", BaseActivity.accessToken);
+
+                return headers;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "favorite_post");
     }
@@ -255,7 +271,21 @@ public class Post implements Serializable {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.getMessage());
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = super.getHeaders();
+
+                if (headers == null
+                        || headers.equals(Collections.emptyMap())) {
+                    headers = new HashMap<String, String>();
+                }
+
+                headers.put("access_token", BaseActivity.accessToken);
+
+                return headers;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "unfavorite_post");
     }

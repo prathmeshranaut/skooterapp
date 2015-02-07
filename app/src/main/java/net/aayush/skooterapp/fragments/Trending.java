@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -42,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,6 +123,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     public void getTrendingSkoots() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", Integer.toString(BaseActivity.userId));
+        params.put("location_id", Integer.toString(BaseActivity.locationId));
 
         String url = BaseActivity.substituteString(getResources().getString(R.string.hot), params);
 
@@ -188,7 +191,21 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = super.getHeaders();
+
+                if (headers == null
+                        || headers.equals(Collections.emptyMap())) {
+                    headers = new HashMap<String, String>();
+                }
+
+                headers.put("access_token", BaseActivity.accessToken);
+
+                return headers;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "trending");
     }

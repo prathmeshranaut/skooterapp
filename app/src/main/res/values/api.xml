@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="main_url">http://skooter.elasticbeanstalk.com/</string>
-    <string name="home">latest/{user_id}.json</string>
-    <string name="hot">hot/{user_id}.json</string>
+    <string name="home">latest/{user_id}/{location_id}</string>
+    <string name="hot">hot/{user_id}/{location_id}</string>
     <string name="peek">sneakpeek/{user_id}.json</string>
 
     <string name="skoot_single">skoot/{user_id}/{post_id}.json</string>
@@ -11,7 +11,7 @@
     <string name="comment_delete">comment/{comment_id}</string>
 
 
-    <string name="zones">zones/{user_id}</string>
+    <string name="zones">zones/{user_id}/{location_id}</string>
     <string name="zones_follow">zone/follow</string>
     <string name="zones_unfollow">zone/unfollow</string>
 

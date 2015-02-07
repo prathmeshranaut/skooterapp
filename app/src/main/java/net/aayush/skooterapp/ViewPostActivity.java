@@ -94,7 +94,7 @@ public class ViewPostActivity extends BaseActivity {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("user_id", Integer.toString(BaseActivity.userId));
                     params.put("content", commentText.getText().toString());
-                    params.put("location_id", "1");
+                    params.put("location_id", Integer.toString(BaseActivity.locationId));
                     params.put("post_id", Integer.toString(postId));
 
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
@@ -109,7 +109,21 @@ public class ViewPostActivity extends BaseActivity {
                         public void onErrorResponse(VolleyError error) {
                             VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
                         }
-                    });
+                    }) {
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> headers = super.getHeaders();
+
+                            if (headers == null
+                                    || headers.equals(Collections.emptyMap())) {
+                                headers = new HashMap<String, String>();
+                            }
+
+                            headers.put("access_token", BaseActivity.accessToken);
+
+                            return headers;
+                        }
+                    };
 
                     AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
 
@@ -193,11 +207,23 @@ public class ViewPostActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = super.getHeaders();
+
+                if (headers == null
+                        || headers.equals(Collections.emptyMap())) {
+                    headers = new HashMap<String, String>();
+                }
+
+                headers.put("access_token", BaseActivity.accessToken);
+
+                return headers;
+            }
+        };
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "view_comments");
-
-
     }
 
 
@@ -219,6 +245,11 @@ public class ViewPostActivity extends BaseActivity {
         if (id == android.R.id.home) {
             this.finish();
             return true;
+        } else if (id == R.id.action_share){
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.putExtra(Intent.EXTRA_TEXT, mPost.getContent() + ". Join me on Skooter!");
+            startActivity(Intent.createChooser(share, "Share post with friends"));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -255,7 +286,21 @@ public class ViewPostActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
                 }
-            });
+            }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = super.getHeaders();
+
+                    if (headers == null
+                            || headers.equals(Collections.emptyMap())) {
+                        headers = new HashMap<String, String>();
+                    }
+
+                    headers.put("access_token", BaseActivity.accessToken);
+
+                    return headers;
+                }
+            };
 
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_skoot");
         }
@@ -278,7 +323,21 @@ public class ViewPostActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
                 }
-            });
+            }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = super.getHeaders();
+
+                    if (headers == null
+                            || headers.equals(Collections.emptyMap())) {
+                        headers = new HashMap<String, String>();
+                    }
+
+                    headers.put("access_token", BaseActivity.accessToken);
+
+                    return headers;
+                }
+            };
 
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_comment");
         }
@@ -319,6 +378,7 @@ public class ViewPostActivity extends BaseActivity {
                     }
 
                     headers.put("user_id", Integer.toString(BaseActivity.userId));
+                    headers.put("access_token", BaseActivity.accessToken);
 
                     return headers;
                 }
@@ -353,6 +413,7 @@ public class ViewPostActivity extends BaseActivity {
                     }
 
                     headers.put("user_id", Integer.toString(BaseActivity.userId));
+                    headers.put("access_token", BaseActivity.accessToken);
 
                     return headers;
                 }

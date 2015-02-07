@@ -3,4 +3,8 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="net.aayush.skooterapp.ViewPostActivity">
 
+    <item android:id="@+id/action_share"
+          android:icon="@drawable/share_icon"
+          android:title="Share"
+          app:showAsAction="always" />
 </menu>
