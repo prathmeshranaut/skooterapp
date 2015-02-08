@@ -22,6 +22,16 @@ public class TrendingPostAdapter extends ArrayAdapter {
     private static final int TYPE_POST = 0;
     private static final int TYPE_TRENDING = 1;
     private static final int TYPE_MAX_COUNT = TYPE_TRENDING + 1;
+
+    public static int getChannelsCount() {
+        return channelsCount;
+    }
+
+    public static void setChannelsCount(int channelsCount) {
+        TrendingPostAdapter.channelsCount = channelsCount;
+    }
+
+    private static int channelsCount = 0;
     Context mContext;
     int mLayoutResourceId;
     List data = new ArrayList();

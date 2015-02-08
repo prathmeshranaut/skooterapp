@@ -56,7 +56,7 @@ public class MeActivity extends BaseActivity {
         testData.add("My Favorites");
         testData.add("Settings");
 
-        myList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, testData));
+        myList.setAdapter(new ArrayAdapter<String>(this, R.layout.simple_list_view, testData));
 
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

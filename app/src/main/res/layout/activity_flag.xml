@@ -6,7 +6,7 @@
 
     <include android:id="@+id/app_bar" layout="@layout/toolbar" />
 
-    <TextView
+    <net.aayush.skooterapp.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/app_bar"

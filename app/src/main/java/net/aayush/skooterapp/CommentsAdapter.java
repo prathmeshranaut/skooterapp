@@ -120,10 +120,10 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
             upvoteBtn.setEnabled(false);
             downvoteBtn.setEnabled(false);
             if (comment.isUserVote()) {
-                upvoteBtn.setAlpha(0.8f);
+                upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
                 downvoteBtn.setAlpha(0.3f);
             } else {
-                downvoteBtn.setAlpha(0.8f);
+                downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
                 upvoteBtn.setAlpha(0.3f);
             }
         } else {
@@ -140,7 +140,7 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
                     voteCount.setText(Integer.toString(comment.getVoteCount() + 1));
                     upvoteBtn.setEnabled(false);
                     downvoteBtn.setEnabled(false);
-                    upvoteBtn.setAlpha(0.8f);
+                    upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
                     downvoteBtn.setAlpha(0.3f);
                 }
             });
@@ -159,8 +159,8 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
                     voteCount.setText(Integer.toString(comment.getVoteCount() - 1));
                     upvoteBtn.setEnabled(false);
                     downvoteBtn.setEnabled(false);
+                    downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
                     upvoteBtn.setAlpha(0.3f);
-                    downvoteBtn.setAlpha(0.8f);
                 }
             });
         }

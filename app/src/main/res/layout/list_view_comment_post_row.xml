@@ -39,7 +39,7 @@
                     android:layout_marginRight="3dp"
                     />
 
-                <TextView
+                <net.aayush.skooterapp.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.85">
 
-                <TextView
+                <net.aayush.skooterapp.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -101,7 +101,7 @@
                     android:layout_alignParentRight="true"
                     android:background="@drawable/vote_up_inactive"/>
 
-                <TextView
+                <net.aayush.skooterapp.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"

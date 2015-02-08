@@ -207,6 +207,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
             mTabStrip.addView(tabView);
             if (i == mViewPager.getCurrentItem()) {
                 tabView.setSelected(true);
+                TextView t = (TextView) mTabStrip.getChildAt(i);
+                final TabsPagerAdapter cAdapter = (TabsPagerAdapter) mViewPager.getAdapter();
+                t.setText(cAdapter.getActivePageTitle(i));
             }
         }
     }

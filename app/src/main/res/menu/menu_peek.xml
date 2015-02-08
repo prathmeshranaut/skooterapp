@@ -6,6 +6,12 @@
     <item android:id="@+id/action_add_zone"
           android:title="@string/action_settings"
           android:orderInCategory="1"
-          android:icon="@android:drawable/ic_input_add"
+          android:icon="@drawable/add_zone"
           app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_me"
+        android:title="Me"
+        android:orderInCategory="2"
+        android:icon="@drawable/profile_icon"
+        app:showAsAction="ifRoom"/>
 </menu>

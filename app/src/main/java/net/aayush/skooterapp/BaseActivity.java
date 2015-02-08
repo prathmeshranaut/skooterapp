@@ -22,11 +22,19 @@ public class BaseActivity extends ActionBarActivity {
 
     public static final String SKOOTER_POST = "SKOOTER_POST";
     public static final String PREFS_NAME = "Skooter";
+    public static final String SETTINGS_NOTIFICATION = "notificationSettings";
 
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+
+    private static final int SECONDS = 1;
+    private static final int MINUTES = 60 * SECONDS;
+    private static final int HOURS = 60 * MINUTES;
+    private static final int DAYS = 24 * HOURS;
+    private static final int MONTHS = 30 * DAYS;
+    private static final int YEARS = 365 * DAYS;
 
     public static Date currentDate() {
         Calendar calendar = Calendar.getInstance();
@@ -67,21 +75,20 @@ public class BaseActivity extends ActionBarActivity {
             return null;
         }
 
-        final long diff = now - t;
-        if (diff < MINUTE_MILLIS) {
-            return "just now";
-        } else if (diff < 2 * MINUTE_MILLIS) {
-            return "a minute";
-        } else if (diff < 50 * MINUTE_MILLIS) {
-            return diff / MINUTE_MILLIS + " minutes";
-        } else if (diff < 90 * MINUTE_MILLIS) {
-            return "an hour";
-        } else if (diff < 24 * HOUR_MILLIS) {
-            return diff / HOUR_MILLIS + " hours";
-        } else if (diff < 48 * HOUR_MILLIS) {
-            return "Yesterday";
+        long diff = now - t;
+        diff /= SECOND_MILLIS;
+        if (diff < MINUTES) {
+            return "1m";
+        } else if (diff < HOURS) {
+            return diff / MINUTES + "min";
+        } else if (diff < DAYS) {
+            return diff / HOURS + "h";
+        } else if (diff < MONTHS) {
+            return diff / DAYS + "d";
+        } else if (diff < YEARS) {
+            return diff / MONTHS + "m";
         } else {
-            return diff / DAY_MILLIS + " days";
+            return diff / YEARS + "y";
         }
     }
 
@@ -91,8 +98,9 @@ public class BaseActivity extends ActionBarActivity {
 
             if (mToolbar != null) {
                 setSupportActionBar(mToolbar);
-                mToolbar.setLogo(R.drawable.action_bar_icon);
-                getSupportActionBar().setDisplayShowTitleEnabled(false);
+                mToolbar.setLogo(R.drawable.ic_launcher_with_padding);
+                getSupportActionBar().setTitle("Skooter");
+                getSupportActionBar().setDisplayShowTitleEnabled(true);
             }
         }
 
@@ -103,6 +111,7 @@ public class BaseActivity extends ActionBarActivity {
         activateToolbar();
         if (mToolbar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Skooter");
         }
         return mToolbar;
     }

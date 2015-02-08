@@ -2,6 +2,7 @@
 <resources>
     <style name="Theme.Skooter" parent="Theme.Base">
         <item name="android:navigationBarColor">?colorPrimaryDark</item>
+        <item name="colorAccent">@color/skooterNPrimaryTextColor</item>
     </style>
 
     <style name="ActionBarThemeOverlay" parent="">

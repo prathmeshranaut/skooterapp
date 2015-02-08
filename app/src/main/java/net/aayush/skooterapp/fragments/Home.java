@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -365,8 +364,6 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
-        MenuItem menuItem = menu.findItem(R.id.score);
-        menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore() + 2));
         super.onCreateOptionsMenu(menu, inflater);
     }
 }

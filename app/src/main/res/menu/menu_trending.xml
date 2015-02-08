@@ -4,10 +4,20 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="net.aayush.skooterapp.MainActivity">
 
-    <item android:id="@+id/action_search"
-          android:icon="@android:drawable/ic_menu_search"
-          android:title="Search"
-          app:showAsAction="always"
-          android:actionViewClass="android.support.v7.widget.SearchView"
-          app:actionViewClass="android.support.v7.widget.SearchView"/>
+    <item
+        android:id="@+id/action_me"
+        android:title="Me"
+        android:orderInCategory="1"
+        android:icon="@drawable/profile_icon"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/search_icon"
+        android:title="Search"
+        app:showAsAction="always"
+        android:orderInCategory="2"
+        android:actionViewClass="android.support.v7.widget.SearchView"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
+
 </menu>

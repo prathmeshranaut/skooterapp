@@ -2,6 +2,7 @@ package net.aayush.skooterapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,22 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
         }
         TextView postContent = (TextView) convertView.findViewById(R.id.postText);
         postContent.setText(post.getContent());
+
+        final TextView handleContent = (TextView) convertView.findViewById(R.id.handleText);
+        handleContent.setText(post.getChannel());
+        handleContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CharSequence channel = handleContent.getText();
+                Intent intent = new Intent(mContext, ChannelActivity.class);
+                intent.putExtra("CHANNEL_NAME", channel.toString());
+                mContext.startActivity(intent);
+            }
+        });
+        handleContent.setVisibility(View.VISIBLE);
+        if (post.getChannel().equals("")) {
+            handleContent.setVisibility(View.GONE);
+        }
 
         final ImageView zoneImage = (ImageView) convertView.findViewById(R.id.zone_icon);
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();

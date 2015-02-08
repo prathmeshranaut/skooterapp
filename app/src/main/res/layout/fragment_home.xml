@@ -33,11 +33,12 @@
         android:background="#00000000">
 
         <Button
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:id="@+id/commentSkoot"
             android:layout_alignParentRight="true"
-            android:background="@drawable/post_icon"/>
+            android:background="@drawable/post_icon"
+            />
 
         <EditText
             android:layout_width="fill_parent"

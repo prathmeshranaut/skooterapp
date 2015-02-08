@@ -76,7 +76,7 @@
             android:textColor="#FFFFFF"
             android:onClick="dismissView"/>
 
-        <TextView
+        <net.aayush.skooterapp.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Want to flag this skoot?"
@@ -171,7 +171,7 @@
         android:visibility="gone"
         android:paddingTop="10dp">
 
-        <TextView
+        <net.aayush.skooterapp.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Are you sure you want to delete your skoot?"
@@ -203,14 +203,14 @@
                 android:onClick="dismissView"/>
         </LinearLayout>
 
-        <TextView
+        <net.aayush.skooterapp.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:id="@+id/type_id"
             android:text="" />
 
-        <TextView
+        <net.aayush.skooterapp.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"

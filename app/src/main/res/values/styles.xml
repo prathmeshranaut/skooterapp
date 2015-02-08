@@ -12,6 +12,8 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/skooterBackgroundColor</item>
+        <item name="android:homeAsUpIndicator">@color/skooterBackgroundColor</item>
+        <item name="homeAsUpIndicator">@color/skooterBackgroundColor</item>
     </style>
 
     <style name="Theme.Skooter" parent="Theme.Base" />

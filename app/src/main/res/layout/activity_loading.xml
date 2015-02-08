@@ -5,7 +5,7 @@
                 android:background="@color/skooterPrimaryBackgroundColor"
                 tools:context="net.aayush.skooterapp.LoadingActivity">
 
-    <TextView
+    <net.aayush.skooterapp.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"

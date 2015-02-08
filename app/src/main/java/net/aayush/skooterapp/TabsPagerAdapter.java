@@ -16,7 +16,7 @@ import net.aayush.skooterapp.fragments.Trending;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
-    Context mContext;
+    public Context mContext;
     private int[] imageResId = {
             R.drawable.home_inactive,
             R.drawable.trending_inactive,

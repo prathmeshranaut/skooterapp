@@ -31,6 +31,6 @@
     <string name="flag_skoot">flag/skoot</string>
     <string name="flag_comment">flag/comment</string>
 
-    <string name="channel_view">channel/{user_id}/{channel}</string>
+    <string name="channel_view">channel/{user_id}/{channel}/{location_id}</string>
     <string name="channel_trending">channels/trending/{user_id}</string>
 </resources>

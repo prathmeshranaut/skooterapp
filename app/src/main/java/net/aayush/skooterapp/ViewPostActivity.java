@@ -245,13 +245,14 @@ public class ViewPostActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {
-            this.finish();
+            finish();
             return true;
         } else if (id == R.id.action_share){
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("text/plain");
             share.putExtra(Intent.EXTRA_TEXT, mPost.getContent() + ". Join me on Skooter!");
             startActivity(Intent.createChooser(share, "Share post with friends"));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

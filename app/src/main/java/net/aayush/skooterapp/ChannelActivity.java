@@ -49,6 +49,7 @@ public class ChannelActivity extends BaseActivity {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", Integer.toString(BaseActivity.userId));
+        params.put("location_id", Integer.toString(BaseActivity.locationId));
         if(mChannel.charAt(0) == '@') {
             params.put("channel", mChannel.substring(1));
         } else {

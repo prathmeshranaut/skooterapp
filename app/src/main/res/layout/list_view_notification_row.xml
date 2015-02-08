@@ -10,10 +10,11 @@
         android:layout_height="50dp"
         android:id="@+id/notification_icon"/>
 
-    <TextView
+    <net.aayush.skooterapp.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/notification_text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="center_vertical"/>
 
 </LinearLayout>
