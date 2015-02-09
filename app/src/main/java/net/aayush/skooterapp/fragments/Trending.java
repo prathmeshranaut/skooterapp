@@ -1,23 +1,17 @@
 package net.aayush.skooterapp.fragments;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.android.volley.AuthFailureError;
@@ -30,7 +24,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.ChannelActivity;
-import net.aayush.skooterapp.ExampleAdapter;
 import net.aayush.skooterapp.R;
 import net.aayush.skooterapp.TrendingPostAdapter;
 import net.aayush.skooterapp.ViewPostActivity;
@@ -52,7 +45,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
     protected static final String LOG_TAG = Trending.class.getSimpleName();
     protected List mPostsList = new ArrayList();
-    protected ArrayAdapter mPostsAdapter;
+    protected TrendingPostAdapter mPostsAdapter;
     protected ListView mListPosts;
     protected Context mContext;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
@@ -176,11 +169,10 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                         mPostsList.add(postObject);
                     }
 
-                    if(channels.length() > 3) {
-                        for (int i = 0; i < 3; i++) {
-                            mPostsList.add(i, channels.getString(i));
-                        }
+                    for (int i = 0; i < min(channels.length(), 3); i++) {
+                        mPostsList.add(i, channels.getString(i));
                     }
+                    mPostsAdapter.setChannelsCount(3);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");
@@ -211,6 +203,14 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         };
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "trending");
+    }
+
+    private int min(int num1, int num2) {
+        if (num1 < num2) {
+            return num1;
+        } else {
+            return num2;
+        }
     }
 
 //    public void getTrendingChannels() {
@@ -251,57 +251,53 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         final Menu m = menu;
         inflater.inflate(R.menu.menu_trending, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-
-        SearchView search = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                loadHistory(query, m);
-
-                return true;
-            }
-        });
+//        MenuItem searchItem = menu.findItem(R.id.action_search);
+//
+//        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+//
+//        SearchView search = (SearchView) MenuItemCompat.getActionView(searchItem);
+//
+//        search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+//
+//        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String s) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String query) {
+//                loadHistory(query, m);
+//
+//                return true;
+//            }
+//        });
 
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private void loadHistory(String query, Menu menu) {
-        // Cursor
-        String[] columns = new String[]{"_id", "text"};
-        Object[] temp = new Object[]{0, "default"};
-
-        MatrixCursor cursor = new MatrixCursor(columns);
-
-        for (int i = 0; i < items.size(); i++) {
-
-            temp[0] = i;
-            temp[1] = items.get(i);
-
-            cursor.addRow(temp);
-        }
-
-        // SearchView
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-
-        SearchView search = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        search.setSuggestionsAdapter(new ExampleAdapter(getActivity().getBaseContext(), cursor, items));
-    }
-
-    public void viewPost(View view){
-
-    }
+//    private void loadHistory(String query, Menu menu) {
+//        // Cursor
+//        String[] columns = new String[]{"_id", "text"};
+//        Object[] temp = new Object[]{0, "default"};
+//
+//        MatrixCursor cursor = new MatrixCursor(columns);
+//
+//        for (int i = 0; i < items.size(); i++) {
+//
+//            temp[0] = i;
+//            temp[1] = items.get(i);
+//
+//            cursor.addRow(temp);
+//        }
+//
+//        // SearchView
+//        MenuItem searchItem = menu.findItem(R.id.action_search);
+//
+//        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+//
+//        SearchView search = (SearchView) MenuItemCompat.getActionView(searchItem);
+//
+//        search.setSuggestionsAdapter(new ExampleAdapter(getActivity().getBaseContext(), cursor, items));
+//    }
 }

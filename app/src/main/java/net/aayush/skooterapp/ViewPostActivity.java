@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -50,7 +49,7 @@ public class ViewPostActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_post);
 
-        activateToolbarWithHomeEnabled();
+        activateToolbarWithHomeEnabled("");
 
         Intent intent = getIntent();
         mPost = (Post) intent.getSerializableExtra(SKOOTER_POST);
@@ -72,14 +71,6 @@ public class ViewPostActivity extends BaseActivity {
         mListComments.setAdapter(mCommentsAdapter);
 
         getCommentsForPostId(mPost, userId);
-        //Setup the item click listeners
-        listPosts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ViewPostActivity.this, MapActivity.class);
-                startActivity(intent);
-            }
-        });
 
         Button commentBtn = (Button) findViewById(R.id.commentSkoot);
         final TextView commentText = (TextView) findViewById(R.id.commentText);

@@ -18,6 +18,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -267,6 +268,15 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 }
 
         );
+
+        Button postSkootButton = (Button) rootView.findViewById(R.id.commentSkoot);
+        postSkootButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ComposeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Inflate the layout for this fragment
         return rootView;

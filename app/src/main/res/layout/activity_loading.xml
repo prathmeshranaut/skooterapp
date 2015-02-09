@@ -2,7 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/skooterPrimaryBackgroundColor"
+                android:background="@color/skooterNPrimaryTextColorLight"
                 tools:context="net.aayush.skooterapp.LoadingActivity">
 
     <net.aayush.skooterapp.ATextView
@@ -11,6 +11,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Loading..."
         android:id="@+id/loadingText"
+        android:textAlignment="center"
         android:textColor="@color/skooterPrimaryTextColor"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>

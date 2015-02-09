@@ -116,6 +116,15 @@ public class BaseActivity extends ActionBarActivity {
         return mToolbar;
     }
 
+    protected Toolbar activateToolbarWithHomeEnabled(String title) {
+        activateToolbar();
+        if (mToolbar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(title);
+        }
+        return mToolbar;
+    }
+
     protected int getUserId() {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         int userId = settings.getInt("userId", 0);

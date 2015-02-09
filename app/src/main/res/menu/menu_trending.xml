@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:skooter="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="net.aayush.skooterapp.MainActivity">
+
+    <item
+        android:id="@+id/action_alerts"
+        android:title="Notifications"
+        android:orderInCategory="1"
+        android:icon="@drawable/notification_icon"
+        skooter:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_me"
         android:title="Me"
         android:orderInCategory="1"
         android:icon="@drawable/profile_icon"
-        app:showAsAction="ifRoom"/>
+        skooter:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/search_icon"
-        android:title="Search"
-        app:showAsAction="always"
-        android:orderInCategory="2"
-        android:actionViewClass="android.support.v7.widget.SearchView"
-        app:actionViewClass="android.support.v7.widget.SearchView"/>
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        android:orderInCategory="1"
+        android:icon="@drawable/settings_icon"
+        skooter:showAsAction="ifRoom"/>
+
+    <!--<item-->
+        <!--android:id="@+id/action_search"-->
+        <!--android:icon="@drawable/search_icon"-->
+        <!--android:title="Search"-->
+        <!--app:showAsAction="always"-->
+        <!--android:orderInCategory="2"-->
+        <!--android:actionViewClass="android.support.v7.widget.SearchView"-->
+        <!--app:actionViewClass="android.support.v7.widget.SearchView"/>-->
 
 </menu>

@@ -58,7 +58,8 @@
         <activity
             android:name=".ComposeActivity"
             android:label="@string/title_activity_compose"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MainActivity" />

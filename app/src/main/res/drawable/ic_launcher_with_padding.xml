@@ -3,5 +3,5 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:drawable="@drawable/action_bar_icon"
-        android:right="20dp"/>
+        android:right="15dp"/>
 </layer-list>

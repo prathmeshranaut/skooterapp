@@ -3,10 +3,15 @@ package net.aayush.skooterapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,19 +32,59 @@ import java.util.Map;
 public class ComposeActivity extends BaseActivity {
 
     protected static final String LOG_TAG = ComposeActivity.class.getSimpleName();
+    private Menu mMenu;
+    private final static int MAX_CHARACTERS = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
 
-        activateToolbarWithHomeEnabled();
+        activateToolbarWithHomeEnabled("");
+
+        EditText editText = (EditText) findViewById(R.id.skootText);
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_CHARACTERS)});
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                MenuItem menuItem = mMenu.findItem(R.id.text_counter);
+                menuItem.setTitle(Integer.toString(MAX_CHARACTERS - s.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        final ImageView imageView = (ImageView) findViewById(R.id.location_icon);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String locationId = (String) imageView.getTag();
+                if (locationId.equals("1")) {
+                    imageView.setImageResource(R.drawable.location_icon);
+                    imageView.setTag("0");
+                } else {
+                    imageView.setImageResource(R.drawable.location_icon_filled);
+                    imageView.setTag("1");
+                }
+
+            }
+        });
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.mMenu = menu;
         getMenuInflater().inflate(R.menu.menu_compose, menu);
         return true;
     }
@@ -79,7 +124,7 @@ public class ComposeActivity extends BaseActivity {
                     public void onErrorResponse(VolleyError error) {
                         VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
                     }
-                }){
+                }) {
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String, String> headers = super.getHeaders();
@@ -129,12 +174,5 @@ public class ComposeActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        return super.onKeyDown(keyCode, event);
     }
 }

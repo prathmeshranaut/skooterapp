@@ -1,31 +1,71 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="fill_parent"
                 tools:context="net.aayush.skooterapp.ComposeActivity">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/toolbar"/>
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="200dp"
-        android:inputType="textMultiLine"
-        android:ems="1"
-        android:hint="@string/enter_a_skoot"
-        android:id="@+id/skootText"
-        android:layout_below="@+id/app_bar" />
-
-    <EditText
+    <net.aayush.skooterapp.AEditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
-        android:hint="@string/channel"
-        android:ems="1"
-        android:id="@+id/skootHandle"
-        android:digits="abcdefghijklmnopqrstuvwxyz1234567890-_QWERTYUIOPASDFGHJKLZMXNCBV"
-        android:layout_below="@+id/skootText" />
+        android:hint="@string/enter_a_skoot"
+        android:id="@+id/skootText"
+        android:layout_below="@+id/app_bar"
+        android:background="@null"
+        android:padding="10dp">
 
+        <requestFocus/>
+    </net.aayush.skooterapp.AEditText>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/md_grey_200"
+        android:id="@+id/location_tab"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/location_icon"
+            android:id="@+id/location_icon"
+            android:tag="0"
+            android:layout_gravity="center_horizontal"
+            android:padding="5dp"/>
+
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/post_skoot_holder"
+        android:layout_above="@id/location_tab"
+        >
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/channel_at_icon"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/channel_at_icon"/>
+
+        <net.aayush.skooterapp.AEditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:maxLength="50"
+            android:hint="@string/channel"
+            android:id="@+id/skootHandle"
+            android:digits="abcdefghijklmnopqrstuvwxyz1234567890-_QWERTYUIOPASDFGHJKLZMXNCBV"
+            android:layout_toRightOf="@id/channel_at_icon"
+            android:layout_toEndOf="@id/channel_at_icon"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

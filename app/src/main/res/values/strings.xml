@@ -23,8 +23,8 @@
     <string name="title_activity_loading">Loading</string>
     <string name="score">100</string>
     <string name="title_activity_me">Me</string>
-    <string name="channel">Channel..</string>
-    <string name="enter_a_skoot">Enter a skoot...</string>
+    <string name="channel">Give channel to your skoot</string>
+    <string name="enter_a_skoot">What\'s on your mind?</string>
     <string name="title_activity_me_posts">MePostsActivity</string>
     <string name="title_activity_me_comments">MeCommentsActivity</string>
     <string name="alerts">alerts</string>
@@ -34,5 +34,6 @@
     <string name="title_activity_favorites">FavoritesActivity</string>
     <string name="title_activity_channel">ChannelActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="reply_post">Reply</string>
 
 </resources>
