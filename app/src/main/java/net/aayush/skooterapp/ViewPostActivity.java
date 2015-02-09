@@ -78,6 +78,7 @@ public class ViewPostActivity extends BaseActivity {
 
         commentBtn.setOnClickListener(new View.OnClickListener() {
             String tag = "post_comment";
+
             @Override
             public void onClick(View v) {
                 if (commentText.getText().length() > 0 && commentText.getText().length() < 250) {
@@ -144,7 +145,6 @@ public class ViewPostActivity extends BaseActivity {
                 }
             }
         });
-
     }
 
     public void getCommentsForPostId(Post post, int userId) {
@@ -238,7 +238,7 @@ public class ViewPostActivity extends BaseActivity {
         if (id == android.R.id.home) {
             finish();
             return true;
-        } else if (id == R.id.action_share){
+        } else if (id == R.id.action_share) {
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("text/plain");
             share.putExtra(Intent.EXTRA_TEXT, mPost.getContent() + ". Join me on Skooter!");
@@ -261,7 +261,7 @@ public class ViewPostActivity extends BaseActivity {
         TextView typeView = (TextView) findViewById(R.id.type);
         LinearLayout flagView = (LinearLayout) findViewById(R.id.flag_view);
 
-        if(typeView.getText().equals("post")) {
+        if (typeView.getText().equals("post")) {
             //Flag a post
             String url = BaseActivity.substituteString(getResources().getString(R.string.flag_skoot), new HashMap<String, String>());
 
@@ -280,7 +280,7 @@ public class ViewPostActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
                 }
-            }){
+            }) {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> headers = super.getHeaders();
@@ -298,8 +298,7 @@ public class ViewPostActivity extends BaseActivity {
             };
 
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_skoot");
-        }
-        else if(typeView.getText().equals("comment")) {
+        } else if (typeView.getText().equals("comment")) {
             //Flag a comment
             String url = BaseActivity.substituteString(getResources().getString(R.string.flag_comment), new HashMap<String, String>());
 
@@ -318,7 +317,7 @@ public class ViewPostActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
                 }
-            }){
+            }) {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> headers = super.getHeaders();
@@ -347,7 +346,7 @@ public class ViewPostActivity extends BaseActivity {
         TextView typeView = (TextView) findViewById(R.id.type);
         LinearLayout deleteView = (LinearLayout) findViewById(R.id.delete_view);
 
-        if(typeView.getText().equals("post")) {
+        if (typeView.getText().equals("post")) {
             //Delete a post
             Map<String, String> params = new HashMap<String, String>();
             params.put("skoot_id", typeId.getText().toString());
@@ -356,7 +355,7 @@ public class ViewPostActivity extends BaseActivity {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.v(LOG_TAG, "Delete Post" +response.toString());
+                    Log.v(LOG_TAG, "Delete Post" + response.toString());
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -381,8 +380,7 @@ public class ViewPostActivity extends BaseActivity {
             };
 
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_content");
-        }
-        else if(typeView.getText().equals("comment")) {
+        } else if (typeView.getText().equals("comment")) {
             //Delete a comment
             Map<String, String> params = new HashMap<String, String>();
             params.put("comment_id", typeId.getText().toString());
@@ -391,7 +389,7 @@ public class ViewPostActivity extends BaseActivity {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.v(LOG_TAG, "Delete Comment" +response.toString());
+                    Log.v(LOG_TAG, "Delete Comment" + response.toString());
                 }
             }, new Response.ErrorListener() {
                 @Override

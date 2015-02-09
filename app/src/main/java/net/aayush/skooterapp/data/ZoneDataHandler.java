@@ -68,7 +68,7 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery("SELECT * FROM " + TABLE_ZONES + " ORDER BY " + COLUMN_ZONE_IS_FOLLOWING + " DESC", null);
 
-        while(c.moveToNext()) {
+        while (c.moveToNext()) {
             Zone zone = new Zone();
             zone.setZoneId(c.getInt(0));
             zone.setZoneName(c.getString(1));
@@ -84,11 +84,43 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
         return zones;
     }
 
+    public Zone getActiveZone(double currentLatitude, double currentLongitude) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+
+        String[] arguments = {
+                Double.toString(currentLatitude), Double.toString(currentLatitude),
+                Double.toString(currentLongitude), Double.toString(currentLongitude),
+        };
+
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_ZONES + " WHERE " +
+                        COLUMN_LATITUDE_MINIMUM + " < ? AND " +
+                        COLUMN_LATITUDE_MAXIMUM + " > ? AND " +
+                        COLUMN_LONGITUDE_MAXIMUM + " > ? AND " +
+                        COLUMN_LONGITUDE_MINIMUM + " < ?",
+                arguments);
+
+        if (c.moveToFirst()) {
+            Zone zone = new Zone();
+            zone.setZoneId(c.getInt(0));
+            zone.setZoneName(c.getString(1));
+            zone.setLatitudeMinimum(c.getFloat(2));
+            zone.setLatitudeMaximum(c.getFloat(3));
+            zone.setLongitudeMinimum(c.getFloat(4));
+            zone.setLongitudeMaximum(c.getFloat(5));
+            zone.setIsFollowing("1".equals(c.getString(6)));
+            return zone;
+        }
+        c.close();
+        db.close();
+        return new Zone();
+    }
+
     public void followZoneById(int i) {
         ContentValues updatedValues = new ContentValues();
         updatedValues.put(COLUMN_ZONE_IS_FOLLOWING, true);
 
-        String where= COLUMN_ZONE_ID+" = ?";
+        String where = COLUMN_ZONE_ID + " = ?";
         SQLiteDatabase db = this.getWritableDatabase();
         db.update(TABLE_ZONES, updatedValues, where, new String[]{Integer.toString(i)});
         db.close();
@@ -98,7 +130,7 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
         ContentValues updatedValues = new ContentValues();
         updatedValues.put(COLUMN_ZONE_IS_FOLLOWING, false);
 
-        String where= COLUMN_ZONE_ID+" = ?";
+        String where = COLUMN_ZONE_ID + " = ?";
         SQLiteDatabase db = this.getWritableDatabase();
         db.update(TABLE_ZONES, updatedValues, where, new String[]{Integer.toString(i)});
         db.close();

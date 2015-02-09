@@ -20,7 +20,8 @@ public class Zone {
     }
 
     public Zone() {
-
+        mZoneId = 0;
+        mZoneName = "";
     }
 
     public Zone(String zoneName, boolean isFollowing) {
@@ -86,14 +87,6 @@ public class Zone {
 
     @Override
     public String toString() {
-        return "Zone{" +
-                "mZoneId=" + mZoneId +
-                ", mZoneName='" + mZoneName + '\'' +
-                ", mLatitudeMinimum=" + mLatitudeMinimum +
-                ", mLongitudeMinimum=" + mLongitudeMinimum +
-                ", mLatitudeMaximum=" + mLatitudeMaximum +
-                ", mLongitudeMaximum=" + mLongitudeMaximum +
-                ", mIsFollowing=" + mIsFollowing +
-                '}';
+        return mZoneName;
     }
 }
