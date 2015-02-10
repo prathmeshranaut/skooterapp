@@ -179,7 +179,9 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");
                 }
-                mPostsAdapter.notifyDataSetChanged();
+                if(mPostsAdapter != null) {
+                    mPostsAdapter.notifyDataSetChanged();
+                }
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }, new Response.ErrorListener() {

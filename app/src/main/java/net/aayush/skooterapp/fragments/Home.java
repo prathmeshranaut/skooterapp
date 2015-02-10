@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -29,6 +30,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.AppController;
@@ -69,6 +71,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     private TextView mQuickReturnView;
     private View mPlaceHolder;
     protected View mSkootHolder;
+    private Menu mMenu;
 
 
     @Override
@@ -369,11 +372,53 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "home_page");
     }
 
+    public void checkNotifications() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(BaseActivity.userId));
+
+        String url = BaseActivity.substituteString(getResources().getString(R.string.user_notifications), params);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                if(response.length() > 0) {
+                    MenuItem menuItem = mMenu.findItem(R.id.action_alerts);
+                    menuItem.setIcon(R.drawable.notification_icon_active);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = super.getHeaders();
+
+                if (headers == null
+                        || headers.equals(Collections.emptyMap())) {
+                    headers = new HashMap<String, String>();
+                }
+
+                headers.put("user_id", Integer.toString(BaseActivity.userId));
+                headers.put("access_token", BaseActivity.accessToken);
+
+                return headers;
+            }
+        };
+        MenuItem menuItem = mMenu.findItem(R.id.action_alerts);
+        menuItem.setIcon(R.drawable.notification_icon_active);
+        AppController.getInstance().addToRequestQueue(jsonArrayRequest, "notifications");
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
+        mMenu = menu;
+        checkNotifications();
         super.onCreateOptionsMenu(menu, inflater);
     }
 }

@@ -26,7 +26,9 @@
             android:orientation="horizontal"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/post_container">
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -50,9 +52,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    android:text="Large Text"
+                    android:text=""
                     android:id="@+id/postText"
                     android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_below="@+id/handleText"
                     />
             </RelativeLayout>
@@ -69,6 +72,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/upvote"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:background="@drawable/vote_up_inactive"
                     android:focusable="false"/>
 
@@ -78,16 +82,18 @@
                     android:text="0"
                     android:id="@+id/voteCount"
                     android:layout_marginRight="15dp"
+                    android:layout_marginEnd="15dp"
                     android:layout_below="@+id/upvote"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_alignParentEnd="true"
+                    android:textAlignment="center"
+                    android:gravity="center_horizontal"/>
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/downvote"
-                    android:layout_alignParentBottom="true"
                     android:layout_below="@+id/voteCount"
                     android:layout_alignLeft="@+id/upvote"
                     android:background="@drawable/vote_down_inactive"
@@ -99,7 +105,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@id/post_container"
             android:orientation="horizontal"
             android:baselineAligned="false">
 
@@ -138,7 +144,9 @@
                     android:src="@drawable/comment_inactive"
                     android:id="@+id/commentImage"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginRight="3dp" />
+                    android:layout_marginStart="15dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginEnd="3dp" />
 
                 <net.aayush.skooterapp.ATextView
                     android:layout_width="wrap_content"
@@ -162,9 +170,9 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:id="@+id/favorite"
-                    android:layout_alignParentRight="true"
                     android:background="@drawable/favorite_icon_inactive"
                     android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
                     android:focusable="false"
                     />
 
@@ -199,6 +207,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="24dp"

@@ -18,7 +18,7 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        activateToolbarWithHomeEnabled();
+        activateToolbarWithHomeEnabled("Settings");
 
         ListView settingsList = (ListView) findViewById(R.id.settings_list);
 

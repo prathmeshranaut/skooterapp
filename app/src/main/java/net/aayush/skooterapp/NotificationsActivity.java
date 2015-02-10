@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -41,7 +42,7 @@ public class NotificationsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
 
-        activateToolbarWithHomeEnabled();
+        activateToolbarWithHomeEnabled("Notifications");
 
         mNotificationList = (ListView) findViewById(R.id.notifications_list);
 
@@ -89,7 +90,7 @@ public class NotificationsActivity extends BaseActivity {
 
                         Notification notification;
 
-                        if(post_redirect) {
+                        if (post_redirect) {
                             JSONObject jsonPost = jsonNotification.getJSONObject(SKOOTS);
 
                             String post = jsonPost.getString(SKOOT_POST);
@@ -112,11 +113,16 @@ public class NotificationsActivity extends BaseActivity {
                             Post postObject = new Post(post_id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url);
 
                             notification = new Notification(id, post_id, text, icon_url, post_redirect, postObject);
-                        }
-                        else {
+                        } else {
                             notification = new Notification(id, post_id, text, icon_url, post_redirect);
                         }
                         mNotificationArrayList.add(notification);
+                    }
+
+                    if(response.length() < 1) {
+                        //No notifications
+                        TextView noNotifications = (TextView) findViewById(R.id.notification_alert);
+                        noNotifications.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -148,13 +154,13 @@ public class NotificationsActivity extends BaseActivity {
 
         AppController.getInstance().addToRequestQueue(jsonArrayRequest, "notifications");
 
-        mNotificationAdapter =  new NotificationAdapter(this, R.layout.list_view_notification_row, mNotificationArrayList);
+        mNotificationAdapter = new NotificationAdapter(this, R.layout.list_view_notification_row, mNotificationArrayList);
         mNotificationList.setAdapter(mNotificationAdapter);
         mNotificationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 Notification notification = mNotificationArrayList.get(position);
-                if(notification.isPostRedirect()) {
+                if (notification.isPostRedirect()) {
                     Intent intent = new Intent(NotificationsActivity.this, ViewPostActivity.class);
                     intent.putExtra(BaseActivity.SKOOTER_POST, notification.getPost());
                     startActivity(intent);
@@ -204,7 +210,7 @@ public class NotificationsActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_notifications, menu);
+        //getMenuInflater().inflate(R.menu.menu_notifications, menu);
         return true;
     }
 
@@ -214,12 +220,9 @@ public class NotificationsActivity extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == android.R.id.home) {
+        if (id == android.R.id.home) {
             finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

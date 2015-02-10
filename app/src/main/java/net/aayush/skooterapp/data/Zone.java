@@ -1,6 +1,27 @@
 package net.aayush.skooterapp.data;
 
+import android.util.Log;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import net.aayush.skooterapp.AppController;
+import net.aayush.skooterapp.BaseActivity;
+import net.aayush.skooterapp.R;
+
+import org.json.JSONObject;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Zone {
+    private static final String LOG_TAG = Zone.class.getSimpleName();
+
     private int mZoneId;
     private String mZoneName;
     private float mLatitudeMinimum;
@@ -83,6 +104,84 @@ public class Zone {
 
     public void setIsFollowing(boolean isFollowing) {
         mIsFollowing = isFollowing;
+    }
+
+    public void unfollow() {
+        String url = BaseActivity.substituteString(AppController.getInstance().getResources().getString(R.string.zones_unfollow), new HashMap<String, String>());
+
+        ZoneDataHandler zoneDataHandler = new ZoneDataHandler(AppController.getInstance().getBaseContext());
+        zoneDataHandler.unFollowZoneById(getZoneId());
+        setIsFollowing(false);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v(LOG_TAG, "UnFollow" + response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = super.getHeaders();
+
+                if (headers == null
+                        || headers.equals(Collections.emptyMap())) {
+                    headers = new HashMap<String, String>();
+                }
+
+                headers.put("user_id", Integer.toString(BaseActivity.userId));
+                headers.put("zone_id", Integer.toString(getZoneId()));
+
+                return headers;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "unfollow_zone");
+    }
+
+    public void follow() {
+        String url = BaseActivity.substituteString(AppController.getInstance().getResources().getString(R.string.zones_follow), new HashMap<String, String>());
+
+        ZoneDataHandler zoneDataHandler = new ZoneDataHandler(AppController.getInstance().getBaseContext());
+        zoneDataHandler.followZoneById(getZoneId());
+        setIsFollowing(true);
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(BaseActivity.userId));
+        params.put("zone_id", Integer.toString(getZoneId()));
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v(LOG_TAG, "Follow" + response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = super.getHeaders();
+
+                if (headers == null
+                        || headers.equals(Collections.emptyMap())) {
+                    headers = new HashMap<String, String>();
+                }
+
+                headers.put("user_id", Integer.toString(BaseActivity.userId));
+                headers.put("access_token", BaseActivity.accessToken);
+
+                return headers;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "follow_zone");
     }
 
     @Override

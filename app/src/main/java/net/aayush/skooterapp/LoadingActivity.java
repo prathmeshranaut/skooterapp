@@ -97,6 +97,7 @@ public class LoadingActivity extends BaseActivity {
                 final String LONGITUDE_MINIMUM = "long_min";
                 final String LONGITUDE_MAXIMUM = "long_max";
                 final String USER_FOLLOWS = "user_follows";
+                final String ACTIVE_ZONE = "active_zone";
 
                 try {
                     for (int i = 0; i < response.length(); i++) {
@@ -108,6 +109,7 @@ public class LoadingActivity extends BaseActivity {
                         float longitudeMinimum = (float) jsonObject.getDouble(LONGITUDE_MINIMUM);
                         float longitudeMaximum = (float) jsonObject.getDouble(LONGITUDE_MAXIMUM);
                         boolean userFollows = jsonObject.getBoolean(USER_FOLLOWS);
+                        boolean active_zone = jsonObject.getBoolean(ACTIVE_ZONE);
 
                         Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, userFollows);
 
@@ -122,6 +124,10 @@ public class LoadingActivity extends BaseActivity {
                         if(!flag) {
                             //Add
                             dataHandler.addZone(zone);
+                        }
+                        if(active_zone) {
+                            BaseActivity.mActiveZones.add(zone);
+                            Log.d("Active Zones: ", BaseActivity.mActiveZones.toString());
                         }
                     }
                 } catch (JSONException e) {

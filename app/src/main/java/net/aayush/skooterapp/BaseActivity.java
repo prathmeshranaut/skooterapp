@@ -5,11 +5,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
 import net.aayush.skooterapp.data.User;
+import net.aayush.skooterapp.data.Zone;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -19,6 +22,7 @@ public class BaseActivity extends ActionBarActivity {
     public static String accessToken;
     public static int locationId;
     public static User mUser;
+    public static List<Zone> mActiveZones = new ArrayList<Zone>();
 
     public static final String SKOOTER_POST = "SKOOTER_POST";
     public static final String PREFS_NAME = "Skooter";

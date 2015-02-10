@@ -23,7 +23,6 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.data.Zone;
-import net.aayush.skooterapp.data.ZoneDataHandler;
 
 import org.json.JSONObject;
 
@@ -37,7 +36,6 @@ public class ComposeActivity extends BaseActivity {
     protected static final String LOG_TAG = ComposeActivity.class.getSimpleName();
     private Menu mMenu;
     private final static int MAX_CHARACTERS = 200;
-    protected GPSLocator mLocator;
     protected Zone mCurrentZone;
 
     @Override
@@ -47,7 +45,6 @@ public class ComposeActivity extends BaseActivity {
 
         activateToolbarWithHomeEnabled("");
 
-        mLocator = new GPSLocator(this);
 
         EditText editText = (EditText) findViewById(R.id.skootText);
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_CHARACTERS)});
@@ -89,21 +86,15 @@ public class ComposeActivity extends BaseActivity {
     }
 
     private void calculateActiveZone() {
-        ZoneDataHandler dataHandler = new ZoneDataHandler(this);
-
-        if (mLocator.canGetLocation()) {
-            double currentLatitude = mLocator.getLatitude();
-            double currentLongitude = mLocator.getLongitude();
-
-            Zone zone = dataHandler.getActiveZone(currentLatitude, currentLongitude);
-
-            if(zone.getZoneId() > 0) {
-                //Found the user in an active zone
-                TextView activeZone = (TextView) findViewById(R.id.zone);
-                activeZone.setText("Active Zone: " + zone.getZoneName());
-                activeZone.setVisibility(View.VISIBLE);
-                mCurrentZone = zone;
+        TextView activeZone = (TextView) findViewById(R.id.zone);
+        String text = "Active Zone: ";
+        if(BaseActivity.mActiveZones.size() > 0) {
+            for (Zone zone : BaseActivity.mActiveZones) {
+                text += zone.getZoneName() + ", ";
             }
+            activeZone.setText(text.substring(0, text.length() - 2));
+        } else {
+            activeZone.setText("Active Zone: None");
         }
     }
 
@@ -136,7 +127,12 @@ public class ComposeActivity extends BaseActivity {
                 params.put("channel", skootHandle.getText().toString());
                 params.put("content", skootText.getText().toString());
                 params.put("location_id", Integer.toString(BaseActivity.locationId));
-                params.put("zone_id", Integer.toString(mCurrentZone.getZoneId()));
+                if(mActiveZones.size() > 0) {
+                    params.put("zone_id", Integer.toString(mActiveZones.get(0).getZoneId()));
+                }
+                else {
+                    params.put("zone_id", "null'");
+                }
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
                     @Override

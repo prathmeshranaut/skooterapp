@@ -8,8 +8,8 @@
                 android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:scaleType="fitXY"
         android:src="@drawable/flame"
         android:id="@+id/trending_icon" />
@@ -20,5 +20,6 @@
         android:layout_toRightOf="@id/trending_icon"
         android:id="@+id/trending_channel"
         android:textSize="18sp"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"/>
 </RelativeLayout>

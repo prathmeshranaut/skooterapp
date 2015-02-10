@@ -6,11 +6,23 @@
 
     <include layout="@layout/toolbar" android:id="@+id/app_bar" />
 
+    <net.aayush.skooterapp.AEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/no_unread_notifications"
+        android:background="#FFDDDDDD"
+        android:padding="5dp"
+        android:id="@+id/notification_alert"
+        android:layout_below="@id/app_bar"
+        android:gravity="center_horizontal"
+        />
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/notifications_list"
-        android:layout_below="@id/app_bar">
+        android:layout_below="@id/notification_alert">
 
     </ListView>
 

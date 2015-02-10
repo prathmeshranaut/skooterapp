@@ -82,7 +82,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(LOG_TAG, Integer.toString(position));
-                if (position < 3) {
+                if (position < mPostsAdapter.getChannelsCount()) {
                     Intent intent = new Intent(mContext, ChannelActivity.class);
                     Log.d(LOG_TAG, mPostsList.get(position).toString());
                     intent.putExtra("CHANNEL_NAME", mPostsList.get(position).toString());
@@ -172,7 +172,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                     for (int i = 0; i < min(channels.length(), 3); i++) {
                         mPostsList.add(i, channels.getString(i));
                     }
-                    mPostsAdapter.setChannelsCount(3);
+                    mPostsAdapter.setChannelsCount(min(channels.length(), 3));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");

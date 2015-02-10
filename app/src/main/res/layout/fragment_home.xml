@@ -30,11 +30,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/post_skoot_holder"
-        android:background="#00000000">
+        android:background="@drawable/custom_textbox"
+        android:paddingTop="4dp">
 
         <Button
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="30dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="8dp"
             android:id="@+id/commentSkoot"
             android:layout_alignParentRight="true"
             android:background="@drawable/post_icon"

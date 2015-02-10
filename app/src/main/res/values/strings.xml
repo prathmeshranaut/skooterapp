@@ -35,5 +35,7 @@
     <string name="title_activity_channel">ChannelActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="reply_post">Reply</string>
+    <string name="no_unread_notifications">0 unread notifications</string>
+    <string name="follow">Follow</string>
 
 </resources>

@@ -25,4 +25,9 @@ public class AEditText extends EditText {
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "font/museo_300.ttf");
         setTypeface(tf);
     }
+
+    @Override
+    public boolean isInEditMode() {
+        return true;
+    }
 }
