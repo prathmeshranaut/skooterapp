@@ -34,6 +34,14 @@
         <requestFocus/>
     </net.aayush.skooterapp.AEditText>
 
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/image_preview"
+        android:padding="5dp"
+        android:layout_below="@id/skootText"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -45,11 +53,20 @@
         <ImageView
             android:layout_width="38dp"
             android:layout_height="38dp"
-            android:src="@drawable/location_icon"
-            android:id="@+id/location_icon"
+            android:src="@drawable/add_image"
+            android:id="@+id/image_icon"
             android:tag="0"
             android:layout_gravity="center_horizontal"
             android:padding="5dp"/>
+
+        <!--<ImageView-->
+            <!--android:layout_width="38dp"-->
+            <!--android:layout_height="38dp"-->
+            <!--android:src="@drawable/location_icon"-->
+            <!--android:id="@+id/location_icon"-->
+            <!--android:tag="0"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:padding="5dp"/>-->
 
     </LinearLayout>
     <RelativeLayout

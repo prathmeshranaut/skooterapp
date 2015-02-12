@@ -74,6 +74,9 @@ public class ChannelActivity extends BaseActivity {
                 final String SKOOT_USER_FAVORITED = "user_favorited";
                 final String SKOOT_USER_COMMENTED = "user_commented";
                 final String SKOOT_IMAGE_URL = "zone_image";
+                final String SKOOT_IMAGE_PRESENT = "image_present";
+                final String SKOOT_SMALL_IMAGE_URL = "small_image_url";
+                final String SKOOT_LARGE_IMAGE_URL = "large_image_url";
 
                 try {
                     mPostsList.clear();
@@ -96,8 +99,11 @@ public class ChannelActivity extends BaseActivity {
                         int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
                         String created_at = jsonPost.getString(SKOOT_CREATED_AT);
                         String image_url = jsonPost.getString(SKOOT_IMAGE_URL);
+                        boolean isImagePresent = jsonPost.getBoolean(SKOOT_IMAGE_PRESENT);
+                        String small_image_url = jsonPost.getString(SKOOT_SMALL_IMAGE_URL);
+                        String large_image_url = jsonPost.getString(SKOOT_LARGE_IMAGE_URL);
 
-                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url);
+                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
                         mPostsList.add(postObject);
                     }
                 } catch (JSONException e) {

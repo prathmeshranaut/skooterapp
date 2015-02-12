@@ -182,6 +182,8 @@ public class LoadingActivity extends BaseActivity {
 
                     try {
                         BaseActivity.locationId = response.getInt(LOCATION_ID);
+                        Log.d("Location ID: ", Integer.toString(BaseActivity.locationId));
+                        Log.d("Access Token: ", BaseActivity.accessToken);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -243,6 +245,9 @@ public class LoadingActivity extends BaseActivity {
                 final String SKOOT_IF_USER_VOTED = "user_voted";
                 final String SKOOT_USER_VOTE = "user_vote";
                 final String SKOOT_IMAGE_URL = "zone_image";
+                final String SKOOT_IMAGE_PRESENT = "image_present";
+                final String SKOOT_SMALL_IMAGE_URL = "small_image_url";
+                final String SKOOT_LARGE_IMAGE_URL = "large_image_url";
 
                 try {
                     int score = response.getInt(SKOOT_SCORE);
@@ -265,8 +270,11 @@ public class LoadingActivity extends BaseActivity {
                         int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
                         String created_at = jsonPost.getString(SKOOT_CREATED_AT);
                         String image_url = jsonPost.getString(SKOOT_IMAGE_URL);
+                        boolean isImagePresent = jsonPost.getBoolean(SKOOT_IMAGE_PRESENT);
+                        String small_image_url = jsonPost.getString(SKOOT_SMALL_IMAGE_URL);
+                        String large_image_url = jsonPost.getString(SKOOT_LARGE_IMAGE_URL);
 
-                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, true, user_favorited, user_commented, created_at, image_url);
+                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, true, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
                         posts.add(postObject);
                     }
 

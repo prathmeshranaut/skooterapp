@@ -38,6 +38,33 @@ public class Post implements Serializable {
     private boolean mUserCommented;
     private boolean mUserSkoot;
     private String mImageUrl;
+    private boolean mImagePresent;
+    private String mSmallImageUrl;
+    private String mLargeImageUrl;
+
+    public boolean isImagePresent() {
+        return mImagePresent;
+    }
+
+    public void setImagePresent(boolean imagePresent) {
+        mImagePresent = imagePresent;
+    }
+
+    public String getSmallImageUrl() {
+        return mSmallImageUrl;
+    }
+
+    public void setSmallImageUrl(String smallImageUrl) {
+        mSmallImageUrl = smallImageUrl;
+    }
+
+    public String getLargeImageUrl() {
+        return mLargeImageUrl;
+    }
+
+    public void setLargeImageUrl(String largeImageUrl) {
+        mLargeImageUrl = largeImageUrl;
+    }
 
     public String getImageUrl() {
         return mImageUrl;
@@ -109,7 +136,7 @@ public class Post implements Serializable {
 
     private String mTimestamp;
 
-    public Post(int id, String channel, String content, int commentsCount, int favoriteCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, boolean userFavorited, boolean userCommented, String timestamp, String imageUrl) {
+    public Post(int id, String channel, String content, int commentsCount, int favoriteCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, boolean userFavorited, boolean userCommented, String timestamp, String imageUrl, boolean imagePresent, String smallImageUrl, String largeImageUrl) {
         mId = id;
         mChannel = channel;
         mContent = content;
@@ -124,6 +151,9 @@ public class Post implements Serializable {
         mUserSkoot = userSkoot;
         mTimestamp = timestamp;
         mImageUrl = imageUrl;
+        mImagePresent = imagePresent;
+        mSmallImageUrl = smallImageUrl;
+        mLargeImageUrl = largeImageUrl;
     }
 
     @Override
@@ -264,6 +294,7 @@ public class Post implements Serializable {
         };
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "favorite_post");
+        mFavoriteCount += 1;
     }
 
     public void unFavoritePost() {
@@ -301,5 +332,6 @@ public class Post implements Serializable {
         };
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "unfavorite_post");
+        mFavoriteCount -= 1;
     }
 }

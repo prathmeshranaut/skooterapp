@@ -134,6 +134,7 @@ public class Zone {
                 }
 
                 headers.put("user_id", Integer.toString(BaseActivity.userId));
+                headers.put("access_token", BaseActivity.accessToken);
                 headers.put("zone_id", Integer.toString(getZoneId()));
 
                 return headers;

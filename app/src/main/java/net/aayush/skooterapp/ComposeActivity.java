@@ -2,10 +2,18 @@ package net.aayush.skooterapp;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,10 +32,27 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.data.Zone;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.params.HttpParams;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -37,6 +62,19 @@ public class ComposeActivity extends BaseActivity {
     private Menu mMenu;
     private final static int MAX_CHARACTERS = 200;
     protected Zone mCurrentZone;
+
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    private static final int MEDIA_TYPE_IMAGE = 1;
+
+    private static final String IMAGE_DIRECTORY_NAME = "Skooter";
+
+    private static ImageView imagePreview;
+
+    private Uri fileUri;
+    private File mFile;
+
+    TextView skootText;
+    TextView skootHandle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,28 +105,110 @@ public class ComposeActivity extends BaseActivity {
             }
         });
 
-        final ImageView imageView = (ImageView) findViewById(R.id.location_icon);
-        imageView.setOnClickListener(new View.OnClickListener() {
+//        final ImageView imageView = (ImageView) findViewById(R.id.location_icon);
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String locationId = (String) imageView.getTag();
+//                if (locationId.equals("1")) {
+//                    imageView.setImageResource(R.drawable.location_icon);
+//                    imageView.setTag("0");
+//                } else {
+//                    imageView.setImageResource(R.drawable.location_icon_filled);
+//                    imageView.setTag("1");
+//                }
+//
+//            }
+//        });
+
+        ImageView imageSelectIcon = (ImageView) findViewById(R.id.image_icon);
+        imageSelectIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String locationId = (String) imageView.getTag();
-                if (locationId.equals("1")) {
-                    imageView.setImageResource(R.drawable.location_icon);
-                    imageView.setTag("0");
-                } else {
-                    imageView.setImageResource(R.drawable.location_icon_filled);
-                    imageView.setTag("1");
-                }
-
+                // Open the camera app
+                captureImage();
             }
         });
+
+        imagePreview = (ImageView) findViewById(R.id.image_preview);
+
         calculateActiveZone();
+    }
+
+    private boolean isDeviceSupportCamera() {
+        return getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+    }
+
+    private void captureImage() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+        startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+            //Successfully captured the image
+            previewCapturedImage();
+        } else if (resultCode == RESULT_CANCELED) {
+
+        } else {
+            //Failed to capture image
+            Toast.makeText(getApplicationContext(), "Sorry! Failed to capture image", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void previewCapturedImage() {
+        try {
+            imagePreview.setVisibility(View.VISIBLE);
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+
+            //Downsize the image
+            options.inSampleSize = 8;
+
+            final Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+            imagePreview.setImageBitmap(bitmap);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Uri getOutputMediaFileUri(int type) {
+        mFile = getOutputMediaFile(type);
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    private static File getOutputMediaFile(int type) {
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_DIRECTORY_NAME);
+
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(IMAGE_DIRECTORY_NAME, "Failed to create " + IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+
+        File mediaFile;
+
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
     }
 
     private void calculateActiveZone() {
         TextView activeZone = (TextView) findViewById(R.id.zone);
         String text = "Active Zone: ";
-        if(BaseActivity.mActiveZones.size() > 0) {
+        if (BaseActivity.mActiveZones.size() > 0) {
             for (Zone zone : BaseActivity.mActiveZones) {
                 text += zone.getZoneName() + ", ";
             }
@@ -116,8 +236,8 @@ public class ComposeActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_send) {
-            final TextView skootText = (TextView) findViewById(R.id.skootText);
-            final TextView skootHandle = (TextView) findViewById(R.id.skootHandle);
+            skootText = (TextView) findViewById(R.id.skootText);
+            skootHandle = (TextView) findViewById(R.id.skootHandle);
 
             if (skootText.getText().length() > 0 && skootText.getText().length() <= 250) {
                 String url = BaseActivity.substituteString(getResources().getString(R.string.skoot_new), new HashMap<String, String>());
@@ -127,44 +247,54 @@ public class ComposeActivity extends BaseActivity {
                 params.put("channel", skootHandle.getText().toString());
                 params.put("content", skootText.getText().toString());
                 params.put("location_id", Integer.toString(BaseActivity.locationId));
-                if(mActiveZones.size() > 0) {
+                if (mActiveZones.size() > 0) {
                     params.put("zone_id", Integer.toString(mActiveZones.get(0).getZoneId()));
-                }
-                else {
+                } else {
                     params.put("zone_id", "null'");
                 }
 
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(LOG_TAG, response.toString());
-                        skootText.setText("");
-                        skootHandle.setText("");
-                        Toast.makeText(ComposeActivity.this, "Woot! Skoot posted!", Toast.LENGTH_SHORT).show();
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
-                    }
-                }) {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String, String> headers = super.getHeaders();
-
-                        if (headers == null
-                                || headers.equals(Collections.emptyMap())) {
-                            headers = new HashMap<String, String>();
+                if (fileUri != null) {
+                    new Thread(new Runnable() {
+                        public void run() {
+                            try {
+                                new PostFile().main();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
+                    }).start();
+                } else {
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(LOG_TAG, response.toString());
+                            skootText.setText("");
+                            skootHandle.setText("");
+                            Toast.makeText(ComposeActivity.this, "Woot! Skoot posted!", Toast.LENGTH_SHORT).show();
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+                        }
+                    }) {
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> headers = super.getHeaders();
 
-                        headers.put("user_id", Integer.toString(BaseActivity.userId));
-                        headers.put("access_token", BaseActivity.accessToken);
+                            if (headers == null
+                                    || headers.equals(Collections.emptyMap())) {
+                                headers = new HashMap<String, String>();
+                            }
 
-                        return headers;
-                    }
-                };
+                            headers.put("user_id", Integer.toString(BaseActivity.userId));
+                            headers.put("access_token", BaseActivity.accessToken);
 
-                AppController.getInstance().addToRequestQueue(jsonObjectRequest, "compose_skoot");
+                            return headers;
+                        }
+                    };
+                    AppController.getInstance().addToRequestQueue(jsonObjectRequest, "compose_skoot");
+                }
                 finish();
             } else if (skootText.getText().length() > 250) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -197,5 +327,58 @@ public class ComposeActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class PostFile {
+        public void main() throws Exception {
+            HttpParams params = new BasicHttpParams();
+            params.setParameter("user_id", Integer.toString(BaseActivity.userId));
+            params.setParameter("channel", skootHandle.getText().toString());
+            params.setParameter("content", skootText.getText().toString());
+            params.setParameter("location_id", Integer.toString(BaseActivity.locationId));
+            if (mActiveZones.size() > 0) {
+                params.setParameter("zone_id", Integer.toString(mActiveZones.get(0).getZoneId()));
+            } else {
+                params.setParameter("zone_id", "null'");
+            }
+
+            Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath());
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream); //compress to which format you want.
+            byte [] byte_arr = stream.toByteArray();
+            String image_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+            ArrayList<NameValuePair> nameValuePairs = new  ArrayList<NameValuePair>();
+
+            nameValuePairs.add(new BasicNameValuePair("image", image_str));
+            nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
+            nameValuePairs.add(new BasicNameValuePair("channel", skootHandle.getText().toString()));
+            nameValuePairs.add(new BasicNameValuePair("content", skootText.getText().toString()));
+            nameValuePairs.add(new BasicNameValuePair("location_id", Integer.toString(BaseActivity.locationId)));
+            if (mActiveZones.size() > 0) {
+                nameValuePairs.add(new BasicNameValuePair("zone_id", Integer.toString(mActiveZones.get(0).getZoneId())));
+            } else {
+                nameValuePairs.add(new BasicNameValuePair("zone_id", "null"));
+            }
+
+            try{
+
+                HttpClient httpclient = new DefaultHttpClient();
+                httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+
+                String url = BaseActivity.substituteString(getResources().getString(R.string.skoot_new), new HashMap<String, String>());
+                HttpPost httppost = new HttpPost(url);
+
+                httppost.setHeader("user_id", Integer.toString(BaseActivity.userId));
+                httppost.setHeader("access_token", BaseActivity.accessToken);
+
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                HttpResponse response = httpclient.execute(httppost);
+
+                Log.d("Done", "Done");
+            }catch(Exception e){
+                Log.d("Error:", e.getMessage());
+                System.out.println("Error in http connection "+e.toString());
+            }
+        }
     }
 }

@@ -103,7 +103,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         TextView commentsCount = (TextView) convertView.findViewById(R.id.commentsCount);
         commentsCount.setText(Integer.toString(post.getCommentsCount()));
 
-        TextView favoritesCount = (TextView) convertView.findViewById(R.id.favoritesCount);
+        final TextView favoritesCount = (TextView) convertView.findViewById(R.id.favoritesCount);
         favoritesCount.setText(Integer.toString(post.getFavoriteCount()));
 
         final Button flagButton = (Button) convertView.findViewById(R.id.flagButton);
@@ -174,6 +174,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
                     favoriteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.favorite_icon_inactive));
                     post.unFavoritePost();
                 }
+                favoritesCount.setText(Integer.toString(post.getFavoriteCount()));
             }
         });
 
