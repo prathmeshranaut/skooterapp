@@ -74,6 +74,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/post_skoot_holder"
         android:layout_above="@id/location_tab"
+        android:background="@color/skooterBackgroundColor"
         >
 
         <ImageView

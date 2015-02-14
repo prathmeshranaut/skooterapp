@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -43,6 +42,7 @@ public class ViewPostActivity extends BaseActivity {
     protected ArrayAdapter<Comment> mCommentsAdapter;
     protected ListView mListComments;
     protected Post mPost;
+    protected ArrayAdapter<Post> postAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,8 @@ public class ViewPostActivity extends BaseActivity {
 
         Intent intent = getIntent();
         mPost = (Post) intent.getSerializableExtra(SKOOTER_POST);
+        boolean canPerformActivity = intent.getBooleanExtra("can_perform_activity", true);
+
         List<Post> postList = new ArrayList<Post>();
         postList.add(mPost);
 
@@ -61,12 +63,12 @@ public class ViewPostActivity extends BaseActivity {
         final TextView typeIdView = (TextView) findViewById(R.id.type_id);
         final TextView typeView = (TextView) findViewById(R.id.type);
 
-        ArrayAdapter<Post> postAdapter = new PostAdapter(this, R.layout.list_view_post_row, postList, true, flagView, deleteView, typeIdView, typeView);
+        postAdapter = new PostAdapter(this, R.layout.list_view_post_row, postList, true, flagView, deleteView, typeIdView, typeView, canPerformActivity);
         ListView listPosts = (ListView) findViewById(R.id.list_posts);
         listPosts.setAdapter(postAdapter);
 
         String tag = "load_comments";
-        mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_comment_post_row, mCommentsList, true, flagView, deleteView, typeIdView, typeView);
+        mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_comment_post_row, mCommentsList, true, flagView, deleteView, typeIdView, typeView, canPerformActivity);
         mListComments = (ListView) findViewById(R.id.list_comments);
         mListComments.setAdapter(mCommentsAdapter);
 
@@ -76,75 +78,132 @@ public class ViewPostActivity extends BaseActivity {
         final TextView commentText = (TextView) findViewById(R.id.commentText);
         final int postId = mPost.getId();
 
-        commentBtn.setOnClickListener(new View.OnClickListener() {
-            String tag = "post_comment";
+        if(canPerformActivity) {
+            commentBtn.setOnClickListener(new View.OnClickListener() {
+                String tag = "post_comment";
 
-            @Override
-            public void onClick(View v) {
-                if (commentText.getText().length() > 0 && commentText.getText().length() < 250) {
-                    String url = "http://skooter.elasticbeanstalk.com/comment";
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("user_id", Integer.toString(BaseActivity.userId));
-                    params.put("content", commentText.getText().toString());
-                    params.put("location_id", Integer.toString(BaseActivity.locationId));
-                    params.put("post_id", Integer.toString(postId));
+                @Override
+                public void onClick(View v) {
+                    if (commentText.getText().length() > 0 && commentText.getText().length() < 200) {
+                        String url = "http://skooter.elasticbeanstalk.com/comment";
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("user_id", Integer.toString(BaseActivity.userId));
+                        params.put("content", commentText.getText().toString());
+                        params.put("location_id", Integer.toString(BaseActivity.locationId));
+                        params.put("post_id", Integer.toString(postId));
 
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d(LOG_TAG, response.toString());
-                            commentText.setText("");
-                            Toast.makeText(ViewPostActivity.this, "Woot! Comment posted!", Toast.LENGTH_SHORT).show();
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
-                        }
-                    }) {
-                        @Override
-                        public Map<String, String> getHeaders() throws AuthFailureError {
-                            Map<String, String> headers = super.getHeaders();
+                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.d(LOG_TAG, response.toString());
+                                commentText.setText("");
+                                mPost.setUserCommented(true);
+                                mPost.setCommentsCount(mPost.getCommentsCount() + 1);
+                                postAdapter.notifyDataSetChanged();
 
-                            if (headers == null
-                                    || headers.equals(Collections.emptyMap())) {
-                                headers = new HashMap<String, String>();
+
+                                final String SKOOT_COMMENTS = "comment";
+
+                                try {
+                                    JSONObject jsonObject = response.getJSONObject(SKOOT_COMMENTS);
+
+                                    Comment commentObject = parseComment(jsonObject);
+                                    if (commentObject != null) {
+                                        mCommentsList.add(commentObject);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Log.e(LOG_TAG, "Error processing JSON data");
+                                }
+                                mCommentsAdapter.notifyDataSetChanged();
                             }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
+                            }
+                        }) {
+                            @Override
+                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                Map<String, String> headers = super.getHeaders();
 
-                            headers.put("user_id", Integer.toString(BaseActivity.userId));
-                            headers.put("access_token", BaseActivity.accessToken);
+                                if (headers == null
+                                        || headers.equals(Collections.emptyMap())) {
+                                    headers = new HashMap<String, String>();
+                                }
 
-                            return headers;
-                        }
-                    };
+                                headers.put("user_id", Integer.toString(BaseActivity.userId));
+                                headers.put("access_token", BaseActivity.accessToken);
 
-                    AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
+                                return headers;
+                            }
+                        };
 
-                } else if (commentText.getText().length() > 200) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
-                    alertDialogBuilder.setMessage("You cannot simply skoot with more than 250! For that you would have login through Facebook.");
-                    alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
+                        AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
 
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                } else {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
-                    alertDialogBuilder.setMessage("You cannot simply skoot with no content!");
-                    alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
+                    } else if (commentText.getText().length() > 200) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
+                        alertDialogBuilder.setMessage("You cannot simply skoot with more than 250! For that you would have login through Facebook.");
+                        alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
 
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
+                            }
+                        });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    } else {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
+                        alertDialogBuilder.setMessage("You cannot simply skoot with no content!");
+                        alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+
+                            }
+                        });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    }
                 }
+            });
+        } else {
+            commentBtn.setEnabled(false);
+            listPosts.setEnabled(false);
+        }
+    }
+
+    public Comment parseComment(JSONObject jsonComment) {
+        final String SKOOTS = "skoot";
+        final String SKOOT_ID = "id";
+        final String SKOOT_POST = "content";
+        final String SKOOT_COMMENTS = "comments";
+        final String SKOOT_CREATED_AT = "created_at";
+        final String SKOOT_UPVOTES = "upvotes";
+        final String SKOOT_DOWNVOTES = "downvotes";
+        final String SKOOT_IF_USER_VOTED = "if_user_voted";
+        final String SKOOT_USER_VOTE = "user_vote";
+        final String SKOOT_USER_COMMENT = "user_comment";
+
+        try {
+            int id = jsonComment.getInt(SKOOT_ID);
+            String comment = jsonComment.getString(SKOOT_POST);
+            int upvotes = jsonComment.getInt(SKOOT_UPVOTES);
+            int downvotes = jsonComment.getInt(SKOOT_DOWNVOTES);
+            boolean if_user_voted = jsonComment.getBoolean(SKOOT_IF_USER_VOTED);
+            boolean user_vote = false;
+            if (if_user_voted) {
+                user_vote = jsonComment.getBoolean(SKOOT_USER_VOTE);
             }
-        });
+            boolean user_skoot = jsonComment.getBoolean(SKOOT_USER_COMMENT);
+            String timestamp = jsonComment.getString(SKOOT_CREATED_AT);
+
+            return new Comment(id, mPost.getId(), comment, upvotes, downvotes, if_user_voted, user_vote, user_skoot, timestamp);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, "Error processing JSON data");
+        }
+        return null;
     }
 
     public void getCommentsForPostId(Post post, int userId) {
@@ -157,36 +216,16 @@ public class ViewPostActivity extends BaseActivity {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                final String SKOOTS = "skoot";
-                final String SKOOT_ID = "id";
-                final String SKOOT_POST = "content";
                 final String SKOOT_COMMENTS = "comments";
-                final String SKOOT_CREATED_AT = "created_at";
-                final String SKOOT_UPVOTES = "upvotes";
-                final String SKOOT_DOWNVOTES = "downvotes";
-                final String SKOOT_IF_USER_VOTED = "if_user_voted";
-                final String SKOOT_USER_VOTE = "user_vote";
-                final String SKOOT_USER_COMMENT = "user_comment";
 
                 try {
                     JSONArray jsonArray = response.getJSONArray(SKOOT_COMMENTS);
 
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonComment = jsonArray.getJSONObject(i);
-                        int id = jsonComment.getInt(SKOOT_ID);
-                        String comment = jsonComment.getString(SKOOT_POST);
-                        int upvotes = jsonComment.getInt(SKOOT_UPVOTES);
-                        int downvotes = jsonComment.getInt(SKOOT_DOWNVOTES);
-                        boolean if_user_voted = jsonComment.getBoolean(SKOOT_IF_USER_VOTED);
-                        boolean user_vote = false;
-                        if (if_user_voted) {
-                            user_vote = jsonComment.getBoolean(SKOOT_USER_VOTE);
+                        Comment commentObject = parseComment(jsonArray.getJSONObject(i));
+                        if (commentObject != null) {
+                            mCommentsList.add(commentObject);
                         }
-                        boolean user_skoot = jsonComment.getBoolean(SKOOT_USER_COMMENT);
-                        String timestamp = jsonComment.getString(SKOOT_CREATED_AT);
-
-                        Comment commentObject = new Comment(id, mPost.getId(), comment, upvotes, downvotes, if_user_voted, user_vote, user_skoot, timestamp);
-                        mCommentsList.add(commentObject);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

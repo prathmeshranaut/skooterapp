@@ -37,5 +37,6 @@
     <string name="reply_post">Reply</string>
     <string name="no_unread_notifications">0 unread notifications</string>
     <string name="follow">Follow</string>
+    <string name="title_activity_view_image">ViewImage</string>
 
 </resources>

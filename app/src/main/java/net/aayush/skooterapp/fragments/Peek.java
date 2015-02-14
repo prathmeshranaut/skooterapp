@@ -97,6 +97,7 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(getActivity(), ViewPostActivity.class);
                     intent.putExtra(BaseActivity.SKOOTER_POST, mPostsList.get(position));
+                    intent.putExtra("can_perform_activity", false);
                     startActivity(intent);
                 }
             });

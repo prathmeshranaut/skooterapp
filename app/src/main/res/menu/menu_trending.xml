@@ -12,13 +12,6 @@
         skooter:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_me"
-        android:title="Me"
-        android:orderInCategory="1"
-        android:icon="@drawable/profile_icon"
-        skooter:showAsAction="ifRoom"/>
-
-    <item
         android:id="@+id/action_settings"
         android:title="Settings"
         android:orderInCategory="1"

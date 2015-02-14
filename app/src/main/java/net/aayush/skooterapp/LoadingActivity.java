@@ -43,7 +43,6 @@ public class LoadingActivity extends BaseActivity {
 
     protected SharedPreferences mSettings;
     protected TextView mLoadingTextView;
-    protected GPSLocator mLocator;
     protected final String LOG_TAG = LoadingActivity.class.getSimpleName();
 
     @Override

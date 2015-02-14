@@ -21,7 +21,8 @@ public class TrendingPostAdapter extends ArrayAdapter {
 
     private static final int TYPE_POST = 0;
     private static final int TYPE_TRENDING = 1;
-    private static final int TYPE_MAX_COUNT = TYPE_TRENDING + 1;
+    private static final int TYPE_SEPERATOR = 2;
+    private static final int TYPE_MAX_COUNT = TYPE_SEPERATOR + 1;
 
     public int getChannelsCount() {
         return channelsCount;
@@ -34,33 +35,40 @@ public class TrendingPostAdapter extends ArrayAdapter {
     private int channelsCount = 0;
     Context mContext;
     int mLayoutResourceId;
-    List data = new ArrayList();
+    List<Post> data = new ArrayList<Post>();
+    List<String> mChannels = new ArrayList<String>();
 
-    public TrendingPostAdapter(Context context, int resource, List objects) {
+    public TrendingPostAdapter(Context context, int resource, List<Post> objects, List<String> channels) {
         super(context, resource, objects);
         mContext = context;
         mLayoutResourceId = resource;
         this.data = objects;
+        mChannels = channels;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
 
-        if(type == TYPE_TRENDING) {
+        if (type == TYPE_TRENDING) {
             if (convertView == null) {
                 LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
                 convertView = inflater.inflate(R.layout.list_view_trending_post_row, parent, false);
-
-                TextView trendingChannel = (TextView) convertView.findViewById(R.id.trending_channel);
-                trendingChannel.setText(data.get(position).toString());
             }
-        } else {
+            TextView trendingChannel = (TextView) convertView.findViewById(R.id.trending_channel);
+            trendingChannel.setText(mChannels.get(position));
+
+        } else if (type == TYPE_SEPERATOR) {
+            if (convertView == null) {
+                LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+                convertView = inflater.inflate(R.layout.list_view_separator, parent, false);
+            }
+        } else if (type == TYPE_POST) {
             if (convertView == null) {
                 LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
                 convertView = inflater.inflate(mLayoutResourceId, parent, false);
             }
-            Post post = (Post) data.get(position);
+            Post post = data.get(position);
 
             View is_user_post_view = convertView.findViewById(R.id.is_user_skoot);
             if (post.isUserSkoot()) {
@@ -98,7 +106,7 @@ public class TrendingPostAdapter extends ArrayAdapter {
             TextView commentsCount = (TextView) convertView.findViewById(R.id.commentsCount);
             commentsCount.setText(Integer.toString(post.getCommentsCount()));
 
-            TextView favoritesCount = (TextView) convertView.findViewById(R.id.favoritesCount);
+            final TextView favoritesCount = (TextView) convertView.findViewById(R.id.favoritesCount);
             favoritesCount.setText(Integer.toString(post.getFavoriteCount()));
 
             final Button flagButton = (Button) convertView.findViewById(R.id.flagButton);
@@ -139,6 +147,7 @@ public class TrendingPostAdapter extends ArrayAdapter {
                         favoriteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.favorite_icon_inactive));
                         post.unFavoritePost();
                     }
+                    favoritesCount.setText(Integer.toString(post.getFavoriteCount()));
                 }
             });
 
@@ -221,8 +230,10 @@ public class TrendingPostAdapter extends ArrayAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if(position < channelsCount) {
+        if (position < mChannels.size()) {
             return TYPE_TRENDING;
+        } else if (position == mChannels.size()) {
+            return TYPE_SEPERATOR;
         }
         return TYPE_POST;
     }

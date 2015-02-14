@@ -96,6 +96,7 @@ public class ComposeActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 MenuItem menuItem = mMenu.findItem(R.id.text_counter);
+                //TODO Redmi crash
                 menuItem.setTitle(Integer.toString(MAX_CHARACTERS - s.length()));
             }
 
@@ -374,7 +375,7 @@ public class ComposeActivity extends BaseActivity {
                 httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                 HttpResponse response = httpclient.execute(httppost);
 
-                Log.d("Done", "Done");
+                Log.d("Done", Integer.toString(response.getStatusLine().getStatusCode()));
             }catch(Exception e){
                 Log.d("Error:", e.getMessage());
                 System.out.println("Error in http connection "+e.toString());

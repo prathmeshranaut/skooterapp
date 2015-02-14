@@ -36,8 +36,8 @@
                 <ImageView
                     android:src="@drawable/custom_loading_peek"
                     android:scaleType="fitXY"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:id="@+id/zone_icon"
                     />
             </RelativeLayout>
@@ -49,13 +49,14 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp">
 
-                <net.aayush.skooterapp.ABITextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text=""
                     android:id="@+id/handleText"
                     android:textColor="@color/skooterNSecondaryTextColor"
+                    android:textStyle="bold|italic"
                     android:layout_marginBottom="2dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
@@ -72,6 +73,16 @@
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/handleText"
                     />
+
+                <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:id="@+id/post_image"
+                    android:layout_below="@id/postText"
+                    android:padding="5dp"
+                    android:visibility="gone"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -160,7 +171,8 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginRight="3dp"
-                    android:layout_marginEnd="3dp"/>
+                    android:layout_marginEnd="3dp"
+                    />
 
                 <net.aayush.skooterapp.ATextView
                     android:layout_width="wrap_content"

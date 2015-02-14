@@ -44,7 +44,8 @@ import java.util.Map;
 public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     protected static final String LOG_TAG = Trending.class.getSimpleName();
-    protected List mPostsList = new ArrayList();
+    protected List<Post> mPostsList = new ArrayList<Post>();
+    protected List<String> mChannelsList = new ArrayList<String>();
     protected TrendingPostAdapter mPostsAdapter;
     protected ListView mListPosts;
     protected Context mContext;
@@ -73,7 +74,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
         getTrendingSkoots();
 
-        mPostsAdapter = new TrendingPostAdapter(mContext, R.layout.list_view_post_row, mPostsList);
+        mPostsAdapter = new TrendingPostAdapter(mContext, R.layout.list_view_post_row, mPostsList, mChannelsList);
         mListPosts = (ListView) rootView.findViewById(R.id.list_posts);
         mListPosts.setAdapter(mPostsAdapter);
 
@@ -109,7 +110,6 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
     @Override
     public void onRefresh() {
-
         getTrendingSkoots();
     }
 
@@ -145,8 +145,16 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
                 try {
                     mPostsList.clear();
+                    mChannelsList.clear();
+
                     JSONArray channels = response.getJSONArray(SKOOT_CHANNELS);
                     JSONArray jsonArray = response.getJSONArray(SKOOTS);
+
+                    for (int i = 0; i < min(channels.length(), 3); i++) {
+                        mChannelsList.add(i, channels.getString(i));
+                    }
+
+                    mPostsAdapter.setChannelsCount(mChannelsList.size());
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonPost = jsonArray.getJSONObject(i);
@@ -175,10 +183,6 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                         mPostsList.add(postObject);
                     }
 
-                    for (int i = 0; i < min(channels.length(), 3); i++) {
-                        mPostsList.add(i, channels.getString(i));
-                    }
-                    mPostsAdapter.setChannelsCount(min(channels.length(), 3));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");

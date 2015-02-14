@@ -73,7 +73,6 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     protected View mSkootHolder;
     private Menu mMenu;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -4,12 +4,9 @@
                 android:layout_height="fill_parent"
                 skooter:context="net.aayush.skooterapp.MeActivity">
 
-    <include layout="@layout/toolbar" android:id="@id/app_bar" />
-
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/app_bar">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="vertical"
@@ -21,18 +18,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
+                <ImageView
                     android:id="@+id/map"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"/>
+                    android:layout_height="300dp"
+                    android:background="@color/md_grey_800"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"/>
 
                 <net.aayush.skooterapp.RippleView
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_centerInParent="true"/>
             </RelativeLayout>
-
 
             <ListView
                 android:id="@+id/myList"

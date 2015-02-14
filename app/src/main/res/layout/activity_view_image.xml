@@ -1,0 +1,14 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="net.aayush.skooterapp.ViewImage"
+                android:background="@color/md_black_1000">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:id="@+id/large_image"
+        android:layout_gravity="center_vertical" />
+
+</RelativeLayout>

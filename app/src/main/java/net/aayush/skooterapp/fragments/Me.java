@@ -4,38 +4,43 @@ import android.animation.IntEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.LatLng;
 
+import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.FavoritesActivity;
-import net.aayush.skooterapp.GPSLocator;
 import net.aayush.skooterapp.MeCommentsActivity;
 import net.aayush.skooterapp.MePostsActivity;
 import net.aayush.skooterapp.R;
 import net.aayush.skooterapp.data.Post;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Me extends Fragment {
     protected List<Post> mPostsList = new ArrayList<Post>();
@@ -44,7 +49,6 @@ public class Me extends Fragment {
     protected Context mContext;
     private SupportMapFragment mSupportMapFragment;
     private GoogleMap mMap;
-    protected GPSLocator mLocator;
     Circle circle;
 
     @Override
@@ -66,7 +70,6 @@ public class Me extends Fragment {
         testData.add("My Skoots");
         testData.add("My Replies");
         testData.add("My Favorites");
-        testData.add("Settings");
 
         myList.setAdapter(new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, testData));
 
@@ -87,13 +90,42 @@ public class Me extends Fragment {
                         intent = new Intent(getActivity(), FavoritesActivity.class);
                         startActivity(intent);
                         break;
-                    case 3:
-                        break;
                 }
             }
         });
 
-        setUpMapIfNeeded();
+        final ImageView map = (ImageView) rootView.findViewById(R.id.map);
+        ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
+        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("latitude", Float.toString(0.0f));
+        params.put("longitude", Float.toString(0.0f));
+        params.put("width", Integer.toString(width));
+        params.put("height", Integer.toString(300));
+
+        String url = "http://maps.google.com/maps/api/staticmap?center=" + Double.toString(BaseActivity.mLocator.getLatitude()) + ","+Double.toString(BaseActivity.mLocator.getLongitude()) + "&zoom=15&"+"size="+ Integer.toString(width) +"x300&sensor=false";
+
+        Log.v("Map", url);
+        imageLoader.get(url, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                if(response.getBitmap() != null) {
+                    map.setImageBitmap(response.getBitmap());
+                }
+            }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("" , error.getMessage());
+            }
+        });
+
+        //setUpMapIfNeeded();
 
         return rootView;
     }
@@ -104,41 +136,42 @@ public class Me extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.menu_me, menu);
         MenuItem menuItem = menu.findItem(R.id.score);
-        menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore() + 2));
+        menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore()));
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        FragmentManager fm = getChildFragmentManager();
-        mLocator = new GPSLocator(getActivity());
-        mSupportMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
-        if (mSupportMapFragment == null) {
-            mSupportMapFragment = SupportMapFragment.newInstance();
-            fm.beginTransaction().replace(R.id.map, mSupportMapFragment).commit();
-        }
+//
+//
+//        mSupportMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.map);
+//        if (mSupportMapFragment == null) {
+//            mSupportMapFragment = SupportMapFragment.newInstance();
+//            fm.beginTransaction().replace(R.id.map, mSupportMapFragment).commit();
+//        }
+
     }
 
     private void setUpMapIfNeeded() {
         // Check if we were successful in obtaining the map.
-        if (mMap != null) {
-            mMap.getUiSettings().setAllGesturesEnabled(false);
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setCompassEnabled(false);
-            mMap.getUiSettings().setZoomControlsEnabled(false);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-
-            if (mLocator.canGetLocation()) {
-                CameraUpdate update = CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(new LatLng(mLocator.getLatitude(), mLocator.getLongitude()), 15.0f));
-                if (update != null) {
-                    mMap.moveCamera(update);
-                }
-                if(circle == null) {
-                    //animateCircle();
-                }
-            }
-        }
+//        if (mMap != null) {
+//            mMap.getUiSettings().setAllGesturesEnabled(false);
+//            mMap.setMyLocationEnabled(true);
+//            mMap.getUiSettings().setCompassEnabled(false);
+//            mMap.getUiSettings().setZoomControlsEnabled(false);
+//            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+//
+//            if (mLocator.canGetLocation()) {
+//                CameraUpdate update = CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(new LatLng(mLocator.getLatitude(), mLocator.getLongitude()), 15.0f));
+//                if (update != null) {
+//                    mMap.moveCamera(update);
+//                }
+//                if(circle == null) {
+//                    //animateCircle();
+//                }
+//            }
+//        }
     }
 
     public void animateCircle() {
@@ -162,9 +195,9 @@ public class Me extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mMap == null) {
-            mMap = mSupportMapFragment.getMap();
-        }
-        setUpMapIfNeeded();
+//        if (mMap == null) {
+//            mMap = mSupportMapFragment.getMap();
+//        }
+//        setUpMapIfNeeded();
     }
 }

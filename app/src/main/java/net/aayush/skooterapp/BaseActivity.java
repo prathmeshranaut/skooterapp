@@ -40,6 +40,8 @@ public class BaseActivity extends ActionBarActivity {
     private static final int MONTHS = 30 * DAYS;
     private static final int YEARS = 365 * DAYS;
 
+    public static GPSLocator mLocator;
+
     public static Date currentDate() {
         Calendar calendar = Calendar.getInstance();
         return calendar.getTime();

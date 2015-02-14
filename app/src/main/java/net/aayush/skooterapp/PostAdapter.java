@@ -13,6 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
+
 import net.aayush.skooterapp.data.Post;
 
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
     LinearLayout mFlagView;
     TextView mTypeIdView;
     TextView mTypeView;
+    boolean canPerformActivity;
 
     public boolean isFlaggable() {
         return mFlaggable;
@@ -45,7 +50,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         this.mFlaggable = false;
     }
 
-    public PostAdapter(Context context, int resource, List<Post> objects, boolean flaggable, LinearLayout flagView, LinearLayout deleteView, TextView typeIdView, TextView typeView) {
+    public PostAdapter(Context context, int resource, List<Post> objects, boolean flaggable, LinearLayout flagView, LinearLayout deleteView, TextView typeIdView, TextView typeView, boolean canPerformActivity) {
         super(context, resource, objects);
         mContext = context;
         mLayoutResourceId = resource;
@@ -55,6 +60,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         this.mDeleteView = deleteView;
         this.mTypeIdView = typeIdView;
         this.mTypeView = typeView;
+        this.canPerformActivity = canPerformActivity;
     }
 
     @Override
@@ -65,7 +71,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
             convertView = inflater.inflate(mLayoutResourceId, parent, false);
         }
 
-        Post post = data.get(position);
+        final Post post = data.get(position);
 
         View is_user_post_view = convertView.findViewById(R.id.is_user_skoot);
         if (post.isUserSkoot()) {
@@ -138,7 +144,44 @@ public class PostAdapter extends ArrayAdapter<Post> {
         } else {
             flagButton.setVisibility(View.GONE);
         }
+        final ImageView postImage = (ImageView) convertView.findViewById(R.id.post_image);
+        if (post.isImagePresent()) {
 
+            ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
+            String url = post.getSmallImageUrl();
+
+            imageLoader.get(url, new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    if (response.getBitmap() != null) {
+                        postImage.setImageBitmap(response.getBitmap());
+                        postImage.setVisibility(View.VISIBLE);
+                        postImage.setMaxHeight(150);
+                        postImage.setMaxWidth(150);
+                        postImage.setMinimumHeight(150);
+                        postImage.setMinimumWidth(150);
+                    }
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d("Post", error.getMessage());
+                }
+            });
+
+            postImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Open an activity with the full image
+                    Intent intent = new Intent(mContext, ViewImage.class);
+                    intent.putExtra("IMAGE_URL", post.getLargeImageUrl());
+                    mContext.startActivity(intent);
+                }
+            });
+        } else {
+            postImage.setVisibility(View.GONE);
+        }
         ImageView commentImage = (ImageView) convertView.findViewById(R.id.commentImage);
 
         final Button favoriteBtn = (Button) convertView.findViewById(R.id.favorite);
@@ -199,43 +242,44 @@ public class PostAdapter extends ArrayAdapter<Post> {
         } else {
             upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_inactive));
             downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_inactive));
+            if (canPerformActivity) {
+                upvoteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RelativeLayout rl = (RelativeLayout) v.getParent();
+                        Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
+                        Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
+                        Post post = (Post) upvoteBtn.getTag();
 
-            upvoteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RelativeLayout rl = (RelativeLayout) v.getParent();
-                    Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
-                    Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
-                    Post post = (Post) upvoteBtn.getTag();
+                        //Call the upvote method
+                        post.upvotePost();
+                        voteCount.setText(Integer.toString(post.getVoteCount() + 1));
+                        upvoteBtn.setEnabled(false);
+                        downvoteBtn.setEnabled(false);
+                        upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
+                        downvoteBtn.setAlpha(0.3f);
+                    }
+                });
 
-                    //Call the upvote method
-                    post.upvotePost();
-                    voteCount.setText(Integer.toString(post.getVoteCount() + 1));
-                    upvoteBtn.setEnabled(false);
-                    downvoteBtn.setEnabled(false);
-                    upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
-                    downvoteBtn.setAlpha(0.3f);
-                }
-            });
+                downvoteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RelativeLayout rl = (RelativeLayout) v.getParent();
+                        Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
+                        Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
 
-            downvoteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RelativeLayout rl = (RelativeLayout) v.getParent();
-                    Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
-                    Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
+                        Post post = (Post) downvoteBtn.getTag();
 
-                    Post post = (Post) downvoteBtn.getTag();
-
-                    //Call the upvote method
-                    post.downvotePost();
-                    voteCount.setText(Integer.toString(post.getVoteCount() - 1));
-                    upvoteBtn.setEnabled(false);
-                    downvoteBtn.setEnabled(false);
-                    downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
-                    upvoteBtn.setAlpha(0.3f);
-                }
-            });
+                        //Call the upvote method
+                        post.downvotePost();
+                        voteCount.setText(Integer.toString(post.getVoteCount() - 1));
+                        upvoteBtn.setEnabled(false);
+                        downvoteBtn.setEnabled(false);
+                        downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
+                        upvoteBtn.setAlpha(0.3f);
+                    }
+                });
+            }
         }
         favoriteBtn.setFocusable(false);
         upvoteBtn.setFocusable(false);

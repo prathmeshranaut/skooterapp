@@ -41,11 +41,13 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
             convertView = inflater.inflate(mLayoutResourceId, parent, false);
         }
 
-        Post post = data.get(position);
+        final Post post = data.get(position);
 
         View is_user_post_view = convertView.findViewById(R.id.is_user_post);
         if(post.isUserSkoot()) {
             is_user_post_view.setAlpha(1.0f);
+        } else {
+            is_user_post_view.setAlpha(0.0f);
         }
         TextView postContent = (TextView) convertView.findViewById(R.id.postText);
         postContent.setText(post.getContent());
@@ -84,6 +86,40 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
             }
         });
 
+        final ImageView postImage = (ImageView) convertView.findViewById(R.id.post_image);
+        if(post.isImagePresent()) {
+
+            ImageLoader imageLoader2 = AppController.getInstance().getImageLoader();
+
+            String url2 = post.getSmallImageUrl();
+
+            imageLoader2.get(url2, new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    if(response.getBitmap() != null) {
+                        postImage.setImageBitmap(response.getBitmap());
+                        postImage.setVisibility(View.VISIBLE);
+                        postImage.setBackground(null);
+                    }
+                }
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d("Peek Post", "Error: " + error.getMessage());
+                }
+            });
+            postImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Open an activity with the full image
+                    Intent intent = new Intent(mContext, ViewImage.class);
+                    intent.putExtra("IMAGE_URL", post.getLargeImageUrl());
+                    mContext.startActivity(intent);
+                }
+            });
+        } else {
+            postImage.setVisibility(View.GONE);
+        }
+
         TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         timestamp.setText(post.getTimestamp());
 
@@ -93,7 +129,7 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
         TextView commentsCount = (TextView) convertView.findViewById(R.id.commentsCount);
         commentsCount.setText(Integer.toString(post.getCommentsCount()));
 
-        TextView favoritesCount = (TextView) convertView.findViewById(R.id.favoritesCount);
+        final TextView favoritesCount = (TextView) convertView.findViewById(R.id.favoritesCount);
         favoritesCount.setText(Integer.toString(post.getFavoriteCount()));
 
         ImageView commentImage = (ImageView) convertView.findViewById(R.id.commentImage);
@@ -131,6 +167,7 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
                     favoriteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.favorite_icon_inactive));
                     post.unFavoritePost();
                 }
+                favoritesCount.setText(Integer.toString(post.getFavoriteCount()));
             }
         });
 

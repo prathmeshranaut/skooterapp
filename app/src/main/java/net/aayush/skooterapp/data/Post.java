@@ -257,6 +257,10 @@ public class Post implements Serializable {
         return mCommentsCount;
     }
 
+    public void setCommentsCount(int commentsCount) {
+        mCommentsCount = commentsCount;
+    }
+
     public void favoritePost() {
         setUserFavorited(true);
         Map<String, String> params = new HashMap<String, String>();

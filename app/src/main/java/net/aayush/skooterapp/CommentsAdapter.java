@@ -25,6 +25,7 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
     TextView mTypeIdView;
     TextView mTypeView;
     boolean mFlaggable;
+    boolean canPerformActivity;
 
     public CommentsAdapter(Context context, int resource, List<Comment> objects) {
         super(context, resource, objects);
@@ -34,7 +35,7 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         mFlaggable = false;
     }
 
-    public CommentsAdapter(Context context, int resource, List<Comment> objects, boolean flaggable, LinearLayout flagView, LinearLayout deleteView, TextView typeIdView, TextView typeView) {
+    public CommentsAdapter(Context context, int resource, List<Comment> objects, boolean flaggable, LinearLayout flagView, LinearLayout deleteView, TextView typeIdView, TextView typeView, boolean canPerformActivity) {
         super(context, resource, objects);
         this.mContext = context;
         this.mLayoutResourceId = resource;
@@ -44,6 +45,7 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         this.mTypeIdView = typeIdView;
         this.mTypeView = typeView;
         this.mFlaggable = flaggable;
+        this.canPerformActivity = canPerformActivity;
     }
 
     @Override
@@ -127,42 +129,44 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
                 upvoteBtn.setAlpha(0.3f);
             }
         } else {
-            upvoteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RelativeLayout rl = (RelativeLayout) v.getParent();
-                    Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
-                    Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
-                    Comment comment = (Comment) upvoteBtn.getTag();
+            if(canPerformActivity) {
+                upvoteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RelativeLayout rl = (RelativeLayout) v.getParent();
+                        Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
+                        Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
+                        Comment comment = (Comment) upvoteBtn.getTag();
 
-                    //Call the upvote method
-                    comment.upvoteComment();
-                    voteCount.setText(Integer.toString(comment.getVoteCount() + 1));
-                    upvoteBtn.setEnabled(false);
-                    downvoteBtn.setEnabled(false);
-                    upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
-                    downvoteBtn.setAlpha(0.3f);
-                }
-            });
+                        //Call the upvote method
+                        comment.upvoteComment();
+                        voteCount.setText(Integer.toString(comment.getVoteCount() + 1));
+                        upvoteBtn.setEnabled(false);
+                        downvoteBtn.setEnabled(false);
+                        upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
+                        downvoteBtn.setAlpha(0.3f);
+                    }
+                });
 
-            downvoteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RelativeLayout rl = (RelativeLayout) v.getParent();
-                    Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
-                    Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
+                downvoteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RelativeLayout rl = (RelativeLayout) v.getParent();
+                        Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
+                        Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
 
-                    Comment comment = (Comment) downvoteBtn.getTag();
+                        Comment comment = (Comment) downvoteBtn.getTag();
 
-                    //Call the upvote method
-                    comment.downvoteComment();
-                    voteCount.setText(Integer.toString(comment.getVoteCount() - 1));
-                    upvoteBtn.setEnabled(false);
-                    downvoteBtn.setEnabled(false);
-                    downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
-                    upvoteBtn.setAlpha(0.3f);
-                }
-            });
+                        //Call the upvote method
+                        comment.downvoteComment();
+                        voteCount.setText(Integer.toString(comment.getVoteCount() - 1));
+                        upvoteBtn.setEnabled(false);
+                        downvoteBtn.setEnabled(false);
+                        downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
+                        upvoteBtn.setAlpha(0.3f);
+                    }
+                });
+            }
         }
         //upvoteBtn.setFocusable(false);
         //downvoteBtn.setFocusable(false);
