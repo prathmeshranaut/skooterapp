@@ -43,6 +43,7 @@ public class ViewPostActivity extends BaseActivity {
     protected ListView mListComments;
     protected Post mPost;
     protected ArrayAdapter<Post> postAdapter;
+    protected boolean canPerformActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class ViewPostActivity extends BaseActivity {
 
         Intent intent = getIntent();
         mPost = (Post) intent.getSerializableExtra(SKOOTER_POST);
-        boolean canPerformActivity = intent.getBooleanExtra("can_perform_activity", true);
+        canPerformActivity = intent.getBooleanExtra("can_perform_activity", true);
 
         List<Post> postList = new ArrayList<Post>();
         postList.add(mPost);
@@ -167,8 +168,22 @@ public class ViewPostActivity extends BaseActivity {
                 }
             });
         } else {
-            commentBtn.setEnabled(false);
             listPosts.setEnabled(false);
+            commentBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
+                    alertDialogBuilder.setMessage("You cannot post when you are not in a zone.");
+                    alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });
         }
     }
 
@@ -198,7 +213,6 @@ public class ViewPostActivity extends BaseActivity {
             String timestamp = jsonComment.getString(SKOOT_CREATED_AT);
 
             return new Comment(id, mPost.getId(), comment, upvotes, downvotes, if_user_voted, user_vote, user_skoot, timestamp);
-
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(LOG_TAG, "Error processing JSON data");

@@ -43,7 +43,7 @@
         android:visibility="gone"/>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/md_grey_200"
@@ -51,11 +51,21 @@
         android:layout_alignParentBottom="true">
 
         <ImageView
-            android:layout_width="38dp"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:src="@drawable/camera_icon"
+            android:id="@+id/camera_icon"
+            android:tag="0"
+            android:layout_weight="1.0"
+            android:padding="5dp"/>
+
+        <ImageView
+            android:layout_width="0dp"
             android:layout_height="38dp"
             android:src="@drawable/add_image"
             android:id="@+id/image_icon"
             android:tag="0"
+            android:layout_weight="1.0"
             android:layout_gravity="center_horizontal"
             android:padding="5dp"/>
 

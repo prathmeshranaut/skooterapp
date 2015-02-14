@@ -62,11 +62,14 @@
                     />
 
                 <ImageView
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
                     android:id="@+id/post_image"
                     android:layout_below="@id/postText"
-                    android:padding="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="50dp"
+                    android:paddingBottom="10dp"
+                    android:paddingRight="50dp"
                     android:visibility="gone"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
@@ -159,7 +162,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginRight="3dp"
-                    android:layout_marginEnd="3dp" />
+                    android:layout_marginEnd="3dp"/>
 
                 <net.aayush.skooterapp.ATextView
                     android:layout_width="wrap_content"

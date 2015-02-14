@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -64,6 +65,9 @@ public class ComposeActivity extends BaseActivity {
     protected Zone mCurrentZone;
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    private static final int CAMERA_BROWSE_IMAGE_REQUEST_CODE = 200;
+    private static final int CAMERA_BROWSE_IMAGE_REQUEST_CODE_KITKAT = 201;
+
     private static final int MEDIA_TYPE_IMAGE = 1;
 
     private static final String IMAGE_DIRECTORY_NAME = "Skooter";
@@ -122,7 +126,7 @@ public class ComposeActivity extends BaseActivity {
 //            }
 //        });
 
-        ImageView imageSelectIcon = (ImageView) findViewById(R.id.image_icon);
+        ImageView imageSelectIcon = (ImageView) findViewById(R.id.camera_icon);
         imageSelectIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,9 +135,34 @@ public class ComposeActivity extends BaseActivity {
             }
         });
 
+        ImageView imageBrowse = (ImageView) findViewById(R.id.image_icon);
+        imageBrowse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                browseImages();
+            }
+        });
+
         imagePreview = (ImageView) findViewById(R.id.image_preview);
 
         calculateActiveZone();
+    }
+
+    public void browseImages() {
+        if (Build.VERSION.SDK_INT < 19) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select Picture"),
+                    CAMERA_BROWSE_IMAGE_REQUEST_CODE);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, CAMERA_BROWSE_IMAGE_REQUEST_CODE_KITKAT);
+
+        }
     }
 
     private boolean isDeviceSupportCamera() {
@@ -154,6 +183,24 @@ public class ComposeActivity extends BaseActivity {
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
             //Successfully captured the image
             previewCapturedImage();
+        } else if (requestCode == CAMERA_BROWSE_IMAGE_REQUEST_CODE) {
+            fileUri = data.getData();
+
+            String realPath = RealPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+            mFile = new File(realPath);
+            Uri uriFromPath = Uri.fromFile(mFile);
+            fileUri = uriFromPath;
+            imagePreview.setVisibility(View.VISIBLE);
+            imagePreview.setImageURI(uriFromPath);
+        } else if (requestCode == CAMERA_BROWSE_IMAGE_REQUEST_CODE_KITKAT) {
+            fileUri = data.getData();
+
+            String realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
+            mFile = new File(realPath);
+            Uri uriFromPath = Uri.fromFile(mFile);
+            fileUri = uriFromPath;
+            imagePreview.setVisibility(View.VISIBLE);
+            imagePreview.setImageURI(uriFromPath);
         } else if (resultCode == RESULT_CANCELED) {
 
         } else {
@@ -346,9 +393,9 @@ public class ComposeActivity extends BaseActivity {
             Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath());
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream); //compress to which format you want.
-            byte [] byte_arr = stream.toByteArray();
+            byte[] byte_arr = stream.toByteArray();
             String image_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
-            ArrayList<NameValuePair> nameValuePairs = new  ArrayList<NameValuePair>();
+            ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
             nameValuePairs.add(new BasicNameValuePair("image", image_str));
             nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(BaseActivity.userId)));
@@ -361,7 +408,7 @@ public class ComposeActivity extends BaseActivity {
                 nameValuePairs.add(new BasicNameValuePair("zone_id", "null"));
             }
 
-            try{
+            try {
 
                 HttpClient httpclient = new DefaultHttpClient();
                 httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
@@ -376,9 +423,9 @@ public class ComposeActivity extends BaseActivity {
                 HttpResponse response = httpclient.execute(httppost);
 
                 Log.d("Done", Integer.toString(response.getStatusLine().getStatusCode()));
-            }catch(Exception e){
+            } catch (Exception e) {
                 Log.d("Error:", e.getMessage());
-                System.out.println("Error in http connection "+e.toString());
+                System.out.println("Error in http connection " + e.toString());
             }
         }
     }

@@ -21,14 +21,14 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             R.drawable.home_inactive,
             R.drawable.trending_inactive,
             R.drawable.peek_inactive,
-            R.drawable.me_inactive,
+            R.drawable.profile_icon,
     };
 
     private int[] activeImageResId = {
             R.drawable.home_active,
             R.drawable.trending_active,
             R.drawable.peek_active,
-            R.drawable.profile_icon
+            R.drawable.profile_icon_filled
     };
 
     public TabsPagerAdapter(Context mContext, FragmentManager fm) {
