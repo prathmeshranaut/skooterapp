@@ -26,8 +26,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Skooter"
-        android:screenOrientation="portrait">
+        android:theme="@style/Theme.Skooter" >
         <meta-data
             android:name="LOCALYTICS_APP_KEY"
             android:value="ccdfa2471067886943f4461-be2fc62e-ab7e-11e4-a83e-005cf8cbabd8" />
@@ -37,7 +36,8 @@
 
         <activity
             android:name=".LoadingActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,12 +50,14 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ViewPostActivity"
             android:label="@string/title_activity_view_post"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MainActivity" />
@@ -72,7 +74,8 @@
         <activity
             android:name=".PeekActivity"
             android:label="@string/title_activity_peek"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MainActivity" />
@@ -80,7 +83,8 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map"
-            android:parentActivityName=".ViewPostActivity" >
+            android:parentActivityName=".ViewPostActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.ViewPostActivity" />
@@ -88,7 +92,8 @@
         <activity
             android:name=".MeActivity"
             android:label="@string/title_activity_me"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MainActivity" />
@@ -96,7 +101,8 @@
         <activity
             android:name=".MePostsActivity"
             android:label="@string/title_activity_me_posts"
-            android:parentActivityName=".MeActivity" >
+            android:parentActivityName=".MeActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MeActivity" />
@@ -104,7 +110,8 @@
         <activity
             android:name=".MeCommentsActivity"
             android:label="@string/title_activity_me_comments"
-            android:parentActivityName=".MeActivity" >
+            android:parentActivityName=".MeActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MeActivity" />
@@ -112,7 +119,8 @@
         <activity
             android:name=".FlagActivity"
             android:label="@string/title_activity_flag"
-            android:parentActivityName=".ViewPostActivity" >
+            android:parentActivityName=".ViewPostActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.ViewPostActivity" />
@@ -120,7 +128,8 @@
         <activity
             android:name=".NotificationsActivity"
             android:label="@string/title_activity_notifications"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MainActivity" />
@@ -128,7 +137,8 @@
         <activity
             android:name=".FavoritesActivity"
             android:label="@string/title_activity_favorites"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MainActivity" />
@@ -136,7 +146,8 @@
         <activity
             android:name=".ChannelActivity"
             android:label="@string/title_activity_channel"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -151,7 +162,8 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MainActivity" />
@@ -159,10 +171,27 @@
         <activity
             android:name=".ViewImage"
             android:label="@string/title_activity_view_image"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.aayush.skooterapp.MainActivity" />
+        </activity>
+        <activity
+            android:name=".FeedbackActivity"
+            android:label="@string/title_activity_feedback"
+            android:parentActivityName=".SettingsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.aayush.skooterapp.SettingsActivity" />
+        </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName=".SettingsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="net.aayush.skooterapp.SettingsActivity" />
         </activity>
     </application>
 

@@ -35,6 +35,15 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         mFlaggable = false;
     }
 
+    public CommentsAdapter(Context context, int resource, List<Comment> objects, boolean canPerformActivity) {
+        super(context, resource, objects);
+        this.mContext = context;
+        this.mLayoutResourceId = resource;
+        this.data = objects;
+        mFlaggable = false;
+        this.canPerformActivity = canPerformActivity;
+    }
+
     public CommentsAdapter(Context context, int resource, List<Comment> objects, boolean flaggable, LinearLayout flagView, LinearLayout deleteView, TextView typeIdView, TextView typeView, boolean canPerformActivity) {
         super(context, resource, objects);
         this.mContext = context;

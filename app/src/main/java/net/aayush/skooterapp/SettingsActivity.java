@@ -25,7 +25,7 @@ public class SettingsActivity extends BaseActivity {
         int[] icons = {
                 R.drawable.s_invite_icon,
                 R.drawable.s_play_store_icon,
-                R.drawable.s_notification,
+                //R.drawable.s_notification,
                 R.drawable.s_facebook,
                 R.drawable.s_twitter,
                 R.drawable.s_instagram,
@@ -35,7 +35,7 @@ public class SettingsActivity extends BaseActivity {
         String[] settings = {
                 "Invite Friends",
                 "Rate us on Play Store",
-                "Notifications",
+                //"Notifications",
                 "Like us on Facebook",
                 "Follow us on Twitter",
                 "Follow us on Instagram",
@@ -45,7 +45,7 @@ public class SettingsActivity extends BaseActivity {
         boolean switchButtons[] = {
                 false,
                 false,
-                true,
+                //true,
                 false,
                 false,
                 false,
@@ -58,6 +58,7 @@ public class SettingsActivity extends BaseActivity {
         settingsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent;
                 switch (position) {
                     case 0:
                         //Invite Friends
@@ -76,43 +77,39 @@ public class SettingsActivity extends BaseActivity {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
                         }
                         break;
-                    case 2:
+                    //case 2:
                         //Notification
 
-                    case 3:
+                    case 2:
                         //Facebook
                         String url = "https://www.facebook.com/SkooterApp";
                         Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(url));
                         startActivity(i);
                         break;
-                    case 4:
+                    case 3:
                         //Twitter
                         url = "https://twitter.com/SkooterApp";
                         i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(url));
                         startActivity(i);
                         break;
-                    case 5:
+                    case 4:
                         //Instagram
                         url = "http://instagram.com/SkooterApp";
                         i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse(url));
                         startActivity(i);
                         break;
-                    case 6:
+                    case 5:
                         //Feedback
-                        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
-                        sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"skooter@gmail.com"});
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "PRESET TEXT");
-                        sendIntent.setType("text/plain");
-                        startActivity(Intent.createChooser(sendIntent, "Send feedback"));
-
+                        intent = new Intent(SettingsActivity.this, FeedbackActivity.class);
+                        startActivity(intent);
                         break;
-                    case 7:
+                    case 6:
                         //About Us
-
+                        intent = new Intent(SettingsActivity.this, AboutActivity.class);
+                        startActivity(intent);
                         break;
                 }
             }
@@ -135,9 +132,7 @@ public class SettingsActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == android.R.id.home) {
+        if (id == android.R.id.home) {
             finish();
             return true;
         }

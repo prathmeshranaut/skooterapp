@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
+import net.aayush.skooterapp.data.Post;
 import net.aayush.skooterapp.data.User;
 import net.aayush.skooterapp.data.Zone;
 
@@ -23,6 +24,7 @@ public class BaseActivity extends ActionBarActivity {
     public static int locationId;
     public static User mUser;
     public static List<Zone> mActiveZones = new ArrayList<Zone>();
+    public static List<Post> mHomePosts = new ArrayList<Post>();
 
     public static final String SKOOTER_POST = "SKOOTER_POST";
     public static final String PREFS_NAME = "Skooter";
@@ -84,7 +86,7 @@ public class BaseActivity extends ActionBarActivity {
         long diff = now - t;
         diff /= SECOND_MILLIS;
         if (diff < MINUTES) {
-            return "1m";
+            return "1min";
         } else if (diff < HOURS) {
             return diff / MINUTES + "min";
         } else if (diff < DAYS) {

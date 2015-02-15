@@ -29,7 +29,7 @@ public class MePostsActivity extends BaseActivity {
         if(postList.isEmpty()) {
             Toast.makeText(getApplicationContext(), "You don't have any skoots yet!", Toast.LENGTH_SHORT).show();
         } else {
-            listView.setAdapter(new PostAdapter(this, R.layout.list_view_post_row, postList));
+            listView.setAdapter(new PostAdapter(this, R.layout.list_view_post_row, postList, true));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
@@ -58,7 +58,8 @@ public class MePostsActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            finish();
             return true;
         }
 

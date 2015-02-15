@@ -97,6 +97,8 @@ public class LoadingActivity extends BaseActivity {
                 final String LONGITUDE_MAXIMUM = "long_max";
                 final String USER_FOLLOWS = "user_follows";
                 final String ACTIVE_ZONE = "active_zone";
+                final String ZONE_IMAGE = "zone_image";
+
 
                 try {
                     for (int i = 0; i < response.length(); i++) {
@@ -109,8 +111,10 @@ public class LoadingActivity extends BaseActivity {
                         float longitudeMaximum = (float) jsonObject.getDouble(LONGITUDE_MAXIMUM);
                         boolean userFollows = jsonObject.getBoolean(USER_FOLLOWS);
                         boolean active_zone = jsonObject.getBoolean(ACTIVE_ZONE);
+                        String zoneImage = jsonObject.getString(ZONE_IMAGE);
+                        Log.d("LoadingZone", zoneImage);
 
-                        Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, userFollows);
+                        Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, userFollows, zoneImage);
 
                         List<Zone> zones = dataHandler.getAllZones();
                         boolean flag = false;
@@ -258,7 +262,10 @@ public class LoadingActivity extends BaseActivity {
                         JSONObject jsonPost = jsonPosts.getJSONObject(i);
                         int id = jsonPost.getInt(SKOOT_ID);
                         String post = jsonPost.getString(SKOOT_CONTENT);
-                        String channel = jsonPost.getString(SKOOT_HANDLE);
+                        String channel = "";
+                        if (!jsonPost.isNull(SKOOT_HANDLE)) {
+                            channel = "@" + jsonPost.getString(SKOOT_HANDLE);
+                        }
                         int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
                         int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
                         int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);

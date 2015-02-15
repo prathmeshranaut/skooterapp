@@ -28,7 +28,7 @@ public class MeCommentsActivity extends BaseActivity {
         if(commentsList.isEmpty()) {
             Toast.makeText(getApplicationContext(), "You don't have any comments yet!" , Toast.LENGTH_SHORT).show();
         } else {
-            listView.setAdapter(new CommentsAdapter(this, R.layout.list_view_comment_post_row, commentsList));
+            listView.setAdapter(new CommentsAdapter(this, R.layout.list_view_comment_post_row, commentsList, true));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
@@ -43,7 +43,7 @@ public class MeCommentsActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_me_comments, menu);
+        //getMenuInflater().inflate(R.menu.menu_me_comments, menu);
         return true;
     }
 
@@ -55,7 +55,8 @@ public class MeCommentsActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == android.R.id.home) {
+            finish();
             return true;
         }
 

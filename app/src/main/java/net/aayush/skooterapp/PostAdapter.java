@@ -32,7 +32,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
     LinearLayout mFlagView;
     TextView mTypeIdView;
     TextView mTypeView;
-    boolean canPerformActivity;
+    boolean canPerformActivity = true;
 
     public boolean isFlaggable() {
         return mFlaggable;
@@ -48,6 +48,14 @@ public class PostAdapter extends ArrayAdapter<Post> {
         mLayoutResourceId = resource;
         this.data = objects;
         this.mFlaggable = false;
+    }
+
+    public PostAdapter(Context context, int resource, List<Post> objects, boolean canPerformActivity) {
+        super(context, resource, objects);
+        mContext = context;
+        mLayoutResourceId = resource;
+        this.data = objects;
+        this.canPerformActivity = canPerformActivity;
     }
 
     public PostAdapter(Context context, int resource, List<Post> objects, boolean flaggable, LinearLayout flagView, LinearLayout deleteView, TextView typeIdView, TextView typeView, boolean canPerformActivity) {

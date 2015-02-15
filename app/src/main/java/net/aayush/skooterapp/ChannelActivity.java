@@ -41,7 +41,7 @@ public class ChannelActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel);
 
-        activateToolbarWithHomeEnabled();
+        activateToolbarWithHomeEnabled("");
 
         handleIntent(getIntent());
 
@@ -52,9 +52,12 @@ public class ChannelActivity extends BaseActivity {
         params.put("location_id", Integer.toString(BaseActivity.locationId));
         if(mChannel.charAt(0) == '@') {
             params.put("channel", mChannel.substring(1));
+            activateToolbarWithHomeEnabled(mChannel.substring(1));
         } else {
             params.put("channel", mChannel);
+            activateToolbarWithHomeEnabled(mChannel);
         }
+
         String url = BaseActivity.substituteString(getResources().getString(R.string.channel_view), params);
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
@@ -154,7 +157,7 @@ public class ChannelActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_channel, menu);
+        //getMenuInflater().inflate(R.menu.menu_channel, menu);
         return true;
     }
 
@@ -166,9 +169,7 @@ public class ChannelActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == android.R.id.home) {
+        if (id == android.R.id.home) {
             finish();
             return true;
         }

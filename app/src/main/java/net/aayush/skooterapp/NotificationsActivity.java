@@ -124,7 +124,7 @@ public class NotificationsActivity extends BaseActivity {
                         mNotificationArrayList.add(notification);
                     }
 
-                    if(response.length() < 1) {
+                    if (response.length() < 1) {
                         //No notifications
                         TextView noNotifications = (TextView) findViewById(R.id.notification_alert);
                         noNotifications.setVisibility(View.VISIBLE);
@@ -169,43 +169,41 @@ public class NotificationsActivity extends BaseActivity {
                     Intent intent = new Intent(NotificationsActivity.this, ViewPostActivity.class);
                     intent.putExtra(BaseActivity.SKOOTER_POST, notification.getPost());
                     startActivity(intent);
-
-                    //TODO Delete notification
-                    String url = BaseActivity.substituteString(getResources().getString(R.string.notification_delete), new HashMap<String, String>());
-
-                    final int notification_id = notification.getId();
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            mNotificationArrayList.remove(position);
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    }) {
-                        @Override
-                        public Map<String, String> getHeaders() throws AuthFailureError {
-                            Map<String, String> headers = super.getHeaders();
-
-                            if (headers == null
-                                    || headers.equals(Collections.emptyMap())) {
-                                headers = new HashMap<String, String>();
-                            }
-
-                            headers.put("user_id", Integer.toString(BaseActivity.userId));
-                            headers.put("notification_id", Integer.toString(notification_id));
-                            headers.put("access_token", BaseActivity.accessToken);
-
-                            Log.d(LOG_TAG, headers.toString());
-
-                            return headers;
-                        }
-                    };
-
-                    AppController.getInstance().addToRequestQueue(jsonObjectRequest, "delete_notification");
                 }
+                String url = BaseActivity.substituteString(getResources().getString(R.string.notification_delete), new HashMap<String, String>());
+
+                final int notification_id = notification.getId();
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        mNotificationArrayList.remove(position);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String, String> headers = super.getHeaders();
+
+                        if (headers == null
+                                || headers.equals(Collections.emptyMap())) {
+                            headers = new HashMap<String, String>();
+                        }
+
+                        headers.put("user_id", Integer.toString(BaseActivity.userId));
+                        headers.put("notification_id", Integer.toString(notification_id));
+                        headers.put("access_token", BaseActivity.accessToken);
+
+                        Log.d(LOG_TAG, headers.toString());
+
+                        return headers;
+                    }
+                };
+
+                AppController.getInstance().addToRequestQueue(jsonObjectRequest, "delete_notification");
             }
         });
 

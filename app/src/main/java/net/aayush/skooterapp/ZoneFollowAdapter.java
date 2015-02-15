@@ -2,12 +2,18 @@ package net.aayush.skooterapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
 
 import net.aayush.skooterapp.data.Zone;
 
@@ -38,6 +44,26 @@ public class ZoneFollowAdapter extends ArrayAdapter<Zone>{
 
         TextView zoneName = (TextView) convertView.findViewById(R.id.zone_name);
         zoneName.setText(zone.getZoneName());
+
+        final ImageView zoneImage = (ImageView) convertView.findViewById(R.id.zone_icon);
+        ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
+        String url = zone.getZoneImage();
+
+        Log.d("URL", zone.getZoneImage());
+
+        imageLoader.get(url, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                if(response.getBitmap() != null) {
+                    zoneImage.setImageBitmap(response.getBitmap());
+                }
+            }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(error.getMessage());
+            }
+        });
 
         final Button button = (Button) convertView.findViewById(R.id.follow_zone_button);
         button.setTag(zone);

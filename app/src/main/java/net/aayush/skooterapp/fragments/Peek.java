@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,7 +63,6 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         mContext = container.getContext();
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_peek, container, false);
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
@@ -233,6 +233,7 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 final String LONGITUDE_MINIMUM = "long_min";
                 final String LONGITUDE_MAXIMUM = "long_max";
                 final String USER_FOLLOWS = "user_follows";
+                final String ZONE_IMAGE = "zone_image";
 
                 try {
                     for (int i = 0; i < response.length(); i++) {
@@ -244,8 +245,9 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                         float longitudeMinimum = (float) jsonObject.getDouble(LONGITUDE_MINIMUM);
                         float longitudeMaximum = (float) jsonObject.getDouble(LONGITUDE_MAXIMUM);
                         boolean userFollows = jsonObject.getBoolean(USER_FOLLOWS);
+                        String zoneImage = jsonObject.getString(ZONE_IMAGE);
 
-                        Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, userFollows);
+                        Zone zone = new Zone(zoneId, name, latitudeMinimum, latitudeMaximum, longitudeMinimum, longitudeMaximum, userFollows, zoneImage);
 
                         List<Zone> zones = dataHandler.getAllZones();
 
@@ -307,6 +309,17 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         findZonesFollowedByUser(zones);
         if (zoneArrayAdapter != null) {
             zoneArrayAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void onStart() {
+        super.onStart();
+    }
+
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Peek");
         }
     }
 

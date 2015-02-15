@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -109,19 +110,20 @@ public class Me extends Fragment {
         params.put("width", Integer.toString(width));
         params.put("height", Integer.toString(300));
 
-        String url = "http://maps.google.com/maps/api/staticmap?center=" + Double.toString(BaseActivity.mLocator.getLatitude()) + ","+Double.toString(BaseActivity.mLocator.getLongitude()) + "&zoom=15&"+"size="+ Integer.toString(width) +"x300&sensor=false";
+        String url = "http://maps.google.com/maps/api/staticmap?center=" + Double.toString(BaseActivity.mLocator.getLatitude()) + "," + Double.toString(BaseActivity.mLocator.getLongitude()) + "&zoom=15&" + "size=" + Integer.toString(width) + "x300&sensor=false";
 
         Log.v("Map", url);
         imageLoader.get(url, new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                if(response.getBitmap() != null) {
+                if (response.getBitmap() != null) {
                     map.setImageBitmap(response.getBitmap());
                 }
             }
+
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("" , error.getMessage());
+                VolleyLog.d("", error.getMessage());
             }
         });
 
@@ -199,5 +201,12 @@ public class Me extends Fragment {
 //            mMap = mSupportMapFragment.getMap();
 //        }
 //        setUpMapIfNeeded();
+    }
+
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Me");
+        }
     }
 }

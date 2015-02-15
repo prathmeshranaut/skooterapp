@@ -1,0 +1,33 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="net.aayush.skooterapp.FeedbackActivity">
+
+    <include layout="@layout/toolbar" android:id="@+id/app_bar" />
+
+    <net.aayush.skooterapp.AEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:id="@+id/name"
+        android:layout_below="@id/app_bar"
+        />
+
+    <net.aayush.skooterapp.AEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:id="@+id/email"
+        android:layout_below="@id/name"
+        />
+
+    <net.aayush.skooterapp.AEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/feedback"
+        android:hint="Tell us your opinions about the app!"
+        android:layout_below="@id/email"
+        android:inputType="textMultiLine"/>
+
+</RelativeLayout>

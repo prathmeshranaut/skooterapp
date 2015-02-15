@@ -29,8 +29,9 @@ public class Zone {
     private float mLatitudeMaximum;
     private float mLongitudeMaximum;
     private boolean mIsFollowing;
+    private String mZoneImage;
 
-    public Zone(int zoneId, String zoneName, float latitudeMinimum, float longitudeMinimum, float latitudeMaximum, float longitudeMaximum, boolean isFollowing) {
+    public Zone(int zoneId, String zoneName, float latitudeMinimum, float longitudeMinimum, float latitudeMaximum, float longitudeMaximum, boolean isFollowing, String zoneImage) {
         mZoneId = zoneId;
         mZoneName = zoneName;
         mLatitudeMinimum = latitudeMinimum;
@@ -38,6 +39,7 @@ public class Zone {
         mLatitudeMaximum = latitudeMaximum;
         mLongitudeMaximum = longitudeMaximum;
         mIsFollowing = isFollowing;
+        mZoneImage = zoneImage;
     }
 
     public Zone() {
@@ -104,6 +106,14 @@ public class Zone {
 
     public void setIsFollowing(boolean isFollowing) {
         mIsFollowing = isFollowing;
+    }
+
+    public String getZoneImage() {
+        return mZoneImage;
+    }
+
+    public void setZoneImage(String zoneImage) {
+        mZoneImage = zoneImage;
     }
 
     public void unfollow() {

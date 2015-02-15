@@ -66,10 +66,10 @@
                     android:layout_height="100dp"
                     android:id="@+id/post_image"
                     android:layout_below="@id/postText"
-                    android:paddingTop="5dp"
-                    android:paddingLeft="50dp"
+                    android:paddingTop="10dp"
+                    android:layout_marginLeft="50dp"
                     android:paddingBottom="10dp"
-                    android:paddingRight="50dp"
+                    android:layout_marginRight="50dp"
                     android:visibility="gone"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
@@ -143,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:layout_gravity="center_vertical"
-                    android:text=""
+                    android:text="1min"
                     android:textColor="@color/skooterNPrimaryTextColor"
                     android:id="@+id/timestamp"/>
             </LinearLayout>

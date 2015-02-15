@@ -38,5 +38,7 @@
     <string name="no_unread_notifications">0 unread notifications</string>
     <string name="follow">Follow</string>
     <string name="title_activity_view_image">ViewImage</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
 
 </resources>

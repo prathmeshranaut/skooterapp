@@ -21,6 +21,7 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
     private static final String COLUMN_LONGITUDE_MINIMUM = "longitude_minimum";
     private static final String COLUMN_LONGITUDE_MAXIMUM = "longitude_maximum";
     private static final String COLUMN_ZONE_IS_FOLLOWING = "is_following";
+    private static final String COLUMN_ZONE_IMAGE = "zone_image";
 
     public ZoneDataHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,7 +38,8 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
                 + COLUMN_LATITUDE_MAXIMUM + " FLOAT,"
                 + COLUMN_LONGITUDE_MINIMUM + " FLOAT,"
                 + COLUMN_LONGITUDE_MAXIMUM + " FLOAT,"
-                + COLUMN_ZONE_IS_FOLLOWING + " INTEGER" + ")";
+                + COLUMN_ZONE_IS_FOLLOWING + " INTEGER,"
+                + COLUMN_ZONE_IMAGE + " TEXT" + ")";
         db.execSQL(CREATE_ZONE_TABLE);
     }
 
@@ -56,6 +58,7 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
         values.put(COLUMN_LONGITUDE_MINIMUM, zone.getLongitudeMinimum());
         values.put(COLUMN_LONGITUDE_MAXIMUM, zone.getLongitudeMaximum());
         values.put(COLUMN_ZONE_IS_FOLLOWING, zone.getIsFollowing());
+        values.put(COLUMN_ZONE_IMAGE, zone.getZoneImage());
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_ZONES, null, values);
@@ -77,6 +80,7 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
             zone.setLongitudeMinimum(c.getFloat(4));
             zone.setLongitudeMaximum(c.getFloat(5));
             zone.setIsFollowing("1".equals(c.getString(6)));
+            zone.setZoneImage(c.getString(7));
             zones.add(zone);
         }
         c.close();
@@ -109,6 +113,7 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
             zone.setLongitudeMinimum(c.getFloat(4));
             zone.setLongitudeMaximum(c.getFloat(5));
             zone.setIsFollowing("1".equals(c.getString(6)));
+            zone.setZoneImage(c.getString(7));
             return zone;
         }
         c.close();

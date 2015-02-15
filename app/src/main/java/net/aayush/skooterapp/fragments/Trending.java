@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -59,6 +60,18 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Trending");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContext = container.getContext();
@@ -83,10 +96,10 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(LOG_TAG, Integer.toString(position));
-                if (position < mPostsAdapter.getChannelsCount()) {
+                if (position < mChannelsList.size()) {
                     Intent intent = new Intent(mContext, ChannelActivity.class);
                     Log.d(LOG_TAG, mPostsList.get(position).toString());
-                    intent.putExtra("CHANNEL_NAME", mPostsList.get(position).toString());
+                    intent.putExtra("CHANNEL_NAME", mChannelsList.get(position));
                     mContext.startActivity(intent);
                 } else {
                     Log.d(LOG_TAG, mPostsList.get(position).toString());

@@ -39,7 +39,7 @@ public class FavoritesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
-        activateToolbarWithHomeEnabled();
+        activateToolbarWithHomeEnabled("Favorites");
 
         mListView = (ListView) findViewById(R.id.list_favorites);
 
@@ -127,7 +127,7 @@ public class FavoritesActivity extends BaseActivity {
 
         AppController.getInstance().addToRequestQueue(jsonArrayRequest, "favorite_post");
 
-        mPostsAdapter = new PostAdapter(this, R.layout.list_view_post_row, mPostsList);
+        mPostsAdapter = new PostAdapter(this, R.layout.list_view_post_row, mPostsList, true);
 
         mListView.setAdapter(mPostsAdapter);
         mListView.setOnItemClickListener(new ListView.OnItemClickListener() {
@@ -145,7 +145,7 @@ public class FavoritesActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_favorites, menu);
+        //getMenuInflater().inflate(R.menu.menu_favorites, menu);
         return true;
     }
 
@@ -157,9 +157,7 @@ public class FavoritesActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == android.R.id.home) {
+        if (id == android.R.id.home) {
             finish();
             return true;
         }

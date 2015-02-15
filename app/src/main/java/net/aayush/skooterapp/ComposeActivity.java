@@ -31,6 +31,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import net.aayush.skooterapp.data.Post;
 import net.aayush.skooterapp.data.Zone;
 
 import org.apache.http.HttpResponse;
@@ -44,6 +45,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -183,7 +185,7 @@ public class ComposeActivity extends BaseActivity {
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
             //Successfully captured the image
             previewCapturedImage();
-        } else if (requestCode == CAMERA_BROWSE_IMAGE_REQUEST_CODE) {
+        } else if (requestCode == CAMERA_BROWSE_IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
             fileUri = data.getData();
 
             String realPath = RealPathUtil.getRealPathFromURI_API11to18(this, data.getData());
@@ -192,7 +194,7 @@ public class ComposeActivity extends BaseActivity {
             fileUri = uriFromPath;
             imagePreview.setVisibility(View.VISIBLE);
             imagePreview.setImageURI(uriFromPath);
-        } else if (requestCode == CAMERA_BROWSE_IMAGE_REQUEST_CODE_KITKAT) {
+        } else if (requestCode == CAMERA_BROWSE_IMAGE_REQUEST_CODE_KITKAT && resultCode == RESULT_OK) {
             fileUri = data.getData();
 
             String realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
@@ -312,13 +314,70 @@ public class ComposeActivity extends BaseActivity {
                         }
                     }).start();
                 } else {
+                    Toast.makeText(ComposeActivity.this, "Posting skoot...", Toast.LENGTH_SHORT).show();
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(LOG_TAG, response.toString());
+
+                            final String SKOOTS = "skoot";
+                            final String SKOOT_ID = "id";
+                            final String SKOOT_POST = "content";
+                            final String SKOOT_HANDLE = "channel";
+                            final String SKOOT_UPVOTES = "upvotes";
+                            final String SKOOT_DOWNVOTES = "downvotes";
+                            final String SKOOT_IF_USER_VOTED = "user_voted";
+                            final String SKOOT_USER_VOTE = "user_vote";
+                            final String SKOOT_USER_SCOOT = "user_skoot";
+                            final String SKOOT_CREATED_AT = "created_at";
+                            final String SKOOT_COMMENTS_COUNT = "comments_count";
+                            final String SKOOT_FAVORITE_COUNT = "favorites_count";
+                            final String SKOOT_USER_FAVORITED = "user_favorited";
+                            final String SKOOT_USER_COMMENTED = "user_commented";
+                            final String SKOOT_IMAGE_URL = "zone_image";
+                            final String SKOOT_IMAGE_PRESENT = "image_present";
+                            final String SKOOT_SMALL_IMAGE_URL = "small_image_url";
+                            final String SKOOT_LARGE_IMAGE_URL = "large_image_url";
+
+                            try {
+                                response = response.getJSONObject(SKOOTS);
+                                int id = response.getInt(SKOOT_ID);
+                                String post = response.getString(SKOOT_POST);
+
+                                String channel = "";
+                                if (!response.isNull(SKOOT_HANDLE)) {
+                                    channel = "@" + response.getString(SKOOT_HANDLE);
+                                }
+
+                                int upvotes = response.getInt(SKOOT_UPVOTES);
+                                int commentsCount = response.getInt(SKOOT_COMMENTS_COUNT);
+                                int downvotes = response.getInt(SKOOT_DOWNVOTES);
+                                boolean skoot_if_user_voted = response.getBoolean(SKOOT_IF_USER_VOTED);
+                                boolean user_vote = response.getBoolean(SKOOT_USER_VOTE);
+                                boolean user_skoot = response.getBoolean(SKOOT_USER_SCOOT);
+                                boolean user_favorited = response.getBoolean(SKOOT_USER_FAVORITED);
+                                boolean user_commented = response.getBoolean(SKOOT_USER_COMMENTED);
+                                int favoriteCount = response.getInt(SKOOT_FAVORITE_COUNT);
+                                String created_at = response.getString(SKOOT_CREATED_AT);
+                                String image_url = response.getString(SKOOT_IMAGE_URL);
+                                boolean isImagePresent = response.getBoolean(SKOOT_IMAGE_PRESENT);
+                                String small_image_url = response.getString(SKOOT_SMALL_IMAGE_URL);
+                                String large_image_url = response.getString(SKOOT_LARGE_IMAGE_URL);
+
+                                Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
+                                BaseActivity.mHomePosts.add(0, postObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e(LOG_TAG, "Error processing Json Data");
+                            }
+
                             skootText.setText("");
                             skootHandle.setText("");
+
                             Toast.makeText(ComposeActivity.this, "Woot! Skoot posted!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent();
+                            setResult(RESULT_OK, intent);
+                            finish();
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -343,7 +402,6 @@ public class ComposeActivity extends BaseActivity {
                     };
                     AppController.getInstance().addToRequestQueue(jsonObjectRequest, "compose_skoot");
                 }
-                finish();
             } else if (skootText.getText().length() > 250) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setMessage("You cannot simply skoot with more than 250! For that you would have login through Facebook.");
@@ -369,12 +427,16 @@ public class ComposeActivity extends BaseActivity {
             }
 
             return true;
-        } else if (id == android.R.id.home) {
+        } else if (id == android.R.id.home)
+
+        {
             finish();
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        return super.
+
+                onOptionsItemSelected(item);
     }
 
     public class PostFile {
