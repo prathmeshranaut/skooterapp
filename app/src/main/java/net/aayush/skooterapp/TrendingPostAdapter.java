@@ -12,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
+
 import net.aayush.skooterapp.data.Post;
 
 import java.util.ArrayList;
@@ -68,7 +72,7 @@ public class TrendingPostAdapter extends ArrayAdapter {
                 LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
                 convertView = inflater.inflate(mLayoutResourceId, parent, false);
             }
-            Post post = data.get(position);
+            final Post post = data.get(position);
 
             View is_user_post_view = convertView.findViewById(R.id.is_user_skoot);
             if (post.isUserSkoot()) {
@@ -96,6 +100,46 @@ public class TrendingPostAdapter extends ArrayAdapter {
             if (post.getChannel().equals("")) {
                 handleContent.setVisibility(View.GONE);
             }
+
+            final ImageView postImage = (ImageView) convertView.findViewById(R.id.post_image);
+            if (post.isImagePresent()) {
+
+                ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
+                String url = post.getSmallImageUrl();
+
+                imageLoader.get(url, new ImageLoader.ImageListener() {
+                    @Override
+                    public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                        if (response.getBitmap() != null) {
+                            postImage.setImageBitmap(response.getBitmap());
+                            postImage.setVisibility(View.VISIBLE);
+                            postImage.setMaxHeight(150);
+                            postImage.setMaxWidth(150);
+                            postImage.setMinimumHeight(150);
+                            postImage.setMinimumWidth(150);
+                        }
+                    }
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.d("Post", error.getMessage());
+                    }
+                });
+
+                postImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Open an activity with the full image
+                        Intent intent = new Intent(mContext, ViewImage.class);
+                        intent.putExtra("IMAGE_URL", post.getLargeImageUrl());
+                        mContext.startActivity(intent);
+                    }
+                });
+            } else {
+                postImage.setVisibility(View.GONE);
+            }
+
 
             TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
             timestamp.setText(post.getTimestamp());

@@ -76,25 +76,11 @@ public class ViewPostActivity extends BaseActivity {
         getCommentsForPostId(mPost, userId);
 
         Button commentBtn = (Button) findViewById(R.id.commentSkoot);
-        TextView channel = (TextView) findViewById(R.id.channel);
-        if(!mPost.getChannel().equals("")) {
-        channel.setText("Channel: " + mPost.getChannel());
-        channel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ViewPostActivity.this, ChannelActivity.class);
-                intent.putExtra("CHANNEL_NAME", mPost.getChannel());
-                startActivity(intent);
-            }
-        });
-        } else {
-            channel.setVisibility(View.GONE);
-        }
 
         final TextView commentText = (TextView) findViewById(R.id.commentText);
         final int postId = mPost.getId();
 
-        if(canPerformActivity) {
+        if (canPerformActivity) {
             commentBtn.setOnClickListener(new View.OnClickListener() {
                 String tag = "post_comment";
 
@@ -115,6 +101,7 @@ public class ViewPostActivity extends BaseActivity {
                                 commentText.setText("");
                                 mPost.setUserCommented(true);
                                 mPost.setCommentsCount(mPost.getCommentsCount() + 1);
+
                                 postAdapter.notifyDataSetChanged();
 
 

@@ -20,7 +20,7 @@
         />
 
     <net.aayush.skooterapp.ATextView
-        android:text="About us Skooter"
+        android:text="@string/about_us_extract"
         android:id="@+id/about_skooter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

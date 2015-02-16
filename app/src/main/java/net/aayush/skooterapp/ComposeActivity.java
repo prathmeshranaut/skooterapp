@@ -313,6 +313,7 @@ public class ComposeActivity extends BaseActivity {
                             }
                         }
                     }).start();
+                    Toast.makeText(ComposeActivity.this, "Posting skoot...", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ComposeActivity.this, "Posting skoot...", Toast.LENGTH_SHORT).show();
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
@@ -320,56 +321,7 @@ public class ComposeActivity extends BaseActivity {
                         public void onResponse(JSONObject response) {
                             Log.d(LOG_TAG, response.toString());
 
-                            final String SKOOTS = "skoot";
-                            final String SKOOT_ID = "id";
-                            final String SKOOT_POST = "content";
-                            final String SKOOT_HANDLE = "channel";
-                            final String SKOOT_UPVOTES = "upvotes";
-                            final String SKOOT_DOWNVOTES = "downvotes";
-                            final String SKOOT_IF_USER_VOTED = "user_voted";
-                            final String SKOOT_USER_VOTE = "user_vote";
-                            final String SKOOT_USER_SCOOT = "user_skoot";
-                            final String SKOOT_CREATED_AT = "created_at";
-                            final String SKOOT_COMMENTS_COUNT = "comments_count";
-                            final String SKOOT_FAVORITE_COUNT = "favorites_count";
-                            final String SKOOT_USER_FAVORITED = "user_favorited";
-                            final String SKOOT_USER_COMMENTED = "user_commented";
-                            final String SKOOT_IMAGE_URL = "zone_image";
-                            final String SKOOT_IMAGE_PRESENT = "image_present";
-                            final String SKOOT_SMALL_IMAGE_URL = "small_image_url";
-                            final String SKOOT_LARGE_IMAGE_URL = "large_image_url";
-
-                            try {
-                                response = response.getJSONObject(SKOOTS);
-                                int id = response.getInt(SKOOT_ID);
-                                String post = response.getString(SKOOT_POST);
-
-                                String channel = "";
-                                if (!response.isNull(SKOOT_HANDLE)) {
-                                    channel = "@" + response.getString(SKOOT_HANDLE);
-                                }
-
-                                int upvotes = response.getInt(SKOOT_UPVOTES);
-                                int commentsCount = response.getInt(SKOOT_COMMENTS_COUNT);
-                                int downvotes = response.getInt(SKOOT_DOWNVOTES);
-                                boolean skoot_if_user_voted = response.getBoolean(SKOOT_IF_USER_VOTED);
-                                boolean user_vote = response.getBoolean(SKOOT_USER_VOTE);
-                                boolean user_skoot = response.getBoolean(SKOOT_USER_SCOOT);
-                                boolean user_favorited = response.getBoolean(SKOOT_USER_FAVORITED);
-                                boolean user_commented = response.getBoolean(SKOOT_USER_COMMENTED);
-                                int favoriteCount = response.getInt(SKOOT_FAVORITE_COUNT);
-                                String created_at = response.getString(SKOOT_CREATED_AT);
-                                String image_url = response.getString(SKOOT_IMAGE_URL);
-                                boolean isImagePresent = response.getBoolean(SKOOT_IMAGE_PRESENT);
-                                String small_image_url = response.getString(SKOOT_SMALL_IMAGE_URL);
-                                String large_image_url = response.getString(SKOOT_LARGE_IMAGE_URL);
-
-                                Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
-                                BaseActivity.mHomePosts.add(0, postObject);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Log.e(LOG_TAG, "Error processing Json Data");
-                            }
+                            parsePost(response);
 
                             skootText.setText("");
                             skootHandle.setText("");
@@ -484,11 +436,68 @@ public class ComposeActivity extends BaseActivity {
                 httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                 HttpResponse response = httpclient.execute(httppost);
 
+                parsePost(new JSONObject(response.toString()));
+
                 Log.d("Done", Integer.toString(response.getStatusLine().getStatusCode()));
+                Toast.makeText(ComposeActivity.this, "Woot! Skoot posted!", Toast.LENGTH_SHORT).show();
+                finish();
             } catch (Exception e) {
                 Log.d("Error:", e.getMessage());
                 System.out.println("Error in http connection " + e.toString());
             }
+        }
+    }
+
+    private void parsePost(JSONObject response) {
+        final String SKOOTS = "skoot";
+        final String SKOOT_ID = "id";
+        final String SKOOT_POST = "content";
+        final String SKOOT_HANDLE = "channel";
+        final String SKOOT_UPVOTES = "upvotes";
+        final String SKOOT_DOWNVOTES = "downvotes";
+        final String SKOOT_IF_USER_VOTED = "user_voted";
+        final String SKOOT_USER_VOTE = "user_vote";
+        final String SKOOT_USER_SCOOT = "user_skoot";
+        final String SKOOT_CREATED_AT = "created_at";
+        final String SKOOT_COMMENTS_COUNT = "comments_count";
+        final String SKOOT_FAVORITE_COUNT = "favorites_count";
+        final String SKOOT_USER_FAVORITED = "user_favorited";
+        final String SKOOT_USER_COMMENTED = "user_commented";
+        final String SKOOT_IMAGE_URL = "zone_image";
+        final String SKOOT_IMAGE_PRESENT = "image_present";
+        final String SKOOT_SMALL_IMAGE_URL = "small_image_url";
+        final String SKOOT_LARGE_IMAGE_URL = "large_image_url";
+
+        try {
+            response = response.getJSONObject(SKOOTS);
+            int id = response.getInt(SKOOT_ID);
+            String post = response.getString(SKOOT_POST);
+
+            String channel = "";
+            if (!response.isNull(SKOOT_HANDLE)) {
+                channel = "@" + response.getString(SKOOT_HANDLE);
+            }
+
+            int upvotes = response.getInt(SKOOT_UPVOTES);
+            int commentsCount = response.getInt(SKOOT_COMMENTS_COUNT);
+            int downvotes = response.getInt(SKOOT_DOWNVOTES);
+            boolean skoot_if_user_voted = response.getBoolean(SKOOT_IF_USER_VOTED);
+            boolean user_vote = response.getBoolean(SKOOT_USER_VOTE);
+            boolean user_skoot = response.getBoolean(SKOOT_USER_SCOOT);
+            boolean user_favorited = response.getBoolean(SKOOT_USER_FAVORITED);
+            boolean user_commented = response.getBoolean(SKOOT_USER_COMMENTED);
+            int favoriteCount = response.getInt(SKOOT_FAVORITE_COUNT);
+            String created_at = response.getString(SKOOT_CREATED_AT);
+            String image_url = response.getString(SKOOT_IMAGE_URL);
+            boolean isImagePresent = response.getBoolean(SKOOT_IMAGE_PRESENT);
+            String small_image_url = response.getString(SKOOT_SMALL_IMAGE_URL);
+            String large_image_url = response.getString(SKOOT_LARGE_IMAGE_URL);
+
+            Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
+            BaseActivity.mHomePosts.add(0, postObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, "Error processing Json Data");
         }
     }
 }

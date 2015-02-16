@@ -25,6 +25,8 @@
         android:textSize="18sp"
         android:gravity="center_vertical"
         android:layout_centerInParent="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         />
 
     <Button
@@ -36,5 +38,7 @@
         android:layout_alignParentEnd="true"
         android:background="@drawable/custom_follow_button"
         android:textSize="14sp"
-        android:textColor="@color/md_grey_600" />
+        android:textColor="@color/md_grey_600"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"/>
 </RelativeLayout>

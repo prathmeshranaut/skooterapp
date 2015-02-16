@@ -94,15 +94,17 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         final TextView handleContent = (TextView) convertView.findViewById(R.id.handleText);
         handleContent.setText(post.getChannel());
-        handleContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CharSequence channel = handleContent.getText();
-                Intent intent = new Intent(mContext, ChannelActivity.class);
-                intent.putExtra("CHANNEL_NAME", channel.toString());
-                mContext.startActivity(intent);
-            }
-        });
+        if (mContext.getClass() != ChannelActivity.class) {
+            handleContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CharSequence channel = handleContent.getText();
+                    Intent intent = new Intent(mContext, ChannelActivity.class);
+                    intent.putExtra("CHANNEL_NAME", channel.toString());
+                    mContext.startActivity(intent);
+                }
+            });
+        }
         handleContent.setVisibility(View.VISIBLE);
         if (post.getChannel().equals("")) {
             handleContent.setVisibility(View.GONE);

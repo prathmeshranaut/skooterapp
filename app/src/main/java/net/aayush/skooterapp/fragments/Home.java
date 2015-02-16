@@ -322,7 +322,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 try {
                     JSONArray jsonArray = response.getJSONArray(SKOOTS);
 
-                    mPostsList.clear();
+                    BaseActivity.mHomePosts.clear();
                     Log.v(LOG_TAG, jsonArray.toString());
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonPost = jsonArray.getJSONObject(i);
