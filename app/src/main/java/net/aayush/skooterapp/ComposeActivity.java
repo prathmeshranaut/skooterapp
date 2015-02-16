@@ -45,6 +45,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -136,6 +137,9 @@ public class ComposeActivity extends BaseActivity {
                 captureImage();
             }
         });
+        if(!isDeviceSupportCamera()) {
+            imageSelectIcon.setVisibility(View.GONE);
+        }
 
         ImageView imageBrowse = (ImageView) findViewById(R.id.image_icon);
         imageBrowse.setOnClickListener(new View.OnClickListener() {
@@ -436,7 +440,7 @@ public class ComposeActivity extends BaseActivity {
                 httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                 HttpResponse response = httpclient.execute(httppost);
 
-                parsePost(new JSONObject(response.toString()));
+                parsePost(new JSONObject(EntityUtils.toString(response.getEntity())));
 
                 Log.d("Done", Integer.toString(response.getStatusLine().getStatusCode()));
                 Toast.makeText(ComposeActivity.this, "Woot! Skoot posted!", Toast.LENGTH_SHORT).show();

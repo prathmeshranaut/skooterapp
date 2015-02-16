@@ -101,6 +101,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     @Override
     public void onResume() {
         super.onResume();
+        mPostsAdapter.notifyDataSetChanged();
         mLinearLayout.requestFocus();
     }
 

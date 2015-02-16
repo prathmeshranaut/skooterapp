@@ -62,6 +62,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     @Override
     public void onStart() {
         super.onStart();
+        mPostsAdapter.notifyDataSetChanged();
     }
 
     public void setUserVisibleHint(boolean isVisibleToUser) {
