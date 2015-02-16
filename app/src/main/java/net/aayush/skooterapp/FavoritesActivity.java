@@ -19,7 +19,6 @@ import net.aayush.skooterapp.data.Post;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,29 +71,7 @@ public class FavoritesActivity extends BaseActivity {
                 try {
                     mPostsList.clear();
                     for (int i = 0; i < response.length(); i++) {
-                        JSONObject jsonPost = response.getJSONObject(i);
-                        int id = jsonPost.getInt(SKOOT_ID);
-                        String post = jsonPost.getString(SKOOT_POST);
-                        String channel = "";
-                        if (!jsonPost.isNull(SKOOT_HANDLE)) {
-                            channel = "@" + jsonPost.getString(SKOOT_HANDLE);
-                        }
-                        int upvotes = jsonPost.getInt(SKOOT_UPVOTES);
-                        int commentsCount = jsonPost.getInt(SKOOT_COMMENTS_COUNT);
-                        int downvotes = jsonPost.getInt(SKOOT_DOWNVOTES);
-                        boolean skoot_if_user_voted = jsonPost.getBoolean(SKOOT_IF_USER_VOTED);
-                        boolean user_vote = jsonPost.getBoolean(SKOOT_USER_VOTE);
-                        boolean user_skoot = jsonPost.getBoolean(SKOOT_USER_SCOOT);
-                        boolean user_favorited = jsonPost.getBoolean(SKOOT_USER_FAVORITED);
-                        boolean user_commented = jsonPost.getBoolean(SKOOT_USER_COMMENTED);
-                        int favoriteCount = jsonPost.getInt(SKOOT_FAVORITE_COUNT);
-                        String created_at = jsonPost.getString(SKOOT_CREATED_AT);
-                        String image_url = jsonPost.getString(SKOOT_IMAGE_URL);
-                        boolean isImagePresent = jsonPost.getBoolean(SKOOT_IMAGE_PRESENT);
-                        String small_image_url = jsonPost.getString(SKOOT_SMALL_IMAGE_URL);
-                        String large_image_url = jsonPost.getString(SKOOT_LARGE_IMAGE_URL);
-
-                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
+                        Post postObject = Post.parsePostFromJSONObject(response.getJSONObject(i));
                         mPostsList.add(postObject);
                     }
                 } catch (JSONException e) {

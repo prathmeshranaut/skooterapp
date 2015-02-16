@@ -25,14 +25,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/logo"
-        android:layout_margin="20dp"/>
+        android:layout_margin="20dp"
+        android:textSize="18sp"/>
+
+    <net.aayush.skooterapp.ABITextView
+        android:text="@string/website_link"
+        android:id="@+id/skooter_website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/about_skooter"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:textSize="18sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:layout_below="@id/about_skooter">
+        android:layout_below="@id/skooter_website">
 
         <ImageView
             android:layout_width="40dp"

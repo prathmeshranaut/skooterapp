@@ -72,7 +72,7 @@ public class FeedbackActivity extends BaseActivity {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d(LOG_TAG, error.networkResponse);
+                    VolleyLog.d(LOG_TAG, error.getStackTrace());
                 }
             });
 

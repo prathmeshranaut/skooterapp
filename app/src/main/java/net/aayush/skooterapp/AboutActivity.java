@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class AboutActivity extends BaseActivity {
@@ -41,6 +42,7 @@ public class AboutActivity extends BaseActivity {
         ImageView facebook = (ImageView) findViewById(R.id.facebook);
         ImageView twitter = (ImageView) findViewById(R.id.twitter);
         ImageView instagram = (ImageView) findViewById(R.id.instagram);
+        TextView website = (TextView) findViewById(R.id.skooter_website);
 
         facebook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +68,16 @@ public class AboutActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String url = "http://instagram.com/SkooterApp";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+
+        website.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "http://skooterapp.com";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);

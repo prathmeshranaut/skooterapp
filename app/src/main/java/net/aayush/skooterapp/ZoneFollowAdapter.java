@@ -2,7 +2,6 @@ package net.aayush.skooterapp;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +48,6 @@ public class ZoneFollowAdapter extends ArrayAdapter<Zone>{
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
         String url = zone.getZoneImage();
-
-        Log.d("URL", zone.getZoneImage());
 
         imageLoader.get(url, new ImageLoader.ImageListener() {
             @Override

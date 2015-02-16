@@ -296,7 +296,7 @@ public class ViewPostActivity extends BaseActivity {
         } else if (id == R.id.action_share) {
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("text/plain");
-            share.putExtra(Intent.EXTRA_TEXT, mPost.getContent() + ". Join me on Skooter!");
+            share.putExtra(Intent.EXTRA_TEXT, mPost.getContent() + "- Shared via Skooter, a location based social network to connect with people nearby. http://get.skooterapp.com");
             startActivity(Intent.createChooser(share, "Share post with friends"));
             return true;
         }

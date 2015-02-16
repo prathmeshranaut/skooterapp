@@ -22,7 +22,7 @@
                     android:id="@+id/map"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:background="@color/md_grey_800"
+                    android:background="@color/md_grey_200"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"/>
 

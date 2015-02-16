@@ -5,7 +5,20 @@
     <item
         android:id="@+id/score"
         android:title="@string/score"
-        android:orderInCategory="1"
+        android:orderInCategory="3"
         skooter:showAsAction="always"/>
 
+    <item
+        android:id="@+id/action_alerts"
+        android:title="Notifications"
+        android:orderInCategory="2"
+        android:icon="@drawable/notification_icon"
+        skooter:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        android:orderInCategory="1"
+        android:icon="@drawable/settings_icon"
+        skooter:showAsAction="ifRoom"/>
 </menu>

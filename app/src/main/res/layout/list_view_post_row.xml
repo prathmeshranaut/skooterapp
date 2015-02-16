@@ -103,7 +103,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:textAlignment="center"
-                    android:gravity="center_horizontal"/>
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/skooterNPrimaryTextColor"/>
 
                 <Button
                     style="?android:attr/buttonStyleSmall"

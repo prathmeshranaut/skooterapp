@@ -62,6 +62,8 @@ public class Me extends Fragment {
                              Bundle savedInstanceState) {
         mContext = container.getContext();
 
+        setHasOptionsMenu(true);
+
         View rootView = inflater.inflate(R.layout.activity_me, container, false);
         int userId = BaseActivity.userId;
 

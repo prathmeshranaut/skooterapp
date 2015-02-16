@@ -25,6 +25,24 @@ public class Post implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String LOG_TAG = Post.class.getSimpleName();
 
+    protected static final String SKOOT_ID = "id";
+    protected static final String SKOOT_POST = "content";
+    protected static final String SKOOT_HANDLE = "channel";
+    protected static final String SKOOT_UPVOTES = "upvotes";
+    protected static final String SKOOT_DOWNVOTES = "downvotes";
+    protected static final String SKOOT_IF_USER_VOTED = "user_voted";
+    protected static final String SKOOT_USER_VOTE = "user_vote";
+    protected static final String SKOOT_USER_SCOOT = "user_skoot";
+    protected static final String SKOOT_CREATED_AT = "created_at";
+    protected static final String SKOOT_COMMENTS_COUNT = "comments_count";
+    protected static final String SKOOT_FAVORITE_COUNT = "favorites_count";
+    protected static final String SKOOT_USER_FAVORITED = "user_favorited";
+    protected static final String SKOOT_USER_COMMENTED = "user_commented";
+    protected static final String SKOOT_IMAGE_URL = "zone_image";
+    protected static final String SKOOT_IMAGE_PRESENT = "image_present";
+    protected static final String SKOOT_SMALL_IMAGE_URL = "small_image_url";
+    protected static final String SKOOT_LARGE_IMAGE_URL = "large_image_url";
+
     private int mId;
     private String mChannel;
     private String mContent;
@@ -337,5 +355,36 @@ public class Post implements Serializable {
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "unfavorite_post");
         mFavoriteCount -= 1;
+    }
+
+    public static Post parsePostFromJSONObject(JSONObject response) {
+        try {
+            int id = response.getInt(SKOOT_ID);
+            String post = response.getString(SKOOT_POST);
+
+            String channel = "";
+            if (!response.isNull(SKOOT_HANDLE)) {
+                channel = "@" + response.getString(SKOOT_HANDLE);
+            }
+
+            int upvotes = response.getInt(SKOOT_UPVOTES);
+            int commentsCount = response.getInt(SKOOT_COMMENTS_COUNT);
+            int downvotes = response.getInt(SKOOT_DOWNVOTES);
+            boolean skoot_if_user_voted = response.getBoolean(SKOOT_IF_USER_VOTED);
+            boolean user_vote = response.getBoolean(SKOOT_USER_VOTE);
+            boolean user_skoot = response.getBoolean(SKOOT_USER_SCOOT);
+            boolean user_favorited = response.getBoolean(SKOOT_USER_FAVORITED);
+            boolean user_commented = response.getBoolean(SKOOT_USER_COMMENTED);
+            int favoriteCount = response.getInt(SKOOT_FAVORITE_COUNT);
+            String created_at = response.getString(SKOOT_CREATED_AT);
+            String image_url = response.getString(SKOOT_IMAGE_URL);
+            boolean isImagePresent = response.getBoolean(SKOOT_IMAGE_PRESENT);
+            String small_image_url = response.getString(SKOOT_SMALL_IMAGE_URL);
+            String large_image_url = response.getString(SKOOT_LARGE_IMAGE_URL);
+
+            return new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

@@ -64,7 +64,7 @@ public class SettingsActivity extends BaseActivity {
                         //Invite Friends
                         Intent share = new Intent(Intent.ACTION_SEND);
                         share.setType("text/plain");
-                        share.putExtra(Intent.EXTRA_TEXT, "Join me on Skooter!");
+                        share.putExtra(Intent.EXTRA_TEXT, "Join me on Skooter, a location based social network to connect with real people without revealing your identity. Download from http://get.skooterapp.com");
                         startActivity(Intent.createChooser(share, "Invite friends on Skooter"));
                         break;
                     case 1:
