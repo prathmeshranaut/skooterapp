@@ -92,13 +92,13 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
             ImageLoader imageLoader2 = AppController.getInstance().getImageLoader();
 
             String url2 = post.getSmallImageUrl();
+            postImage.setVisibility(View.VISIBLE);
 
             imageLoader2.get(url2, new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                     if(response.getBitmap() != null) {
                         postImage.setImageBitmap(response.getBitmap());
-                        postImage.setVisibility(View.VISIBLE);
                         postImage.setBackground(null);
                     }
                 }

@@ -160,13 +160,13 @@ public class PostAdapter extends ArrayAdapter<Post> {
             ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
             String url = post.getSmallImageUrl();
+            postImage.setVisibility(View.VISIBLE);
 
             imageLoader.get(url, new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                     if (response.getBitmap() != null) {
                         postImage.setImageBitmap(response.getBitmap());
-                        postImage.setVisibility(View.VISIBLE);
                         postImage.setMaxHeight(150);
                         postImage.setMaxWidth(150);
                         postImage.setMinimumHeight(150);

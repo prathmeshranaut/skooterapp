@@ -140,10 +140,25 @@ public class Me extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Me");
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.score) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

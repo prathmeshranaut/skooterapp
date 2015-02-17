@@ -73,7 +73,8 @@
                     android:visibility="gone"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    android:focusable="false"/>
+                    android:focusable="false"
+                    android:background="@color/md_grey_200"/>
             </RelativeLayout>
 
             <RelativeLayout

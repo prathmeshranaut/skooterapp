@@ -2,21 +2,19 @@ package net.aayush.skooterapp.data;
 
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.R;
+import net.aayush.skooterapp.SkooterJsonObjectRequest;
 
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,7 +95,7 @@ public class Comment implements Serializable {
         params.put("vote", "true");
         params.put("location_id", Integer.toString(BaseActivity.locationId));
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+        SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(LOG_TAG, "Upvote Comment: " + response.toString());
@@ -109,22 +107,7 @@ public class Comment implements Serializable {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.getMessage());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "upvote_comment");
     }
@@ -140,7 +123,7 @@ public class Comment implements Serializable {
         params.put("vote", "false");
         params.put("location_id", Integer.toString(BaseActivity.locationId));
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+        SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(LOG_TAG, "Downvote Comment: " + response.toString());
@@ -152,22 +135,7 @@ public class Comment implements Serializable {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.getMessage());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "downvote_comment");
     }

@@ -24,13 +24,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.PeekActivity;
 import net.aayush.skooterapp.PeekPostAdapter;
 import net.aayush.skooterapp.R;
+import net.aayush.skooterapp.SkooterJsonObjectRequest;
 import net.aayush.skooterapp.ViewPostActivity;
 import net.aayush.skooterapp.data.Post;
 import net.aayush.skooterapp.data.Zone;
@@ -130,7 +130,7 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
         String url = BaseActivity.substituteString(getResources().getString(R.string.peek), params);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 final String SKOOTS = "skoots";
@@ -157,22 +157,7 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "home_page");
     }

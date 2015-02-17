@@ -12,6 +12,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.R;
+import net.aayush.skooterapp.SkooterJsonObjectRequest;
 
 import org.json.JSONObject;
 
@@ -165,7 +166,7 @@ public class Zone {
         params.put("user_id", Integer.toString(BaseActivity.userId));
         params.put("zone_id", Integer.toString(getZoneId()));
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+        SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v(LOG_TAG, "Follow" + response.toString());
@@ -175,22 +176,7 @@ public class Zone {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "follow_zone");
     }

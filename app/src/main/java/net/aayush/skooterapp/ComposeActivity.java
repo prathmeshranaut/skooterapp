@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -311,6 +312,7 @@ public class ComposeActivity extends BaseActivity {
                     new Thread(new Runnable() {
                         public void run() {
                             try {
+                                Looper.prepare();
                                 new PostFile().main();
                             } catch (Exception e) {
                                 e.printStackTrace();

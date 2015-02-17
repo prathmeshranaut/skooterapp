@@ -12,6 +12,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.R;
+import net.aayush.skooterapp.SkooterJsonObjectRequest;
 
 import org.json.JSONObject;
 
@@ -239,7 +240,7 @@ public class Post implements Serializable {
         params.put("vote", "false");
         params.put("location_id", Integer.toString(BaseActivity.locationId));
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+        SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(LOG_TAG, "Downvote: " + response.toString());
@@ -251,22 +252,7 @@ public class Post implements Serializable {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.getMessage());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "downvote_post");
     }
@@ -289,7 +275,7 @@ public class Post implements Serializable {
         params = new HashMap<String, String>();
         params.put("user_id", Integer.toString(BaseActivity.userId));
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+        SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(LOG_TAG, "Follow: " + response.toString());
@@ -299,21 +285,7 @@ public class Post implements Serializable {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.getMessage());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "favorite_post");
         mFavoriteCount += 1;
@@ -326,7 +298,7 @@ public class Post implements Serializable {
 
         String url = BaseActivity.substituteString(AppController.getInstance().getResources().getString(R.string.unfavorite_post), params);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+        SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(LOG_TAG, "UnFollow: " + response.toString());
@@ -336,22 +308,7 @@ public class Post implements Serializable {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.getMessage());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "unfavorite_post");
         mFavoriteCount -= 1;
