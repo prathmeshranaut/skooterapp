@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              >
+
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@drawable/intro_anonymous_icon"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/anonymous_icon" />
+
+    <net.aayush.skooterapp.ATextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Share your"
+        android:id="@+id/intro_share_text"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/anonymous_icon"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/skooterIntroTextColor"
+        android:gravity="center"
+        />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:src="@drawable/intro_share_icons"
+        android:layout_below="@id/intro_share_text"
+        android:layout_marginTop="10dp"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
+        android:id="@+id/intro_share_icon"
+        />
+
+    <net.aayush.skooterapp.ABITextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="Anonymously"
+        android:id="@+id/intro_anonymously_text"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/intro_share_icon"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/skooterIntroTextColor"
+        android:gravity="center"
+        />
+
+</RelativeLayout>

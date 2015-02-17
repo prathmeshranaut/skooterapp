@@ -13,5 +13,8 @@
     <color name="skooterNSecondaryBackgroundColor">#449bdd</color>
     <color name="skooterNSecondaryTextColor">#aa111111</color>
 
+    <color name="skooterIntroBackgroundColor">#ecf0f1</color>
+    <color name="skooterIntroTextColor">#292f33</color>
+
     <color name="skooterNNotifyColor">#fff36c77</color>
 </resources>

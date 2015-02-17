@@ -22,6 +22,9 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = new Intent(this, IntroductoryActivity.class);
+        startActivity(intent);
+
         this.localyticsSession = new LocalyticsAmpSession(
                 this.getApplicationContext());
         getApplication().registerActivityLifecycleCallbacks(

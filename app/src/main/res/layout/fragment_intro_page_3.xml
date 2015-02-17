@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@drawable/intro_peek"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/peek_icon"
+        android:alpha="0.0"
+        />
+
+    <net.aayush.skooterapp.ATextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:text="Peek other campuses’ \n feeds to see what’s going on"
+        android:id="@+id/intro_peek_text"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/peek_icon"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/skooterIntroTextColor"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:alpha="0.0"
+        />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:src="@drawable/intro_location"
+        android:layout_below="@id/intro_peek_text"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/intro_peek_location"
+        android:alpha="0.0"
+        />
+
+</RelativeLayout>

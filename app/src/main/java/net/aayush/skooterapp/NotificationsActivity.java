@@ -116,7 +116,7 @@ public class NotificationsActivity extends BaseActivity {
                             String small_image_url = jsonPost.getString(SKOOT_SMALL_IMAGE_URL);
                             String large_image_url = jsonPost.getString(SKOOT_LARGE_IMAGE_URL);
 
-                            Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
+                            Post postObject = new Post(post_id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
                             notification = new Notification(id, post_id, text, icon_url, post_redirect, postObject);
                         } else {
                             notification = new Notification(id, post_id, text, icon_url, post_redirect);
@@ -176,7 +176,7 @@ public class NotificationsActivity extends BaseActivity {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        mNotificationArrayList.remove(position);
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -202,6 +202,8 @@ public class NotificationsActivity extends BaseActivity {
                         return headers;
                     }
                 };
+                mNotificationArrayList.remove(position);
+                mNotificationAdapter.notifyDataSetChanged();
 
                 AppController.getInstance().addToRequestQueue(jsonObjectRequest, "delete_notification");
             }

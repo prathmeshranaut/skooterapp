@@ -42,5 +42,6 @@
     <string name="title_activity_about">AboutActivity</string>
     <string name="about_us_extract">Skooter is a location based social network where you can connect with real people nearby without revealing your identity.</string>
     <string name="website_link">http://skooterapp.com</string>
+    <string name="title_activity_introductory">IntroductoryActivity</string>
 
 </resources>
