@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.viewpagerindicator.CirclePageIndicator;
+
 import net.aayush.skooterapp.intro.fragments.AnonymousPageFragment;
 import net.aayush.skooterapp.intro.fragments.ExplorePageFragment;
 import net.aayush.skooterapp.intro.fragments.PeekPageFragment;
@@ -32,6 +34,9 @@ public class IntroductoryActivity extends FragmentActivity {
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new IntroPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+
+        CirclePageIndicator circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circles);
+        circlePageIndicator.setViewPager(mPager);
 
         final int sdkVersion = Build.VERSION.SDK_INT;
         if (sdkVersion >= Build.VERSION_CODES.LOLLIPOP) {
