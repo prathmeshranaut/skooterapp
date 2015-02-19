@@ -5,14 +5,26 @@
                 android:background="@color/skooterNPrimaryTextColorLight"
                 tools:context="net.aayush.skooterapp.LoadingActivity">
 
-    <net.aayush.skooterapp.ATextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Loading..."
-        android:id="@+id/loadingText"
-        android:textAlignment="center"
-        android:textColor="@color/skooterPrimaryTextColor"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo"
+            android:id="@+id/logo"
+            android:layout_marginBottom="30dp"
+            />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+
 </RelativeLayout>

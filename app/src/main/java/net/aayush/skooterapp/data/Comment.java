@@ -12,10 +12,12 @@ import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.R;
 import net.aayush.skooterapp.SkooterJsonObjectRequest;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Comment implements Serializable {
@@ -84,6 +86,10 @@ public class Comment implements Serializable {
                 mTimestamp;
     }
 
+    public int getPostId() {
+        return mPostId;
+    }
+
     public void upvoteComment() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("comment_id", Integer.toString(getId()));
@@ -142,5 +148,46 @@ public class Comment implements Serializable {
 
     public int getVoteCount() {
         return mUpvotes - mDownvotes;
+    }
+
+    public static int findCommentPositionInListById(List<Comment> commentList, int commentId) {
+        int i = 0;
+        for (Comment comment : commentList) {
+            if (comment.getId() == commentId) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
+
+    public static Comment parseCommentFromJSONObject(JSONObject response) {
+        final String SKOOT_ID = "id";
+        final String SKOOT_POST_ID = "post_id";
+        final String SKOOT_POST = "content";
+        final String SKOOT_CREATED_AT = "created_at";
+        final String SKOOT_UPVOTES = "upvotes";
+        final String SKOOT_DOWNVOTES = "downvotes";
+        final String SKOOT_IF_USER_VOTED = "if_user_voted";
+        final String SKOOT_USER_VOTE = "user_vote";
+        final String SKOOT_USER_COMMENT = "user_comment";
+
+        try {
+            int id = response.getInt(SKOOT_ID);
+            String comment = response.getString(SKOOT_POST);
+            int post_id = response.getInt(SKOOT_POST_ID);
+            int upvotes = response.getInt(SKOOT_UPVOTES);
+            int downvotes = response.getInt(SKOOT_DOWNVOTES);
+            boolean if_user_voted = response.getBoolean(SKOOT_IF_USER_VOTED);
+            boolean user_vote = response.getBoolean(SKOOT_USER_VOTE);
+            boolean user_skoot = response.getBoolean(SKOOT_USER_COMMENT);
+            String timestamp = response.getString(SKOOT_CREATED_AT);
+
+            return new Comment(id, post_id, comment, upvotes, downvotes, if_user_voted, user_vote, user_skoot, timestamp);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(LOG_TAG, "Error processing JSON data");
+        }
+        return null;
     }
 }

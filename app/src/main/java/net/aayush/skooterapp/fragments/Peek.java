@@ -207,6 +207,8 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                         if(!flag) {
                             //Add
                             dataHandler.addZone(zone);
+                        }else {
+                            dataHandler.updateZone(zone);
                         }
                     }
                 } catch (JSONException e) {

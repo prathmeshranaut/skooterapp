@@ -185,4 +185,17 @@ public class Zone {
     public String toString() {
         return mZoneName;
     }
+
+    public String toStringCustom() {
+        return "Zone{" +
+                "mZoneId=" + mZoneId +
+                ", mZoneName='" + mZoneName + '\'' +
+                ", mLatitudeMinimum=" + mLatitudeMinimum +
+                ", mLongitudeMinimum=" + mLongitudeMinimum +
+                ", mLatitudeMaximum=" + mLatitudeMaximum +
+                ", mLongitudeMaximum=" + mLongitudeMaximum +
+                ", mIsFollowing=" + mIsFollowing +
+                ", mZoneImage='" + mZoneImage + '\'' +
+                '}';
+    }
 }

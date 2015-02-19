@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Post implements Serializable {
@@ -343,5 +344,17 @@ public class Post implements Serializable {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static int findPostPositionInListById(List<Post> postList, int postId) {
+        int i = 0;
+        for(Post post: postList) {
+            if(post.getId() == postId)
+            {
+                return i;
+            }
+            i++;
+        }
+        return -1;
     }
 }

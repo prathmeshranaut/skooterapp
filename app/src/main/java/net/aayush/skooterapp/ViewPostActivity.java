@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,12 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.data.Comment;
 import net.aayush.skooterapp.data.Post;
@@ -29,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,9 +40,18 @@ public class ViewPostActivity extends BaseActivity {
     protected List<Comment> mCommentsList = new ArrayList<Comment>();
     protected ArrayAdapter<Comment> mCommentsAdapter;
     protected ListView mListComments;
+    protected List<Post> postList;
     protected Post mPost;
     protected ArrayAdapter<Post> postAdapter;
     protected boolean canPerformActivity;
+
+    LinearLayout flagView;
+    LinearLayout deleteView;
+    TextView typeIdView;
+    TextView typeView;
+    ListView listPosts;
+
+    private final static int MAX_CHARACTERS = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,33 +60,28 @@ public class ViewPostActivity extends BaseActivity {
 
         activateToolbarWithHomeEnabled("");
 
-        Intent intent = getIntent();
-        mPost = (Post) intent.getSerializableExtra(SKOOTER_POST);
-        canPerformActivity = intent.getBooleanExtra("can_perform_activity", true);
-
-        List<Post> postList = new ArrayList<Post>();
-        postList.add(mPost);
-
-        final LinearLayout flagView = (LinearLayout) findViewById(R.id.flag_view);
-        final LinearLayout deleteView = (LinearLayout) findViewById(R.id.delete_view);
-        final TextView typeIdView = (TextView) findViewById(R.id.type_id);
-        final TextView typeView = (TextView) findViewById(R.id.type);
-
-        postAdapter = new PostAdapter(this, R.layout.list_view_post_row, postList, true, flagView, deleteView, typeIdView, typeView, canPerformActivity);
-        ListView listPosts = (ListView) findViewById(R.id.list_posts);
-        listPosts.setAdapter(postAdapter);
-
-        String tag = "load_comments";
-        mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_comment_post_row, mCommentsList, true, flagView, deleteView, typeIdView, typeView, canPerformActivity);
-        mListComments = (ListView) findViewById(R.id.list_comments);
-        mListComments.setAdapter(mCommentsAdapter);
-
-        getCommentsForPostId(mPost, userId);
-
-        Button commentBtn = (Button) findViewById(R.id.commentSkoot);
+        flagView = (LinearLayout) findViewById(R.id.flag_view);
+        deleteView = (LinearLayout) findViewById(R.id.delete_view);
+        typeIdView = (TextView) findViewById(R.id.type_id);
+        typeView = (TextView) findViewById(R.id.type);
+        listPosts = (ListView) findViewById(R.id.list_posts);
 
         final TextView commentText = (TextView) findViewById(R.id.commentText);
-        final int postId = mPost.getId();
+        final int postId;
+
+        Intent intent = getIntent();
+        mPost = (Post) intent.getSerializableExtra(SKOOTER_POST);
+        if(mPost == null) {
+            postId = intent.getIntExtra(SKOOTER_POST_ID, 0);
+            getCommentsForPostId(postId, userId, true);
+        } else {
+            postId = mPost.getId();
+            getCommentsForPostId(mPost.getId(), userId, false);
+            initListViews();
+        }
+        canPerformActivity = intent.getBooleanExtra("can_perform_activity", true);
+
+        Button commentBtn = (Button) findViewById(R.id.commentSkoot);
 
         if (canPerformActivity) {
             commentBtn.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +89,7 @@ public class ViewPostActivity extends BaseActivity {
 
                 @Override
                 public void onClick(View v) {
-                    if (commentText.getText().length() > 0 && commentText.getText().length() < 200) {
+                    if (commentText.getText().length() > 0 && commentText.getText().length() <= 200) {
                         String url = "http://skooter.elasticbeanstalk.com/comment";
                         Map<String, String> params = new HashMap<String, String>();
                         params.put("user_id", Integer.toString(BaseActivity.userId));
@@ -94,7 +97,7 @@ public class ViewPostActivity extends BaseActivity {
                         params.put("location_id", Integer.toString(BaseActivity.locationId));
                         params.put("post_id", Integer.toString(postId));
 
-                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+                        SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Log.d(LOG_TAG, response.toString());
@@ -110,7 +113,7 @@ public class ViewPostActivity extends BaseActivity {
                                 try {
                                     JSONObject jsonObject = response.getJSONObject(SKOOT_COMMENTS);
 
-                                    Comment commentObject = parseComment(jsonObject);
+                                    Comment commentObject = Comment.parseCommentFromJSONObject(jsonObject);
                                     if (commentObject != null) {
                                         mCommentsList.add(commentObject);
                                     }
@@ -125,28 +128,13 @@ public class ViewPostActivity extends BaseActivity {
                             public void onErrorResponse(VolleyError error) {
                                 VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
                             }
-                        }) {
-                            @Override
-                            public Map<String, String> getHeaders() throws AuthFailureError {
-                                Map<String, String> headers = super.getHeaders();
-
-                                if (headers == null
-                                        || headers.equals(Collections.emptyMap())) {
-                                    headers = new HashMap<String, String>();
-                                }
-
-                                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                                headers.put("access_token", BaseActivity.accessToken);
-
-                                return headers;
-                            }
-                        };
+                        });
 
                         AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
 
-                    } else if (commentText.getText().length() > 200) {
+                    } else if (commentText.getText().length() > MAX_CHARACTERS) {
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
-                        alertDialogBuilder.setMessage("You cannot simply skoot with more than 250! For that you would have login through Facebook.");
+                        alertDialogBuilder.setMessage("You cannot simply skoot with more than 200! For that you would have login through Facebook.");
                         alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
@@ -169,6 +157,34 @@ public class ViewPostActivity extends BaseActivity {
                     }
                 }
             });
+
+            commentText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (s.length() >= MAX_CHARACTERS) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
+                        alertDialogBuilder.setMessage("You can reply with a maximum of 200 characters only!");
+                        alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+
+                            }
+                        });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
         } else {
             listPosts.setEnabled(false);
             commentBtn.setOnClickListener(new View.OnClickListener() {
@@ -189,56 +205,42 @@ public class ViewPostActivity extends BaseActivity {
         }
     }
 
-    public Comment parseComment(JSONObject jsonComment) {
-        final String SKOOTS = "skoot";
-        final String SKOOT_ID = "id";
-        final String SKOOT_POST = "content";
-        final String SKOOT_COMMENTS = "comments";
-        final String SKOOT_CREATED_AT = "created_at";
-        final String SKOOT_UPVOTES = "upvotes";
-        final String SKOOT_DOWNVOTES = "downvotes";
-        final String SKOOT_IF_USER_VOTED = "if_user_voted";
-        final String SKOOT_USER_VOTE = "user_vote";
-        final String SKOOT_USER_COMMENT = "user_comment";
+    public void initListViews() {
+        postList = new ArrayList<Post>();
+        postList.add(mPost);
 
-        try {
-            int id = jsonComment.getInt(SKOOT_ID);
-            String comment = jsonComment.getString(SKOOT_POST);
-            int upvotes = jsonComment.getInt(SKOOT_UPVOTES);
-            int downvotes = jsonComment.getInt(SKOOT_DOWNVOTES);
-            boolean if_user_voted = jsonComment.getBoolean(SKOOT_IF_USER_VOTED);
-            boolean user_vote = false;
-            if (if_user_voted) {
-                user_vote = jsonComment.getBoolean(SKOOT_USER_VOTE);
-            }
-            boolean user_skoot = jsonComment.getBoolean(SKOOT_USER_COMMENT);
-            String timestamp = jsonComment.getString(SKOOT_CREATED_AT);
+        postAdapter = new PostAdapter(this, R.layout.list_view_post_row, postList, true, flagView, deleteView, typeIdView, typeView, canPerformActivity);
+        listPosts.setAdapter(postAdapter);
 
-            return new Comment(id, mPost.getId(), comment, upvotes, downvotes, if_user_voted, user_vote, user_skoot, timestamp);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e(LOG_TAG, "Error processing JSON data");
-        }
-        return null;
+        String tag = "load_comments";
+        mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_comment_post_row, mCommentsList, true, flagView, deleteView, typeIdView, typeView, canPerformActivity);
+        mListComments = (ListView) findViewById(R.id.list_comments);
+        mListComments.setAdapter(mCommentsAdapter);
     }
 
-    public void getCommentsForPostId(Post post, int userId) {
+    public void getCommentsForPostId(int postId, int userId, final boolean parsePost) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", Integer.toString(userId));
-        params.put("post_id", Integer.toString(mPost.getId()));
+        params.put("post_id", Integer.toString(postId));
 
         String url = BaseActivity.substituteString(getResources().getString(R.string.skoot_single), params);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 final String SKOOT_COMMENTS = "comments";
+                final String SKOOT = "skoot";
 
+                Log.d(LOG_TAG, response.toString());
                 try {
                     JSONArray jsonArray = response.getJSONArray(SKOOT_COMMENTS);
 
+                    if(parsePost) {
+                        mPost = Post.parsePostFromJSONObject(response.getJSONObject(SKOOT));
+                        initListViews();
+                    }
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        Comment commentObject = parseComment(jsonArray.getJSONObject(i));
+                        Comment commentObject = Comment.parseCommentFromJSONObject(jsonArray.getJSONObject(i));
                         if (commentObject != null) {
                             mCommentsList.add(commentObject);
                         }
@@ -254,22 +256,7 @@ public class ViewPostActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "view_comments");
     }
@@ -325,7 +312,7 @@ public class ViewPostActivity extends BaseActivity {
             params.put("post_id", typeId.getText().toString());
             params.put("type_id", type);
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+            SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.d(LOG_TAG, response.toString());
@@ -335,22 +322,7 @@ public class ViewPostActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
                 }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = super.getHeaders();
-
-                    if (headers == null
-                            || headers.equals(Collections.emptyMap())) {
-                        headers = new HashMap<String, String>();
-                    }
-
-                    headers.put("user_id", Integer.toString(BaseActivity.userId));
-                    headers.put("access_token", BaseActivity.accessToken);
-
-                    return headers;
-                }
-            };
+            });
 
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_skoot");
         } else if (typeView.getText().equals("comment")) {
@@ -362,7 +334,7 @@ public class ViewPostActivity extends BaseActivity {
             params.put("comment_id", typeId.getText().toString());
             params.put("type_id", type);
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+            SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.d(LOG_TAG, response.toString());
@@ -372,22 +344,7 @@ public class ViewPostActivity extends BaseActivity {
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
                 }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = super.getHeaders();
-
-                    if (headers == null
-                            || headers.equals(Collections.emptyMap())) {
-                        headers = new HashMap<String, String>();
-                    }
-
-                    headers.put("user_id", Integer.toString(BaseActivity.userId));
-                    headers.put("access_token", BaseActivity.accessToken);
-
-                    return headers;
-                }
-            };
+            });
 
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_comment");
         }
@@ -397,7 +354,7 @@ public class ViewPostActivity extends BaseActivity {
     }
 
     public void acceptDelete(View view) {
-        TextView typeId = (TextView) findViewById(R.id.type_id);
+        final TextView typeId = (TextView) findViewById(R.id.type_id);
         TextView typeView = (TextView) findViewById(R.id.type);
         LinearLayout deleteView = (LinearLayout) findViewById(R.id.delete_view);
 
@@ -407,32 +364,23 @@ public class ViewPostActivity extends BaseActivity {
             params.put("skoot_id", typeId.getText().toString());
             String url = BaseActivity.substituteString(getResources().getString(R.string.skoot_delete), params);
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+            SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.v(LOG_TAG, "Delete Post" + response.toString());
+                    int position = Post.findPostPositionInListById(BaseActivity.mHomePosts, Integer.parseInt(typeId.getText().toString()));
+
+                    if (position >= 0) {
+                        mHomePosts.remove(position);
+                    }
+                    finish();
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(LOG_TAG, "Delete Post Error: " + error.getMessage());
                 }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = super.getHeaders();
-
-                    if (headers == null
-                            || headers.equals(Collections.emptyMap())) {
-                        headers = new HashMap<String, String>();
-                    }
-
-                    headers.put("user_id", Integer.toString(BaseActivity.userId));
-                    headers.put("access_token", BaseActivity.accessToken);
-
-                    return headers;
-                }
-            };
+            });
 
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_content");
         } else if (typeView.getText().equals("comment")) {
@@ -441,32 +389,26 @@ public class ViewPostActivity extends BaseActivity {
             params.put("comment_id", typeId.getText().toString());
             String url = BaseActivity.substituteString(getResources().getString(R.string.comment_delete), params);
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+            SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.v(LOG_TAG, "Delete Comment" + response.toString());
+                    int position = Comment.findCommentPositionInListById(mCommentsList, Integer.parseInt(typeId.getText().toString()));
+
+                    if (position >= 0) {
+                        postList.get(0).setCommentsCount(postList.get(0).getCommentsCount() - 1);
+                        mHomePosts.get(Post.findPostPositionInListById(mHomePosts, mCommentsList.get(position).getPostId())).setCommentsCount(postList.get(0).getCommentsCount());
+                        mCommentsList.remove(position);
+                    }
+                    mCommentsAdapter.notifyDataSetChanged();
+                    postAdapter.notifyDataSetChanged();
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(LOG_TAG, "Delete Comment Error: " + error.getMessage());
                 }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = super.getHeaders();
-
-                    if (headers == null
-                            || headers.equals(Collections.emptyMap())) {
-                        headers = new HashMap<String, String>();
-                    }
-
-                    headers.put("user_id", Integer.toString(BaseActivity.userId));
-                    headers.put("access_token", BaseActivity.accessToken);
-
-                    return headers;
-                }
-            };
+            });
 
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "flag_content");
         }

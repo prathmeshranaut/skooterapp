@@ -121,6 +121,21 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
         return new Zone();
     }
 
+    public void updateZone(Zone zone) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_ZONE_NAME, zone.getZoneName());
+        values.put(COLUMN_LATITUDE_MINIMUM, zone.getLatitudeMinimum());
+        values.put(COLUMN_LATITUDE_MAXIMUM, zone.getLatitudeMaximum());
+        values.put(COLUMN_LONGITUDE_MINIMUM, zone.getLongitudeMinimum());
+        values.put(COLUMN_LONGITUDE_MAXIMUM, zone.getLongitudeMaximum());
+        values.put(COLUMN_ZONE_IS_FOLLOWING, zone.getIsFollowing());
+        values.put(COLUMN_ZONE_IMAGE, zone.getZoneImage());
+
+        db.update(TABLE_ZONES, values, COLUMN_ZONE_ID + " = '" + Integer.toString(zone.getZoneId()) + "'", null);
+    }
+
     public void followZoneById(int i) {
         ContentValues updatedValues = new ContentValues();
         updatedValues.put(COLUMN_ZONE_IS_FOLLOWING, true);

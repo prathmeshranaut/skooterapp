@@ -2,6 +2,7 @@ package net.aayush.skooterapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +79,7 @@ public class ZoneFollowAdapter extends ArrayAdapter<Zone>{
             @Override
             public void onClick(View v) {
                 Zone zone = (Zone) v.getTag();
+                Log.d("ZoneAdapter", zone.toStringCustom());
                 if(zone.getIsFollowing()) {
                     //Zone is being followed
                     zone.unfollow();

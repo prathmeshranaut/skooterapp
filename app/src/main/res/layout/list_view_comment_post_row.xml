@@ -20,11 +20,73 @@
         android:paddingRight="10dp"
         android:paddingBottom="10dp">
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/post_container">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.85">
+
+                <net.aayush.skooterapp.ATextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text=""
+                    android:id="@+id/postText"
+                    android:layout_alignParentLeft="true"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/upvote"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/vote_up_inactive"
+                    android:focusable="false"/>
+
+                <net.aayush.skooterapp.ATextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="0"
+                    android:id="@+id/voteCount"
+                    android:layout_marginRight="15dp"
+                    android:layout_below="@+id/upvote"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:textColor="@color/skooterNPrimaryTextColor"/>
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/downvote"
+                    android:layout_below="@+id/voteCount"
+                    android:layout_alignLeft="@+id/upvote"
+                    android:background="@drawable/vote_down_inactive"
+                    android:focusable="false"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:layout_below="@id/post_container">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -64,65 +126,6 @@
                     android:layout_marginLeft="15dp"
                     />
             </LinearLayout>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.85">
-
-                <net.aayush.skooterapp.ATextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Large Text"
-                    android:id="@+id/postText"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/handleText"
-                    />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.15">
-
-                <Button
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/upvote"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/vote_up_inactive"/>
-
-                <net.aayush.skooterapp.ATextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="0"
-                    android:id="@+id/voteCount"
-                    android:layout_marginRight="15dp"
-                    android:layout_below="@+id/upvote"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:textColor="@color/skooterNPrimaryTextColor"/>
-
-                <Button
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/downvote"
-                    android:layout_below="@+id/voteCount"
-                    android:layout_alignLeft="@+id/upvote"
-                    android:background="@drawable/vote_down_inactive"
-                    />
-            </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

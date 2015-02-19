@@ -13,7 +13,9 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -52,6 +54,8 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     protected Context mContext;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
     private List<String> items = new ArrayList<String>();
+    protected ProgressBar mProgressBar;
+    protected LinearLayout mProgressBarLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,9 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                 android.R.color.holo_red_light);
 
         getTrendingSkoots();
+
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+        mProgressBarLayout = (LinearLayout) rootView.findViewById(R.id.progress_bar_layout);
 
         mPostsAdapter = new TrendingPostAdapter(mContext, R.layout.list_view_post_row, mPostsList, mChannelsList);
         mListPosts = (ListView) rootView.findViewById(R.id.list_posts);
@@ -137,6 +144,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                Log.d(LOG_TAG, response.toString());
                 final String SKOOTS = "skoots";
                 final String SKOOT_CHANNELS = "channels";
 
@@ -157,7 +165,9 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                         Post postObject = Post.parsePostFromJSONObject(jsonArray.getJSONObject(i));
                         mPostsList.add(postObject);
                     }
-
+                    mProgressBar.setVisibility(View.GONE);
+                    mProgressBarLayout.setVisibility(View.GONE);
+                    mSwipeRefreshLayout.setVisibility(View.VISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");

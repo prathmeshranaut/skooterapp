@@ -50,7 +50,7 @@ public class LoadingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        mLoadingTextView = (TextView) findViewById(R.id.loadingText);
+//        mLoadingTextView = (TextView) findViewById(R.id.loadingText);
         mSettings = getSharedPreferences(PREFS_NAME, 0);
         userId = mSettings.getInt("userId", 0);
         accessToken = mSettings.getString("access_token", "");
@@ -127,6 +127,8 @@ public class LoadingActivity extends BaseActivity {
                         if(!flag) {
                             //Add
                             dataHandler.addZone(zone);
+                        } else {
+                            dataHandler.updateZone(zone);
                         }
                         if(active_zone) {
                             BaseActivity.mActiveZones.add(zone);
@@ -196,7 +198,7 @@ public class LoadingActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(LOG_TAG, error.getMessage());
-                    mLoadingTextView.setText("We're having a hard time locating you!");
+                    //mLoadingTextView.setText("We're having a hard time locating you!");
                 }
             }) {
                 @Override
@@ -217,7 +219,7 @@ public class LoadingActivity extends BaseActivity {
 
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "location");
         } else {
-            mLoadingTextView.setText("We're having a hard time locating you!");
+            //mLoadingTextView.setText("We're having a hard time locating you!");
             mLocator.showSettingsAlert();
         }
     }
@@ -228,7 +230,7 @@ public class LoadingActivity extends BaseActivity {
 
         String url = BaseActivity.substituteString(getResources().getString(R.string.user), params);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 final String SKOOT_SCORE = "score";
@@ -241,7 +243,7 @@ public class LoadingActivity extends BaseActivity {
                 final String SKOOT_DOWNVOTES = "downvotes";
                 final String SKOOT_CREATED_AT = "created_at";
                 final String SKOOT_COMMENTS_COUNT = "comments_count";
-                final String SKOOT_POST_ID = "id";
+                final String SKOOT_POST_ID = "post_id";
                 final String SKOOT_FAVORITE_COUNT = "favorites_count";
                 final String SKOOT_USER_FAVORITED = "user_favorited";
                 final String SKOOT_USER_COMMENTED = "user_commented";
@@ -308,33 +310,51 @@ public class LoadingActivity extends BaseActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.getMessage());
-                mLoadingTextView.setText("Darn! Looks like we couldn't log you in. Hold on we'll keep trying!");
+                //mLoadingTextView.setText("Darn! Looks like we couldn't log you in. Hold on we'll keep trying!");
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "login_user");
     }
 
     public void loginUser() {
         String androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        String[] data = {"phone", androidId};
+        Map<String, String> params = new HashMap<>();
+        params.put("phone", androidId);
 
-        LoginUser loginUser = new LoginUser("http://skooter.elasticbeanstalk.com/user", data);
-        loginUser.execute();
+        String url = BaseActivity.substituteString(getResources().getString(R.string.user_new), new HashMap<String, String>());
+        Log.d(LOG_TAG, params.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                final String SKOOT_USER_ID = "user_id";
+                final String SKOOT_ACCESS_TOKEN = "access_token";
+
+                Log.d(LOG_TAG, response.toString());
+                try {
+                    BaseActivity.userId = response.getInt(SKOOT_USER_ID);
+                    BaseActivity.accessToken = response.getString(SKOOT_ACCESS_TOKEN);
+
+                    SharedPreferences.Editor editor = mSettings.edit();
+                    editor.putInt("userId", userId);
+                    editor.putString("access_token", accessToken);
+                    editor.apply();
+                    getUserDetails();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(LOG_TAG, "Error processing Json Data");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //mLoadingTextView.setText("Darn! Looks like we couldn't log you in. Hold on we'll keep trying!");
+                error.printStackTrace();
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "signup_user");
     }
 
     @Override
@@ -357,38 +377,5 @@ public class LoadingActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public class LoginUser extends PostUserLogin {
-
-        public LoginUser(String mRawUrl, String[] postData) {
-            super(mRawUrl, postData);
-        }
-
-        public void execute() {
-            super.execute();
-            LoginUserData loginUserData = new LoginUserData();
-            loginUserData.execute();
-        }
-
-        public class LoginUserData extends PushJsonData {
-
-            protected void onPostExecute(String webData) {
-                super.onPostExecute(webData);
-                BaseActivity.userId = getUserId();
-                BaseActivity.accessToken = getAccessToken();
-                if (BaseActivity.userId == 0) {
-                    if (getmDownloadStatus() == DownloadStatus.FAILED_OR_EMPTY) {
-                        mLoadingTextView.setText("Darn! Looks like we couldn't log you in. Hold on we'll keep trying!");
-                    }
-                } else {
-                    SharedPreferences.Editor editor = mSettings.edit();
-                    editor.putInt("userId", userId);
-                    editor.putString("access_token", accessToken);
-                    editor.commit();
-                    getUserDetails();
-                }
-            }
-        }
     }
 }

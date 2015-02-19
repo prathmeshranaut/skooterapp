@@ -31,7 +31,6 @@ public class MePostsActivity extends BaseActivity {
         } else {
             listView.setAdapter(new PostAdapter(this, R.layout.list_view_post_row, postList, true));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(MePostsActivity.this, ViewPostActivity.class);

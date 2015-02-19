@@ -27,6 +27,7 @@ public class BaseActivity extends ActionBarActivity {
     public static List<Post> mHomePosts = new ArrayList<Post>();
 
     public static final String SKOOTER_POST = "SKOOTER_POST";
+    public static final String SKOOTER_POST_ID = "SKOOTER_POST_ID";
     public static final String PREFS_NAME = "Skooter";
     public static final String SETTINGS_NOTIFICATION = "notificationSettings";
 

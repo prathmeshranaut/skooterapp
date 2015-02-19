@@ -1,6 +1,8 @@
 package net.aayush.skooterapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +17,8 @@ import java.util.List;
 
 public class MeCommentsActivity extends BaseActivity {
 
+    List<Comment> commentsList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,16 +28,18 @@ public class MeCommentsActivity extends BaseActivity {
 
         ListView listView = (ListView) findViewById(R.id.list_posts);
 
-        List<Comment> commentsList = BaseActivity.mUser.getComments();
-        if(commentsList.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "You don't have any comments yet!" , Toast.LENGTH_SHORT).show();
+        commentsList = BaseActivity.mUser.getComments();
+        if (commentsList.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "You don't have any comments yet!", Toast.LENGTH_SHORT).show();
         } else {
             listView.setAdapter(new CommentsAdapter(this, R.layout.list_view_comment_post_row, commentsList, true));
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                    Intent intent = new Intent(MeCommentsActivity.this, ViewPostActivity.class);
+                    Log.d("Comments", Integer.toString(commentsList.get(position).getPostId()));
+                    intent.putExtra(SKOOTER_POST_ID, commentsList.get(position).getPostId());
+                    startActivity(intent);
                 }
             });
         }

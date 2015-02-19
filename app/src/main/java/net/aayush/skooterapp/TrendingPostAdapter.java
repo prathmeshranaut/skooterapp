@@ -72,7 +72,7 @@ public class TrendingPostAdapter extends ArrayAdapter {
                 LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
                 convertView = inflater.inflate(mLayoutResourceId, parent, false);
             }
-            final Post post = data.get(position);
+            final Post post = data.get(position - mChannels.size() - 1);
 
             View is_user_post_view = convertView.findViewById(R.id.is_user_skoot);
             if (post.isUserSkoot()) {

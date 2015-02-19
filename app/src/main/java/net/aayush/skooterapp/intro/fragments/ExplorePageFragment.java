@@ -1,5 +1,6 @@
 package net.aayush.skooterapp.intro.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.R;
 
 public class ExplorePageFragment extends Fragment {
@@ -39,6 +41,10 @@ public class ExplorePageFragment extends Fragment {
         introFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences settings = getActivity().getSharedPreferences(BaseActivity.PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt("intro_screen", 1);
+                editor.apply();
                 getActivity().finish();
             }
         });

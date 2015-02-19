@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -56,6 +57,8 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     protected Context mContext;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
     protected LinearLayout mLinearLayout;
+    protected ProgressBar mProgressBar;
+    protected LinearLayout mProgressBarLayout;
 
     private static final int ACTIVITY_POST_SKOOT = 100;
 
@@ -111,7 +114,6 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         mContext = container.getContext();
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        int userId = BaseActivity.userId;
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -121,6 +123,9 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 android.R.color.holo_red_light);
 
         getLatestSkoots();
+
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
+        mProgressBarLayout = (LinearLayout) rootView.findViewById(R.id.progress_bar_layout);
 
         mPostsAdapter = new PostAdapter(mContext, R.layout.list_view_post_row, BaseActivity.mHomePosts);
         mListPosts = (ListView) rootView.findViewById(R.id.list_posts);
@@ -312,6 +317,9 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                         Post postObject = Post.parsePostFromJSONObject(jsonArray.getJSONObject(i));
 
                         BaseActivity.mHomePosts.add(postObject);
+                        mProgressBar.setVisibility(View.GONE);
+                        mProgressBarLayout.setVisibility(View.GONE);
+                        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
