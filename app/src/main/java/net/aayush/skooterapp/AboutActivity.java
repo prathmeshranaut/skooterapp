@@ -32,7 +32,15 @@ public class AboutActivity extends BaseActivity {
         aboutList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String url = "http://skooterapp.com/";
+                String url = "http://skooterapp.com/privacy";
+                switch (position) {
+                    case 0:
+                        url = "http://skooterapp.com/terms";
+                        break;
+                    case 1:
+                        url = "http://skooterapp.com/privacy";
+                        break;
+                }
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);

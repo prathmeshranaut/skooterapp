@@ -112,7 +112,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                 } else {
                     Log.d(LOG_TAG, mPostsList.get(position).toString());
                     Intent intent = new Intent(getActivity(), ViewPostActivity.class);
-                    intent.putExtra(BaseActivity.SKOOTER_POST, (Post) mPostsList.get(position));
+                    intent.putExtra(BaseActivity.SKOOTER_POST, (Post) mPostsList.get(position - mChannelsList.size() - 1));
                     startActivity(intent);
                 }
             }

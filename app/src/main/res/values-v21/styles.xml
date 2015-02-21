@@ -12,4 +12,12 @@
         <item name="android:textColorSecondary">@color/skooterPrimaryTextColor</item>
         <item name="android:background">@color/skooterNPrimaryTextColor</item>
     </style>
+
+    <style name="TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/md_white_1000</item>
+        <item name="android:actionMenuTextColor">@color/skooterBackgroundColor</item>
+        <item name="android:textColorPrimary">@color/skooterPrimaryTextColor</item>
+        <item name="android:textColorSecondary">@color/skooterPrimaryTextColor</item>
+        <item name="android:colorFocusedHighlight">@color/skooterBackgroundColor</item>
+    </style>
 </resources>

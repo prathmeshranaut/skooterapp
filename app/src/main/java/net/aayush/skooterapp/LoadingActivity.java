@@ -1,17 +1,16 @@
 package net.aayush.skooterapp;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -44,32 +43,19 @@ public class LoadingActivity extends BaseActivity {
     protected SharedPreferences mSettings;
     protected TextView mLoadingTextView;
     protected final String LOG_TAG = LoadingActivity.class.getSimpleName();
+    Handler mHandler = new Handler();
+    Thread thread = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-//        mLoadingTextView = (TextView) findViewById(R.id.loadingText);
+        mLoadingTextView = (TextView) findViewById(R.id.loading_text);
         mSettings = getSharedPreferences(PREFS_NAME, 0);
         userId = mSettings.getInt("userId", 0);
         accessToken = mSettings.getString("access_token", "");
         mLocator = new GPSLocator(this);
-
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo == null) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoadingActivity.this);
-            alertDialogBuilder.setMessage("Looks like you aren't connected to the internet! Would you please mind doing so?");
-            alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface arg0, int arg1) {
-
-                }
-            });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-        }
 
         if (userId == 0) {
             loginUser();
@@ -101,6 +87,7 @@ public class LoadingActivity extends BaseActivity {
 
 
                 try {
+                    BaseActivity.mActiveZones.clear();
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
                         int zoneId = jsonObject.getInt(ZONE_ID);
@@ -118,19 +105,19 @@ public class LoadingActivity extends BaseActivity {
 
                         List<Zone> zones = dataHandler.getAllZones();
                         boolean flag = false;
-                        for(Zone z: zones) {
-                            if(z.getZoneId() == zone.getZoneId()) {
+                        for (Zone z : zones) {
+                            if (z.getZoneId() == zone.getZoneId()) {
                                 flag = true;
                                 break;
                             }
                         }
-                        if(!flag) {
+                        if (!flag) {
                             //Add
                             dataHandler.addZone(zone);
                         } else {
                             dataHandler.updateZone(zone);
                         }
-                        if(active_zone) {
+                        if (active_zone) {
                             BaseActivity.mActiveZones.add(zone);
                             Log.d("Active Zones: ", BaseActivity.mActiveZones.toString());
                         }
@@ -198,7 +185,7 @@ public class LoadingActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(LOG_TAG, error.getMessage());
-                    //mLoadingTextView.setText("We're having a hard time locating you!");
+                    mLoadingTextView.setText("We're having a hard time locating you!");
                 }
             }) {
                 @Override
@@ -219,7 +206,7 @@ public class LoadingActivity extends BaseActivity {
 
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "location");
         } else {
-            //mLoadingTextView.setText("We're having a hard time locating you!");
+            mLoadingTextView.setText("We're having a hard time locating you!");
             mLocator.showSettingsAlert();
         }
     }
@@ -310,7 +297,7 @@ public class LoadingActivity extends BaseActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.getMessage());
-                //mLoadingTextView.setText("Darn! Looks like we couldn't log you in. Hold on we'll keep trying!");
+                bootstrapCheckDeviceSettings();
             }
         });
 
@@ -349,12 +336,35 @@ public class LoadingActivity extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //mLoadingTextView.setText("Darn! Looks like we couldn't log you in. Hold on we'll keep trying!");
+                bootstrapCheckDeviceSettings();
                 error.printStackTrace();
             }
         });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "signup_user");
+    }
+
+    public void bootstrapCheckDeviceSettings() {
+        if (!isOnline()) {
+            mLoadingTextView.setText("We're unable to connect with the Skooter servers. \n We'll keep trying");
+            mLoadingTextView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Check if the device is online
+     *
+     * @return
+     */
+    public boolean isOnline() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo == null || !networkInfo.isConnected() || !networkInfo.isAvailable()) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override

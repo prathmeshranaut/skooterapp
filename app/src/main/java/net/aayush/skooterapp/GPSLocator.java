@@ -102,7 +102,7 @@ public class GPSLocator extends Service implements LocationListener {
     public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
         alertDialog.setTitle("GPS");
-        alertDialog.setMessage("Could you please turn that darn GPS on? Please!");
+        alertDialog.setMessage("To improve your social experience Skooter requires GPS of your device to be enabled.");
 
         alertDialog.setPositiveButton("Sure!", new DialogInterface.OnClickListener() {
             @Override

@@ -91,7 +91,6 @@ public class ComposeActivity extends BaseActivity {
 
         activateToolbarWithHomeEnabled("");
 
-
         EditText editText = (EditText) findViewById(R.id.skootText);
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_CHARACTERS)});
 

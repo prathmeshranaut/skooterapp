@@ -74,7 +74,8 @@
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     android:focusable="false"
-                    android:background="@color/md_grey_200"/>
+                    android:background="@color/md_grey_200"
+                    android:elevation="8dp" />
             </RelativeLayout>
 
             <RelativeLayout
