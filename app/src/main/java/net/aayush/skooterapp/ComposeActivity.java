@@ -318,6 +318,7 @@ public class ComposeActivity extends BaseActivity {
                             }
                         }
                     }).start();
+                    item.setEnabled(false);
                     Toast.makeText(ComposeActivity.this, "Posting skoot...", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(ComposeActivity.this, "Posting skoot...", Toast.LENGTH_SHORT).show();
@@ -358,6 +359,7 @@ public class ComposeActivity extends BaseActivity {
                         }
                     };
                     AppController.getInstance().addToRequestQueue(jsonObjectRequest, "compose_skoot");
+                    item.setEnabled(false);
                 }
             } else if (skootText.getText().length() > 250) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);

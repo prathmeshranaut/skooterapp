@@ -10,10 +10,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONObject;
-
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,8 +27,6 @@ public class FeedbackActivity extends BaseActivity {
         setContentView(R.layout.activity_feedback);
 
         activateToolbarWithHomeEnabled("Feedback");
-
-
     }
 
 
@@ -51,9 +49,9 @@ public class FeedbackActivity extends BaseActivity {
             //Upload the data to google forms
             String url = "https://docs.google.com/forms/d/1zz9BQvIuvTd4ZXmtKXyeiAZaXDi3MWkKAUMG8GamoGs/formResponse";
 
-            TextView email = (TextView) findViewById(R.id.email);
-            TextView feedback = (TextView) findViewById(R.id.feedback);
-            TextView name = (TextView) findViewById(R.id.name);
+            final TextView email = (TextView) findViewById(R.id.email);
+            final TextView feedback = (TextView) findViewById(R.id.feedback);
+            final TextView name = (TextView) findViewById(R.id.name);
 
             Map<String, String> params = new HashMap<String, String>();
             params.put("fbzx", "-2669735696740216817");
@@ -63,20 +61,53 @@ public class FeedbackActivity extends BaseActivity {
             params.put("entry.1648041446", name.getText().toString());
 
             Log.d(LOG_TAG, params.toString());
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+            final StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
-                public void onResponse(JSONObject response) {
-                    Log.d(LOG_TAG, response.toString());
+                public void onResponse(String response) {
+                    Log.d(LOG_TAG, response.substring(1700));
                     finish();
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
                     VolleyLog.d(LOG_TAG, error.getStackTrace());
                 }
-            });
+            }) {
+                public byte[] getBody() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("fbzx", "-2669735696740216817");
+                    params.put("pageHistory", "0");
+                    params.put("entry.401753170", feedback.getText().toString());
+                    params.put("entry.365030282", email.getText().toString());
+                    params.put("entry.1648041446", name.getText().toString());
 
+                    if (params != null && params.size() > 0) {
+                        return encodeParameters(params, getParamsEncoding());
+                    }
+                    return null;
+                }
+
+
+                protected byte[] encodeParameters(Map<String, String> params, String paramsEncoding) {
+                    StringBuilder encodedParams = new StringBuilder();
+                    try {
+                        for (Map.Entry<String, String> entry : params.entrySet()) {
+                            encodedParams.append(URLEncoder.encode(entry.getKey(), paramsEncoding));
+                            encodedParams.append('=');
+                            encodedParams.append(URLEncoder.encode(entry.getValue(), paramsEncoding));
+                            encodedParams.append('&');
+                        }
+                        return encodedParams.toString().getBytes(paramsEncoding);
+                    } catch (UnsupportedEncodingException uee) {
+                        throw new RuntimeException("Encoding not supported: " + paramsEncoding, uee);
+                    }
+                }
+            };
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "feedback");
+            return true;
+        } else if (id == android.R.id.home) {
+            finish();
             return true;
         }
 

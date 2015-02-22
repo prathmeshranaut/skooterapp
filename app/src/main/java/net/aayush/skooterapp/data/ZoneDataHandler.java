@@ -134,6 +134,7 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
         values.put(COLUMN_ZONE_IMAGE, zone.getZoneImage());
 
         db.update(TABLE_ZONES, values, COLUMN_ZONE_ID + " = '" + Integer.toString(zone.getZoneId()) + "'", null);
+        db.close();
     }
 
     public void followZoneById(int i) {

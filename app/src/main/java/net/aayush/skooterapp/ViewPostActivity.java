@@ -186,12 +186,12 @@ public class ViewPostActivity extends BaseActivity {
                 }
             });
         } else {
-            listPosts.setEnabled(false);
+            //listPosts.setEnabled(false);
             commentBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);
-                    alertDialogBuilder.setMessage("You cannot post when you are not in a zone.");
+                    alertDialogBuilder.setMessage("You can't post outside 3 kms of the zone.");
                     alertDialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {

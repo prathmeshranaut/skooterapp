@@ -16,20 +16,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
 
 import net.aayush.skooterapp.AppController;
 import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.PeekActivity;
 import net.aayush.skooterapp.PeekPostAdapter;
 import net.aayush.skooterapp.R;
+import net.aayush.skooterapp.SkooterJsonArrayRequest;
 import net.aayush.skooterapp.SkooterJsonObjectRequest;
 import net.aayush.skooterapp.ViewPostActivity;
 import net.aayush.skooterapp.data.Post;
@@ -41,7 +39,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +51,6 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     protected ArrayAdapter<Zone> zoneArrayAdapter;
     protected ArrayList<Zone> followingZones = new ArrayList<Zone>();
     private PeekPostAdapter mPostsAdapter;
-    private ListView mListPosts;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
     private ArrayList<Post> mPostsList = new ArrayList<Post>();
 
@@ -84,9 +80,6 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
             //Fetch the peek posts for the person
             getPeekData();
 
-            TextView addZonesTextView = (TextView) rootView.findViewById(R.id.addZonesText);
-            addZonesTextView.setVisibility(View.GONE);
-
             mPostsAdapter = new PeekPostAdapter(mContext, R.layout.list_view_peek_row, mPostsList);
 
             mListView.setAdapter(mPostsAdapter);
@@ -102,18 +95,11 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 }
             });
         } else {
-            mListView = (ListView) rootView.findViewById(R.id.list_zones);
-            final ArrayAdapter<Zone> zoneArrayAdapter = new ArrayAdapter<Zone>(mContext, android.R.layout.simple_list_item_1, zones);
+            final ArrayAdapter<Zone> zoneArrayAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, new ArrayList<Zone>());
             View header = getLayoutInflater(savedInstanceState).inflate(R.layout.list_header_text_view, null);
             mListView.addHeaderView(header);
             mListView.setAdapter(zoneArrayAdapter);
-
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    dataHandler.followZoneById(position + 1);
-                }
-            });
+            mListView.setEnabled(false);
         }
 
         return rootView;
@@ -143,6 +129,7 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                         Post postObject = Post.parsePostFromJSONObject(jsonArray.getJSONObject(i));
                         mPostsList.add(postObject);
                     }
+                    mListView.setEnabled(true);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");
@@ -169,7 +156,7 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         final String url = BaseActivity.substituteString(getResources().getString(R.string.zones), params);
         final ZoneDataHandler dataHandler = new ZoneDataHandler(mContext);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+        SkooterJsonArrayRequest jsonArrayRequest = new SkooterJsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 final String ZONE_ID = "zone_id";
@@ -220,22 +207,7 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.networkResponse);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonArrayRequest, "zones");
     }

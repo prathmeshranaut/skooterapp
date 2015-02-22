@@ -130,7 +130,11 @@ public class GPSLocator extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.d("Location", location.toString());
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
 
+        BaseActivity.mUser.updateLocation();
     }
 
     @Override

@@ -1,7 +1,9 @@
 package net.aayush.skooterapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +46,7 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
         final Post post = data.get(position);
 
         View is_user_post_view = convertView.findViewById(R.id.is_user_post);
-        if(post.isUserSkoot()) {
+        if (post.isUserSkoot()) {
             is_user_post_view.setAlpha(1.0f);
         } else {
             is_user_post_view.setAlpha(0.0f);
@@ -76,10 +78,11 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
         imageLoader.get(url, new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                if(response.getBitmap() != null) {
+                if (response.getBitmap() != null) {
                     zoneImage.setImageBitmap(response.getBitmap());
                 }
             }
+
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(error.getMessage());
@@ -87,7 +90,7 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
         });
 
         final ImageView postImage = (ImageView) convertView.findViewById(R.id.post_image);
-        if(post.isImagePresent()) {
+        if (post.isImagePresent()) {
 
             ImageLoader imageLoader2 = AppController.getInstance().getImageLoader();
 
@@ -97,11 +100,12 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
             imageLoader2.get(url2, new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                    if(response.getBitmap() != null) {
+                    if (response.getBitmap() != null) {
                         postImage.setImageBitmap(response.getBitmap());
                         postImage.setBackground(null);
                     }
                 }
+
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d("Peek Post", "Error: " + error.getMessage());
@@ -148,6 +152,38 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
         upvoteBtn.setAlpha(1.0f);
         downvoteBtn.setAlpha(1.0f);
 
+        upvoteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage("You can't do any activity outside 3 kms");
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+
+        downvoteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage("You can't do any activity outside 3 kms");
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+
         //Favorited
         if (post.isUserFavorited()) {
             favoriteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.favorite_icon_active));
@@ -170,9 +206,6 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
                 favoritesCount.setText(Integer.toString(post.getFavoriteCount()));
             }
         });
-
-        upvoteBtn.setEnabled(false);
-        downvoteBtn.setEnabled(false);
 
         //Commented
         if (post.isUserCommented()) {

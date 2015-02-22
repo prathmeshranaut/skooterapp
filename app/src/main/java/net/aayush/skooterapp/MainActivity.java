@@ -46,42 +46,6 @@ public class MainActivity extends BaseActivity {
             transaction.commit();
         }
     }
-//
-//    public static void addShortcut(Context context)
-//    {
-//        Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-//
-//        ApplicationInfo appInfo = context.getApplicationInfo();
-//
-//        // Shortcut name
-//        shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, appInfo.name);
-//        shortcut.putExtra("duplicate", false); // Just create once
-//
-//        // Setup activity shoud be shortcut object
-//        ComponentName component = new ComponentName(appInfo.packageName, appInfo.className);
-//        shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(Intent.ACTION_MAIN).setComponent(component));
-//
-//        // Set shortcut icon
-//        Intent.ShortcutIconResource iconResource = Intent.ShortcutIconResource.fromContext(context, appInfo.icon);
-//        shortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
-//
-//        context.sendBroadcast(shortcut);
-//    }
-//
-//    public static void deleteShortcut(Context context)
-//    {
-//        Intent shortcut = new Intent("com.android.launcher.action.UNINSTALL_SHORTCUT");
-//
-//        ApplicationInfo appInfo = context.getApplicationInfo();
-//
-//        // Shortcut name
-//        shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, appInfo.name);
-//
-//        ComponentName comp = new ComponentName(appInfo.packageName, appInfo.className);
-//        shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(Intent.ACTION_MAIN).setComponent(comp));
-//
-//        context.sendBroadcast(shortcut);
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

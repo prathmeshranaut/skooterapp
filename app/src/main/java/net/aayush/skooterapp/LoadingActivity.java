@@ -18,7 +18,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.data.Comment;
@@ -72,7 +71,7 @@ public class LoadingActivity extends BaseActivity {
         final String url = BaseActivity.substituteString(getResources().getString(R.string.zones), params);
         final ZoneDataHandler dataHandler = new ZoneDataHandler(this);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+        SkooterJsonArrayRequest jsonArrayRequest = new SkooterJsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 final String ZONE_ID = "zone_id";
@@ -131,22 +130,7 @@ public class LoadingActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.networkResponse);
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonArrayRequest, "zones");
         Intent i = new Intent(LoadingActivity.this, MainActivity.class);

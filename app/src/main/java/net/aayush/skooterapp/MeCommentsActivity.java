@@ -24,7 +24,7 @@ public class MeCommentsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_me_comments);
 
-        activateToolbarWithHomeEnabled();
+        activateToolbarWithHomeEnabled("My Replies");
 
         ListView listView = (ListView) findViewById(R.id.list_posts);
 

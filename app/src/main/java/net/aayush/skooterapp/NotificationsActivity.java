@@ -14,7 +14,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.data.Notification;
@@ -52,7 +51,7 @@ public class NotificationsActivity extends BaseActivity {
 
         String url = BaseActivity.substituteString(getResources().getString(R.string.user_notifications), params);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+        SkooterJsonArrayRequest jsonArrayRequest = new SkooterJsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 final String NOTIFICATION_TEXT = "text";
@@ -128,6 +127,9 @@ public class NotificationsActivity extends BaseActivity {
                         //No notifications
                         TextView noNotifications = (TextView) findViewById(R.id.notification_alert);
                         noNotifications.setVisibility(View.VISIBLE);
+                        BaseActivity.mUser.setHasNotifications(false);
+                    } else {
+                        BaseActivity.mUser.setHasNotifications(true);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -140,22 +142,7 @@ public class NotificationsActivity extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
 
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
 
         AppController.getInstance().addToRequestQueue(jsonArrayRequest, "notifications");
 
@@ -204,7 +191,9 @@ public class NotificationsActivity extends BaseActivity {
                 };
                 mNotificationArrayList.remove(position);
                 mNotificationAdapter.notifyDataSetChanged();
-
+                if (mNotificationArrayList.size() < 1) {
+                    BaseActivity.mUser.setHasNotifications(false);
+                }
                 AppController.getInstance().addToRequestQueue(jsonObjectRequest, "delete_notification");
             }
         });

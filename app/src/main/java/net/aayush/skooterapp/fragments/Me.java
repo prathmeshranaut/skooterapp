@@ -31,6 +31,7 @@ import net.aayush.skooterapp.MeCommentsActivity;
 import net.aayush.skooterapp.MePostsActivity;
 import net.aayush.skooterapp.R;
 import net.aayush.skooterapp.data.Post;
+import net.aayush.skooterapp.data.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,14 +99,12 @@ public class Me extends Fragment {
         int width = size.x;
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("latitude", Float.toString(0.0f));
-        params.put("longitude", Float.toString(0.0f));
         params.put("width", Integer.toString(width));
         params.put("height", Integer.toString(300));
 
         String url = "http://maps.google.com/maps/api/staticmap?center=" + Double.toString(BaseActivity.mLocator.getLatitude()) + "," + Double.toString(BaseActivity.mLocator.getLongitude()) + "&zoom=15&" + "size=" + Integer.toString(width) + "x300&sensor=false";
-
         Log.v("Map", url);
+
         imageLoader.get(url, new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
@@ -120,7 +119,8 @@ public class Me extends Fragment {
             }
         });
 
-        //setUpMapIfNeeded();
+        // Get the latest updates to the user scores and stuff
+        User.getUserDetails();
 
         return rootView;
     }
@@ -144,7 +144,7 @@ public class Me extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Me");
+            ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle("Me");
         }
     }
 

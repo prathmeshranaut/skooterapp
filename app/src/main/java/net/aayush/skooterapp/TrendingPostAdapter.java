@@ -28,15 +28,6 @@ public class TrendingPostAdapter extends ArrayAdapter {
     private static final int TYPE_SEPERATOR = 2;
     private static final int TYPE_MAX_COUNT = TYPE_SEPERATOR + 1;
 
-    public int getChannelsCount() {
-        return channelsCount;
-    }
-
-    public void setChannelsCount(int count) {
-        channelsCount = count;
-    }
-
-    private int channelsCount = 0;
     Context mContext;
     int mLayoutResourceId;
     List<Post> data = new ArrayList<Post>();

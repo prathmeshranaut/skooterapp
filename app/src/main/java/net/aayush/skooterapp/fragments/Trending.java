@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -155,11 +156,9 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                     JSONArray channels = response.getJSONArray(SKOOT_CHANNELS);
                     JSONArray jsonArray = response.getJSONArray(SKOOTS);
 
-                    for (int i = 0; i < min(channels.length(), 3); i++) {
+                    for (int i = 0; i < min(channels.length(), 5); i++) {
                         mChannelsList.add(i, channels.getString(i));
                     }
-
-                    mPostsAdapter.setChannelsCount(mChannelsList.size());
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         Post postObject = Post.parsePostFromJSONObject(jsonArray.getJSONObject(i));
@@ -243,8 +242,12 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
-        final Menu m = menu;
         inflater.inflate(R.menu.menu_trending, menu);
+
+        if (BaseActivity.mUser.isHasNotifications()) {
+            MenuItem menuItem = menu.findItem(R.id.action_alerts);
+            menuItem.setIcon(R.drawable.notification_icon_active);
+        }
 
 //        MenuItem searchItem = menu.findItem(R.id.action_search);
 //

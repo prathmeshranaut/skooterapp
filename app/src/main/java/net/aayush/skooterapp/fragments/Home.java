@@ -28,7 +28,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import net.aayush.skooterapp.AppController;
@@ -36,6 +35,7 @@ import net.aayush.skooterapp.BaseActivity;
 import net.aayush.skooterapp.ComposeActivity;
 import net.aayush.skooterapp.PostAdapter;
 import net.aayush.skooterapp.R;
+import net.aayush.skooterapp.SkooterJsonArrayRequest;
 import net.aayush.skooterapp.ViewPostActivity;
 import net.aayush.skooterapp.data.Post;
 
@@ -97,7 +97,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Home");
+            ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle("Home");
         }
     }
 
@@ -113,6 +113,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                              Bundle savedInstanceState) {
         mContext = container.getContext();
 
+        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
@@ -354,7 +355,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             if (requestCode == ACTIVITY_POST_SKOOT) {
                 mPostsAdapter.notifyDataSetChanged();
             }
@@ -367,35 +368,22 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
         String url = BaseActivity.substituteString(getResources().getString(R.string.user_notifications), params);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+        SkooterJsonArrayRequest jsonArrayRequest = new SkooterJsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                if(response.length() > 0) {
+                Log.d(LOG_TAG, response.toString());
+                if (response.length() > 0) {
                     MenuItem menuItem = mMenu.findItem(R.id.action_alerts);
                     menuItem.setIcon(R.drawable.notification_icon_active);
+                    BaseActivity.mUser.setHasNotifications(true);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                VolleyLog.d(LOG_TAG, error.getMessage());
             }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = super.getHeaders();
-
-                if (headers == null
-                        || headers.equals(Collections.emptyMap())) {
-                    headers = new HashMap<String, String>();
-                }
-
-                headers.put("user_id", Integer.toString(BaseActivity.userId));
-                headers.put("access_token", BaseActivity.accessToken);
-
-                return headers;
-            }
-        };
+        });
         AppController.getInstance().addToRequestQueue(jsonArrayRequest, "notifications");
     }
 
@@ -405,7 +393,12 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
         mMenu = menu;
-        checkNotifications();
+        if (BaseActivity.mUser.isHasNotifications()) {
+            MenuItem menuItem = mMenu.findItem(R.id.action_alerts);
+            menuItem.setIcon(R.drawable.notification_icon_active);
+        } else {
+            checkNotifications();
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 }
