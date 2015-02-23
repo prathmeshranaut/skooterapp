@@ -2,12 +2,12 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="net.aayush.skooterapp.ViewPostActivity">
+             tools:context="com.skooterapp.ViewPostActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="net.aayush.skooterapp.ViewPostActivity"
+        tools:context="com.skooterapp.ViewPostActivity"
         android:orientation="vertical">
 
         <include
@@ -49,7 +49,7 @@
                 android:background="@drawable/custombutton"
                 />
 
-            <net.aayush.skooterapp.AIEditText
+            <com.skooterapp.AIEditText
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -80,7 +80,7 @@
             android:background="@drawable/cross_icon"
             android:onClick="dismissView"/>
 
-        <net.aayush.skooterapp.ATextView
+        <com.skooterapp.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Want to flag this skoot?"
@@ -175,7 +175,7 @@
         android:visibility="gone"
         android:paddingTop="10dp">
 
-        <net.aayush.skooterapp.ATextView
+        <com.skooterapp.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Are you sure you want to delete your skoot?"
@@ -208,14 +208,14 @@
                 android:onClick="dismissView"/>
         </LinearLayout>
 
-        <net.aayush.skooterapp.ATextView
+        <com.skooterapp.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:id="@+id/type_id"
             android:text="" />
 
-        <net.aayush.skooterapp.ATextView
+        <com.skooterapp.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"

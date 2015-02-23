@@ -15,7 +15,7 @@
         android:id="@+id/trending_icon"
         android:alpha="0.0" />
 
-    <net.aayush.skooterapp.ATextView
+    <com.skooterapp.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -31,7 +31,7 @@
         android:gravity="center"
         />
 
-    <net.aayush.skooterapp.ATextView
+    <com.skooterapp.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -47,7 +47,7 @@
         android:gravity="center"
         />
 
-    <net.aayush.skooterapp.ABITextView
+    <com.skooterapp.ABITextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"

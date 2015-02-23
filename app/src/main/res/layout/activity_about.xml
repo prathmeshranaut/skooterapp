@@ -2,7 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="net.aayush.skooterapp.AboutActivity">
+                tools:context="com.skooterapp.AboutActivity">
 
     <include
         layout="@layout/toolbar"
@@ -19,7 +19,7 @@
         android:layout_marginBottom="30dp"
         />
 
-    <net.aayush.skooterapp.ATextView
+    <com.skooterapp.ATextView
         android:text="@string/about_us_extract"
         android:id="@+id/about_skooter"
         android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
         android:layout_margin="20dp"
         android:textSize="18sp"/>
 
-    <net.aayush.skooterapp.ABITextView
+    <com.skooterapp.ABITextView
         android:text="@string/website_link"
         android:id="@+id/skooter_website"
         android:layout_width="wrap_content"

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     android:id="@+id/focusLayout"
-    skooter:context="net.aayush.skooterapp.fragments.Home"
+    skooter:context="com.skooterapp.fragments.Home"
     >
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -42,7 +42,7 @@
             android:id="@+id/progress_bar"
             android:layout_marginTop="30dp"/>
 
-        <net.aayush.skooterapp.ATextView
+        <com.skooterapp.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/loading_content_from_nearby"

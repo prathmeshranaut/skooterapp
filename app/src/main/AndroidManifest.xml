@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.aayush.skooterapp" >
+    package="com.skooterapp" >
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -23,7 +23,7 @@
     <!--</receiver>-->
 
     <application
-        android:name=".AppController"
+        android:name="com.skooterapp.AppController"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -33,7 +33,7 @@
             android:value="ccdfa2471067886943f4461-be2fc62e-ab7e-11e4-a83e-005cf8cbabd8" />
 
         <activity
-            android:name=".LoadingActivity"
+            android:name="com.skooterapp.LoadingActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -47,104 +47,104 @@
                 android:value=".ChannelActivity" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.skooterapp.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ViewPostActivity"
+            android:name="com.skooterapp.ViewPostActivity"
             android:label="@string/title_activity_view_post"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.skooterapp.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MainActivity" />
+                android:value="com.skooterapp.MainActivity" />
         </activity>
         <activity
-            android:name=".ComposeActivity"
+            android:name="com.skooterapp.ComposeActivity"
             android:label="@string/title_activity_compose"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.skooterapp.MainActivity"
             android:windowSoftInputMode="adjustResize" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MainActivity" />
+                android:value="com.skooterapp.MainActivity" />
         </activity>
         <activity
-            android:name=".PeekActivity"
+            android:name="com.skooterapp.PeekActivity"
             android:label="@string/title_activity_peek"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.skooterapp.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MainActivity" />
+                android:value="com.skooterapp.MainActivity" />
         </activity>
         <activity
-            android:name=".MapActivity"
+            android:name="com.skooterapp.MapActivity"
             android:label="@string/title_activity_map"
-            android:parentActivityName=".ViewPostActivity"
+            android:parentActivityName="com.skooterapp.ViewPostActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.ViewPostActivity" />
+                android:value="com.skooterapp.ViewPostActivity" />
         </activity>
         <activity
-            android:name=".MeActivity"
+            android:name="com.skooterapp.MeActivity"
             android:label="@string/title_activity_me"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.skooterapp.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MainActivity" />
+                android:value="com.skooterapp.MainActivity" />
         </activity>
         <activity
-            android:name=".MePostsActivity"
+            android:name="com.skooterapp.MePostsActivity"
             android:label="@string/title_activity_me_posts"
-            android:parentActivityName=".MeActivity"
+            android:parentActivityName="com.skooterapp.MeActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MeActivity" />
+                android:value="com.skooterapp.MeActivity" />
         </activity>
         <activity
-            android:name=".MeCommentsActivity"
+            android:name="com.skooterapp.MeCommentsActivity"
             android:label="@string/title_activity_me_comments"
-            android:parentActivityName=".MeActivity"
+            android:parentActivityName="com.skooterapp.MeActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MeActivity" />
+                android:value="com.skooterapp.MeActivity" />
         </activity>
         <activity
-            android:name=".FlagActivity"
+            android:name="com.skooterapp.FlagActivity"
             android:label="@string/title_activity_flag"
-            android:parentActivityName=".ViewPostActivity"
+            android:parentActivityName="com.skooterapp.ViewPostActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.ViewPostActivity" />
+                android:value="com.skooterapp.ViewPostActivity" />
         </activity>
         <activity
-            android:name=".NotificationsActivity"
+            android:name="com.skooterapp.NotificationsActivity"
             android:label="@string/title_activity_notifications"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.skooterapp.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MainActivity" />
+                android:value="com.skooterapp.MainActivity" />
         </activity>
         <activity
-            android:name=".FavoritesActivity"
+            android:name="com.skooterapp.FavoritesActivity"
             android:label="@string/title_activity_favorites"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.skooterapp.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MainActivity" />
+                android:value="com.skooterapp.MainActivity" />
         </activity>
         <activity
-            android:name=".ChannelActivity"
+            android:name="com.skooterapp.ChannelActivity"
             android:label="@string/title_activity_channel"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.skooterapp.MainActivity"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -155,49 +155,49 @@
                 android:resource="@xml/searchable" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MainActivity" />
+                android:value="com.skooterapp.MainActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.skooterapp.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.skooterapp.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MainActivity" />
+                android:value="com.skooterapp.MainActivity" />
         </activity>
         <activity
-            android:name=".ViewImage"
+            android:name="com.skooterapp.ViewImage"
             android:label="@string/title_activity_view_image"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.skooterapp.MainActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MainActivity" />
+                android:value="com.skooterapp.MainActivity" />
         </activity>
         <activity
-            android:name=".FeedbackActivity"
+            android:name="com.skooterapp.FeedbackActivity"
             android:label="@string/title_activity_feedback"
-            android:parentActivityName=".SettingsActivity" >
+            android:parentActivityName="com.skooterapp.SettingsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.SettingsActivity" />
+                android:value="com.skooterapp.SettingsActivity" />
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name="com.skooterapp.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".SettingsActivity" >
+            android:parentActivityName="com.skooterapp.SettingsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.SettingsActivity" />
+                android:value="com.skooterapp.SettingsActivity" />
         </activity>
         <activity
-            android:name=".IntroductoryActivity"
+            android:name="com.skooterapp.IntroductoryActivity"
             android:label="@string/title_activity_introductory"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName="com.skooterapp.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.aayush.skooterapp.MainActivity" />
+                android:value="com.skooterapp.MainActivity" />
         </activity>
     </application>
 

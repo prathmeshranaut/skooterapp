@@ -63,7 +63,7 @@
                     android:layout_alignParentStart="true"
                     />
 
-                <net.aayush.skooterapp.ATextView
+                <com.skooterapp.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -105,7 +105,7 @@
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/vote_up_inactive"/>
 
-                <net.aayush.skooterapp.ATextView
+                <com.skooterapp.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -153,7 +153,7 @@
                     android:layout_marginRight="3dp"
                     />
 
-                <net.aayush.skooterapp.ATextView
+                <com.skooterapp.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
@@ -180,7 +180,7 @@
                     android:layout_marginEnd="3dp"
                     />
 
-                <net.aayush.skooterapp.ATextView
+                <com.skooterapp.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
@@ -207,7 +207,7 @@
                     android:layout_marginStart="15dp"
                     />
 
-                <net.aayush.skooterapp.ATextView
+                <com.skooterapp.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"

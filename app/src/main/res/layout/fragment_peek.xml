@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    skooter:context="net.aayush.skooterapp.fragments.Peek"
+    skooter:context="com.skooterapp.fragments.Peek"
     >
 
 

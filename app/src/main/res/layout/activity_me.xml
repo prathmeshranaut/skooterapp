@@ -2,7 +2,7 @@
                 xmlns:skooter="http://schemas.android.com/tools"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                skooter:context="net.aayush.skooterapp.MeActivity">
+                skooter:context="com.skooterapp.MeActivity">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -26,7 +26,7 @@
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"/>
 
-                <net.aayush.skooterapp.RippleView
+                <com.skooterapp.RippleView
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_centerInParent="true"/>

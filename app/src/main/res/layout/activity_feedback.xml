@@ -2,11 +2,11 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="net.aayush.skooterapp.FeedbackActivity">
+                tools:context="com.skooterapp.FeedbackActivity">
 
     <include layout="@layout/toolbar" android:id="@+id/app_bar" />
 
-    <net.aayush.skooterapp.AEditText
+    <com.skooterapp.AEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"
@@ -14,7 +14,7 @@
         android:layout_below="@id/app_bar"
         />
 
-    <net.aayush.skooterapp.AEditText
+    <com.skooterapp.AEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
@@ -22,7 +22,7 @@
         android:layout_below="@id/name"
         />
 
-    <net.aayush.skooterapp.AEditText
+    <com.skooterapp.AEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/feedback"

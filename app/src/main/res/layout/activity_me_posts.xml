@@ -2,7 +2,7 @@
                 xmlns:skooter="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                skooter:context="net.aayush.skooterapp.MePostsActivity">
+                skooter:context="com.skooterapp.MePostsActivity">
 
     <include
         android:id="@+id/app_bar"

@@ -2,11 +2,11 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="net.aayush.skooterapp.FlagActivity">
+                tools:context="com.skooterapp.FlagActivity">
 
     <include android:id="@+id/app_bar" layout="@layout/toolbar" />
 
-    <net.aayush.skooterapp.ATextView
+    <com.skooterapp.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/app_bar"

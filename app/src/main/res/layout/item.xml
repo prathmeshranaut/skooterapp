@@ -3,7 +3,7 @@
                 android:layout_height="fill_parent"
     android:padding="4dp">
 
-    <net.aayush.skooterapp.ATextView
+    <com.skooterapp.ATextView
         android:id="@+id/item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

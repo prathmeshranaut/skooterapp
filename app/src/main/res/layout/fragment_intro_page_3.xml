@@ -16,7 +16,7 @@
         android:alpha="0.0"
         />
 
-    <net.aayush.skooterapp.ATextView
+    <com.skooterapp.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp"

@@ -14,7 +14,7 @@
         android:layout_centerVertical="true"
         android:id="@+id/anonymous_icon" />
 
-    <net.aayush.skooterapp.ATextView
+    <com.skooterapp.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -39,7 +39,7 @@
         android:id="@+id/intro_share_icon"
         />
 
-    <net.aayush.skooterapp.ABITextView
+    <com.skooterapp.ABITextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
