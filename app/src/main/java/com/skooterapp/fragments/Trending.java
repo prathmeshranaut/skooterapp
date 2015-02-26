@@ -14,24 +14,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.skooterapp.TrendingPostAdapter;
-import com.skooterapp.data.Post;
-
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.skooterapp.AppController;
 import com.skooterapp.BaseActivity;
 import com.skooterapp.ChannelActivity;
 import com.skooterapp.R;
 import com.skooterapp.SkooterJsonObjectRequest;
+import com.skooterapp.TrendingPostAdapter;
 import com.skooterapp.ViewPostActivity;
+import com.skooterapp.data.Post;
 import com.skooterapp.data.Zone;
 import com.skooterapp.data.ZoneDataHandler;
 
@@ -51,12 +50,9 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     protected List<Post> mPostsList = new ArrayList<Post>();
     protected List<String> mChannelsList = new ArrayList<String>();
     protected TrendingPostAdapter mPostsAdapter;
-    protected ListView mListPosts;
+    protected PullToRefreshListView mListPosts;
     protected Context mContext;
-    protected SwipeRefreshLayout mSwipeRefreshLayout;
     private List<String> items = new ArrayList<String>();
-    protected ProgressBar mProgressBar;
-    protected LinearLayout mProgressBarLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +69,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            ((ActionBarActivity)getActivity()).getSupportActionBar().setTitle("Trending");
+            ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle("Trending");
         }
     }
 
@@ -84,21 +80,18 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
         View rootView = inflater.inflate(R.layout.fragment_trending, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
         getTrendingSkoots();
 
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
-        mProgressBarLayout = (LinearLayout) rootView.findViewById(R.id.progress_bar_layout);
-
         mPostsAdapter = new TrendingPostAdapter(mContext, R.layout.list_view_post_row, mPostsList, mChannelsList);
-        mListPosts = (ListView) rootView.findViewById(R.id.list_posts);
+        mListPosts = (PullToRefreshListView) rootView.findViewById(R.id.list_posts);
         mListPosts.setAdapter(mPostsAdapter);
+        mListPosts.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+
+                getTrendingSkoots();
+            }
+        });
 
         mListPosts.setOnItemClickListener(new ListView.OnItemClickListener() {
 
@@ -107,13 +100,13 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                 Log.d(LOG_TAG, Integer.toString(position));
                 if (position < mChannelsList.size()) {
                     Intent intent = new Intent(mContext, ChannelActivity.class);
-                    Log.d(LOG_TAG, mPostsList.get(position).toString());
+                    Log.d(LOG_TAG, mPostsList.get(position - 1).toString());
                     intent.putExtra("CHANNEL_NAME", mChannelsList.get(position));
                     mContext.startActivity(intent);
                 } else {
                     Log.d(LOG_TAG, mPostsList.get(position).toString());
                     Intent intent = new Intent(getActivity(), ViewPostActivity.class);
-                    intent.putExtra(BaseActivity.SKOOTER_POST, (Post) mPostsList.get(position - mChannelsList.size() - 1));
+                    intent.putExtra(BaseActivity.SKOOTER_POST, (Post) mPostsList.get(position - mChannelsList.size() - 2));
                     startActivity(intent);
                 }
             }
@@ -164,15 +157,12 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
                         Post postObject = Post.parsePostFromJSONObject(jsonArray.getJSONObject(i));
                         mPostsList.add(postObject);
                     }
-                    mProgressBar.setVisibility(View.GONE);
-                    mProgressBarLayout.setVisibility(View.GONE);
-                    mSwipeRefreshLayout.setVisibility(View.VISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");
                 }
                 mPostsAdapter.notifyDataSetChanged();
-                mSwipeRefreshLayout.setRefreshing(false);
+                mListPosts.onRefreshComplete();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -244,9 +234,13 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         menu.clear();
         inflater.inflate(R.menu.menu_trending, menu);
 
-        if (BaseActivity.mUser.isHasNotifications()) {
-            MenuItem menuItem = menu.findItem(R.id.action_alerts);
-            menuItem.setIcon(R.drawable.notification_icon_active);
+        if (BaseActivity.mUser != null) {
+            if (BaseActivity.mUser.isHasNotifications()) {
+                MenuItem menuItem = menu.findItem(R.id.action_alerts);
+                if (menuItem != null) {
+                    menuItem.setIcon(R.drawable.notification_icon_active);
+                }
+            }
         }
 
 //        MenuItem searchItem = menu.findItem(R.id.action_search);

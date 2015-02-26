@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:id="@+id/intro_compass"
-        android:alpha="0.0"
+        android:alpha="1.0"
         />
 
     <com.skooterapp.ATextView
@@ -28,7 +28,7 @@
         android:layout_marginTop="30dp"
         android:textColor="@color/skooterIntroTextColor"
         android:gravity="center"
-        android:alpha="0.0"
+        android:alpha="1.0"
         />
 
     <com.skooterapp.ABITextView
@@ -43,7 +43,7 @@
         android:layout_marginTop="20dp"
         android:textColor="@color/skooterIntroTextColor"
         android:gravity="center"
-        android:alpha="0.0"
+        android:alpha="1.0"
         />
 
     <ImageView
@@ -55,7 +55,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
         android:id="@+id/intro_channels"
-        android:alpha="0.0"
+        android:alpha="1.0"
         />
 
     <Button
@@ -65,10 +65,10 @@
         android:text="Finish"
         android:id="@+id/intro_finish_button"
         android:textColor="@color/skooterBackgroundColor"
-        android:layout_below="@id/intro_channels"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
         android:layout_marginRight="10dp"
-        android:alpha="0.0" />
+        android:alpha="1.0" />
 
 </RelativeLayout>

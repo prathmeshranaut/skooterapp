@@ -24,7 +24,7 @@ public class GPSLocator extends Service implements LocationListener {
     double latitude;
     double longitude;
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 5;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 2;
 
     protected LocationManager mLocationManager;

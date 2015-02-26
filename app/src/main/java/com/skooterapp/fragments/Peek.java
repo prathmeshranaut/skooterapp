@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,17 +20,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.skooterapp.AppController;
+import com.skooterapp.BaseActivity;
 import com.skooterapp.PeekActivity;
 import com.skooterapp.PeekPostAdapter;
-import com.skooterapp.data.Post;
-
-import com.skooterapp.BaseActivity;
-
 import com.skooterapp.R;
 import com.skooterapp.SkooterJsonArrayRequest;
 import com.skooterapp.SkooterJsonObjectRequest;
 import com.skooterapp.ViewPostActivity;
+import com.skooterapp.data.Post;
 import com.skooterapp.data.Zone;
 import com.skooterapp.data.ZoneDataHandler;
 
@@ -44,15 +43,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class Peek extends Fragment {
 
     protected static final String LOG_TAG = Peek.class.getSimpleName();
     protected Context mContext;
-    protected ListView mListView;
+    protected PullToRefreshListView mListView;
     protected ArrayAdapter<Zone> zoneArrayAdapter;
     protected ArrayList<Zone> followingZones = new ArrayList<Zone>();
     private PeekPostAdapter mPostsAdapter;
-    protected SwipeRefreshLayout mSwipeRefreshLayout;
     private ArrayList<Post> mPostsList = new ArrayList<Post>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,12 +58,6 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         mContext = container.getContext();
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_peek, container, false);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
 
         downloadZones();
 
@@ -75,7 +67,13 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
         findZonesFollowedByUser(zones);
 
-        mListView = (ListView) rootView.findViewById(R.id.list_zones);
+        mListView = (PullToRefreshListView) rootView.findViewById(R.id.list_posts);
+        mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                getPeekData();
+            }
+        });
 
         if (followingZones.size() > 0) {
             //Fetch the peek posts for the person
@@ -96,19 +94,13 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 }
             });
         } else {
+            //TODO
             final ArrayAdapter<Zone> zoneArrayAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, new ArrayList<Zone>());
-            View header = getLayoutInflater(savedInstanceState).inflate(R.layout.list_header_text_view, null);
-            mListView.addHeaderView(header);
             mListView.setAdapter(zoneArrayAdapter);
             mListView.setEnabled(false);
         }
 
         return rootView;
-    }
-
-    @Override
-    public void onRefresh() {
-        getPeekData();
     }
 
     public void getPeekData() {
@@ -138,7 +130,7 @@ public class Peek extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                 if(mPostsAdapter != null) {
                     mPostsAdapter.notifyDataSetChanged();
                 }
-                mSwipeRefreshLayout.setRefreshing(false);
+                mListView.onRefreshComplete();
             }
         }, new Response.ErrorListener() {
             @Override

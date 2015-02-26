@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -15,9 +16,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.skooterapp.data.Post;
-
 import com.skooterapp.data.Notification;
+import com.skooterapp.data.Post;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +35,7 @@ public class NotificationsActivity extends BaseActivity {
     protected ArrayList<Notification> mNotificationArrayList = new ArrayList<Notification>();
     private NotificationAdapter mNotificationAdapter;
     private ListView mNotificationList;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class NotificationsActivity extends BaseActivity {
         activateToolbarWithHomeEnabled("Notifications");
 
         mNotificationList = (ListView) findViewById(R.id.notifications_list);
+        mProgressBar = (ProgressBar) findViewById(R.id.loading_progress);
 
         //Get the notifications for the user
         Map<String, String> params = new HashMap<String, String>();
@@ -83,7 +85,6 @@ public class NotificationsActivity extends BaseActivity {
                     mNotificationArrayList.clear();
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonNotification = response.getJSONObject(i);
-
                         int id = jsonNotification.getInt(NOTIFICATION_ID);
                         String text = jsonNotification.getString(NOTIFICATION_TEXT);
                         int post_id = jsonNotification.getInt(NOTIFICATION_POST_ID);
@@ -131,6 +132,7 @@ public class NotificationsActivity extends BaseActivity {
                     } else {
                         mUser.setHasNotifications(true);
                     }
+                    mProgressBar.setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");

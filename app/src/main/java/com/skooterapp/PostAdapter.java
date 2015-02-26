@@ -25,23 +25,15 @@ import java.util.List;
 
 public class PostAdapter extends ArrayAdapter<Post> {
 
-    Context mContext;
-    int mLayoutResourceId;
-    List<Post> data = new ArrayList<Post>();
-    boolean mFlaggable;
-    LinearLayout mDeleteView;
-    LinearLayout mFlagView;
-    TextView mTypeIdView;
-    TextView mTypeView;
-    boolean canPerformActivity = true;
-
-    public boolean isFlaggable() {
-        return mFlaggable;
-    }
-
-    public void setFlaggable(boolean flaggable) {
-        mFlaggable = flaggable;
-    }
+    protected Context mContext;
+    protected int mLayoutResourceId;
+    protected List<Post> data = new ArrayList<Post>();
+    protected boolean mFlaggable;
+    protected LinearLayout mDeleteView;
+    protected LinearLayout mFlagView;
+    protected TextView mTypeIdView;
+    protected TextView mTypeView;
+    protected boolean canPerformActivity = true;
 
     public PostAdapter(Context context, int resource, List<Post> objects) {
         super(context, resource, objects);
@@ -82,7 +74,20 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         final Post post = data.get(position);
 
-        View is_user_post_view = convertView.findViewById(R.id.is_user_skoot);
+        final View is_user_post_view = convertView.findViewById(R.id.is_user_skoot);
+        final TextView postContent = (TextView) convertView.findViewById(R.id.postText);
+        final TextView handleContent = (TextView) convertView.findViewById(R.id.handleText);
+        final TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
+        final TextView voteCount = (TextView) convertView.findViewById(R.id.voteCount);
+        final TextView commentsCount = (TextView) convertView.findViewById(R.id.commentsCount);
+        final TextView favoritesCount = (TextView) convertView.findViewById(R.id.favoritesCount);
+        final ImageView postImage = (ImageView) convertView.findViewById(R.id.post_image);
+        final ImageView commentImage = (ImageView) convertView.findViewById(R.id.commentImage);
+        final Button flagButton = (Button) convertView.findViewById(R.id.flagButton);
+        final Button favoriteBtn = (Button) convertView.findViewById(R.id.favorite);
+        final Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
+        final Button downvoteBtn = (Button) convertView.findViewById(R.id.downvote);
+
         if (post.isUserSkoot()) {
             is_user_post_view.setAlpha(1.0f);
             is_user_post_view.setVisibility(View.VISIBLE);
@@ -90,11 +95,14 @@ public class PostAdapter extends ArrayAdapter<Post> {
             is_user_post_view.setAlpha(0.0f);
             is_user_post_view.setVisibility(View.GONE);
         }
-        TextView postContent = (TextView) convertView.findViewById(R.id.postText);
+
         postContent.setText(post.getContent());
 
-        final TextView handleContent = (TextView) convertView.findViewById(R.id.handleText);
         handleContent.setText(post.getChannel());
+        handleContent.setVisibility(View.VISIBLE);
+        if (post.getChannel().equals("")) {
+            handleContent.setVisibility(View.GONE);
+        }
         if (mContext.getClass() != ChannelActivity.class) {
             handleContent.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -106,24 +114,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 }
             });
         }
-        handleContent.setVisibility(View.VISIBLE);
-        if (post.getChannel().equals("")) {
-            handleContent.setVisibility(View.GONE);
-        }
 
-        TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         timestamp.setText(post.getTimestamp());
-
-        final TextView voteCount = (TextView) convertView.findViewById(R.id.voteCount);
         voteCount.setText(Integer.toString(post.getVoteCount()));
-
-        TextView commentsCount = (TextView) convertView.findViewById(R.id.commentsCount);
         commentsCount.setText(Integer.toString(post.getCommentsCount()));
-
-        final TextView favoritesCount = (TextView) convertView.findViewById(R.id.favoritesCount);
         favoritesCount.setText(Integer.toString(post.getFavoriteCount()));
-
-        final Button flagButton = (Button) convertView.findViewById(R.id.flagButton);
 
         if (mFlaggable) {
             flagButton.setVisibility(View.VISIBLE);
@@ -155,7 +150,6 @@ public class PostAdapter extends ArrayAdapter<Post> {
         } else {
             flagButton.setVisibility(View.GONE);
         }
-        final ImageView postImage = (ImageView) convertView.findViewById(R.id.post_image);
         if (post.isImagePresent()) {
 
             ImageLoader imageLoader = AppController.getInstance().getImageLoader();
@@ -193,11 +187,6 @@ public class PostAdapter extends ArrayAdapter<Post> {
         } else {
             postImage.setVisibility(View.GONE);
         }
-        ImageView commentImage = (ImageView) convertView.findViewById(R.id.commentImage);
-
-        final Button favoriteBtn = (Button) convertView.findViewById(R.id.favorite);
-        Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
-        Button downvoteBtn = (Button) convertView.findViewById(R.id.downvote);
 
         favoriteBtn.setTag(post);
         upvoteBtn.setTag(post);

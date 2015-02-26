@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:id="@+id/trending_icon"
-        android:alpha="0.0" />
+        android:alpha="1.0" />
 
     <com.skooterapp.ATextView
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
         android:layout_marginTop="30dp"
         android:textColor="@color/skooterIntroTextColor"
         android:textAlignment="center"
-        android:alpha="0.0"
+        android:alpha="1.0"
         android:gravity="center"
         />
 
@@ -43,7 +43,7 @@
         android:layout_marginTop="30dp"
         android:textColor="@color/skooterIntroTextColor"
         android:textAlignment="center"
-        android:alpha="0.0"
+        android:alpha="1.0"
         android:gravity="center"
         />
 
@@ -63,7 +63,7 @@
         android:layout_marginRight="20dp"
         android:textColor="@color/skooterIntroTextColor"
         android:textAlignment="center"
-        android:alpha="0.0"
+        android:alpha="1.0"
         android:gravity="center"
         />
 

@@ -131,7 +131,11 @@ public class Me extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.menu_me, menu);
         MenuItem menuItem = menu.findItem(R.id.score);
-        menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore()));
+        if (BaseActivity.mUser != null) {
+            menuItem.setTitle(Integer.toString(BaseActivity.mUser.getScore()));
+        } else {
+            menuItem.setTitle(Integer.toString(0));
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 

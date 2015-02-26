@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:id="@+id/peek_icon"
-        android:alpha="0.0"
+        android:alpha="1.0"
         />
 
     <com.skooterapp.ATextView
@@ -29,7 +29,7 @@
         android:textColor="@color/skooterIntroTextColor"
         android:textAlignment="center"
         android:gravity="center"
-        android:alpha="0.0"
+        android:alpha="1.0"
         />
 
     <ImageView
@@ -40,7 +40,7 @@
         android:layout_marginTop="20dp"
         android:layout_alignParentRight="true"
         android:id="@+id/intro_peek_location"
-        android:alpha="0.0"
+        android:alpha="1.0"
         />
 
 </RelativeLayout>

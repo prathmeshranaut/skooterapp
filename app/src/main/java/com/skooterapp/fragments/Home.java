@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -29,15 +28,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.skooterapp.ComposeActivity;
-import com.skooterapp.data.Post;
-
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.skooterapp.AppController;
 import com.skooterapp.BaseActivity;
+import com.skooterapp.ComposeActivity;
 import com.skooterapp.PostAdapter;
 import com.skooterapp.R;
 import com.skooterapp.SkooterJsonArrayRequest;
 import com.skooterapp.ViewPostActivity;
+import com.skooterapp.data.Post;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,12 +53,10 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     private static final String LOG_TAG = Home.class.getSimpleName();
     protected List<Post> mPostsList = new ArrayList<Post>();
     protected ArrayAdapter<Post> mPostsAdapter;
-    protected ListView mListPosts;
+    protected PullToRefreshListView mListPosts;
     protected Context mContext;
-    protected SwipeRefreshLayout mSwipeRefreshLayout;
+    //protected SwipeRefreshLayout mSwipeRefreshLayout;
     protected LinearLayout mLinearLayout;
-    protected ProgressBar mProgressBar;
-    protected LinearLayout mProgressBarLayout;
 
     private static final int ACTIVITY_POST_SKOOT = 100;
 
@@ -116,30 +114,25 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
         getLatestSkoots();
 
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
-        mProgressBarLayout = (LinearLayout) rootView.findViewById(R.id.progress_bar_layout);
-
         mPostsAdapter = new PostAdapter(mContext, R.layout.list_view_post_row, BaseActivity.mHomePosts);
-        mListPosts = (ListView) rootView.findViewById(R.id.list_posts);
+        mListPosts = (PullToRefreshListView) rootView.findViewById(R.id.list_posts);
         mListPosts.setAdapter(mPostsAdapter);
+        mListPosts.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                // Do work to refresh the list here.
+                getLatestSkoots();
+            }
+        });
 
         mListPosts.setOnItemClickListener(new ListView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Context context = view.getContext();
-
                 Intent intent = new Intent(getActivity(), ViewPostActivity.class);
-                intent.putExtra(BaseActivity.SKOOTER_POST, BaseActivity.mHomePosts.get(position));
+                intent.putExtra(BaseActivity.SKOOTER_POST, BaseActivity.mHomePosts.get(position - 1));
                 startActivity(intent);
             }
         });
@@ -269,20 +262,15 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         mLinearLayout = (LinearLayout) rootView.findViewById(R.id.focusLayout);
         mLinearLayout.requestFocus();
 
-        postSkoot.setOnFocusChangeListener(
-                new View.OnFocusChangeListener()
-
-                {
-                    @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
-                        if (hasFocus) {
-                            Intent intent = new Intent(getActivity(), ComposeActivity.class);
-                            startActivityForResult(intent, ACTIVITY_POST_SKOOT);
-                        }
-                    }
+        postSkoot.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    Intent intent = new Intent(getActivity(), ComposeActivity.class);
+                    startActivityForResult(intent, ACTIVITY_POST_SKOOT);
                 }
-
-        );
+            }
+        });
 
         Button postSkootButton = (Button) rootView.findViewById(R.id.commentSkoot);
         postSkootButton.setOnClickListener(new View.OnClickListener() {
@@ -318,16 +306,13 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
                         Post postObject = Post.parsePostFromJSONObject(jsonArray.getJSONObject(i));
 
                         BaseActivity.mHomePosts.add(postObject);
-                        mProgressBar.setVisibility(View.GONE);
-                        mProgressBarLayout.setVisibility(View.GONE);
-                        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");
                 }
                 mPostsAdapter.notifyDataSetChanged();
-                mSwipeRefreshLayout.setRefreshing(false);
+                mListPosts.onRefreshComplete();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -373,8 +358,7 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
             public void onResponse(JSONArray response) {
                 Log.d(LOG_TAG, response.toString());
                 if (response.length() > 0) {
-                    MenuItem menuItem = mMenu.findItem(R.id.action_alerts);
-                    menuItem.setIcon(R.drawable.notification_icon_active);
+                    changeNotificationIconInMenu();
                     BaseActivity.mUser.setHasNotifications(true);
                 }
             }
@@ -393,12 +377,28 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
         mMenu = menu;
-        if (BaseActivity.mUser.isHasNotifications()) {
-            MenuItem menuItem = mMenu.findItem(R.id.action_alerts);
-            menuItem.setIcon(R.drawable.notification_icon_active);
-        } else {
-            checkNotifications();
+        if (BaseActivity.mUser != null) {
+            if (BaseActivity.mUser.isHasNotifications()) {
+                changeNotificationIconInMenu();
+            } else {
+                checkNotifications();
+            }
         }
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    protected void changeNotificationIconInMenu() {
+        if (mMenu != null && BaseActivity.mUser != null) {
+            MenuItem menuItem = mMenu.findItem(R.id.action_alerts);
+            if (BaseActivity.mUser.isHasNotifications()) {
+                if (menuItem != null) {
+                    menuItem.setIcon(R.drawable.notification_icon_active);
+                }
+            } else {
+                if (menuItem != null) {
+                    menuItem.setIcon(R.drawable.notification_icon);
+                }
+            }
+        }
     }
 }

@@ -58,7 +58,7 @@ public class ZoneFollowAdapter extends ArrayAdapter<Zone>{
             }
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(error.getMessage());
+                VolleyLog.d("Zone Follow", error.getMessage());
             }
         });
 

@@ -71,6 +71,7 @@ public class ViewPostActivity extends BaseActivity {
 
         Intent intent = getIntent();
         mPost = (Post) intent.getSerializableExtra(SKOOTER_POST);
+        canPerformActivity = intent.getBooleanExtra("can_perform_activity", true);
         if(mPost == null) {
             postId = intent.getIntExtra(SKOOTER_POST_ID, 0);
             getCommentsForPostId(postId, userId, true);
@@ -79,7 +80,6 @@ public class ViewPostActivity extends BaseActivity {
             getCommentsForPostId(mPost.getId(), userId, false);
             initListViews();
         }
-        canPerformActivity = intent.getBooleanExtra("can_perform_activity", true);
 
         Button commentBtn = (Button) findViewById(R.id.commentSkoot);
 

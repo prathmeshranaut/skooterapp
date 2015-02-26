@@ -5,5 +5,5 @@
               android:id="@+id/addZonesText"
               android:gravity="center_horizontal"
               android:padding="40dp"
-              android:text="Add zones by clicking on +">
+              android:text="Follow feeds from college campuses &amp; companies by clicking on +">
 </com.skooterapp.ATextView>

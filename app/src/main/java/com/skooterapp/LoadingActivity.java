@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -291,6 +292,8 @@ public class LoadingActivity extends BaseActivity {
         String androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         Map<String, String> params = new HashMap<>();
         params.put("phone", androidId);
+        params.put("device_info", Build.BRAND + " " + Build.MODEL);
+        params.put("android_version", Integer.toString(Build.VERSION.SDK_INT));
 
         String url = substituteString(getResources().getString(R.string.user_new), new HashMap<String, String>());
         Log.d(LOG_TAG, params.toString());
