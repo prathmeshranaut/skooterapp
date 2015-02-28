@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -50,6 +51,7 @@ public class Peek extends Fragment {
     protected PullToRefreshListView mListView;
     protected ArrayAdapter<Zone> zoneArrayAdapter;
     protected ArrayList<Zone> followingZones = new ArrayList<Zone>();
+    protected TextView mInfoTextView;
     private PeekPostAdapter mPostsAdapter;
     private ArrayList<Post> mPostsList = new ArrayList<Post>();
 
@@ -67,6 +69,7 @@ public class Peek extends Fragment {
 
         findZonesFollowedByUser(zones);
 
+        mInfoTextView = (TextView) rootView.findViewById(R.id.peek_info_text);
         mListView = (PullToRefreshListView) rootView.findViewById(R.id.list_posts);
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
@@ -77,6 +80,8 @@ public class Peek extends Fragment {
 
         if (followingZones.size() > 0) {
             //Fetch the peek posts for the person
+            mInfoTextView.setText("Peeking posts...");
+            mInfoTextView.setVisibility(View.VISIBLE);
             getPeekData();
 
             mPostsAdapter = new PeekPostAdapter(mContext, R.layout.list_view_peek_row, mPostsList);
@@ -84,17 +89,18 @@ public class Peek extends Fragment {
             mListView.setAdapter(mPostsAdapter);
 
             mListView.setOnItemClickListener(new ListView.OnItemClickListener() {
-
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(getActivity(), ViewPostActivity.class);
-                    intent.putExtra(BaseActivity.SKOOTER_POST, mPostsList.get(position));
+                    intent.putExtra(BaseActivity.SKOOTER_POST, mPostsList.get(position - 1));
                     intent.putExtra("can_perform_activity", false);
                     startActivity(intent);
                 }
             });
         } else {
             //TODO
+            mInfoTextView.setText("Follow feeds from college campuses & companies by clicking on +");
+            mInfoTextView.setVisibility(View.VISIBLE);
             final ArrayAdapter<Zone> zoneArrayAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, new ArrayList<Zone>());
             mListView.setAdapter(zoneArrayAdapter);
             mListView.setEnabled(false);
@@ -121,6 +127,13 @@ public class Peek extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         Post postObject = Post.parsePostFromJSONObject(jsonArray.getJSONObject(i));
                         mPostsList.add(postObject);
+                    }
+                    if(jsonArray.length() > 0) {
+                        mInfoTextView.setVisibility(View.GONE);
+                    }
+                    else {
+                        mInfoTextView.setVisibility(View.VISIBLE);
+                        mInfoTextView.setText("Follow feeds from college campuses & companies by clicking on +");
                     }
                     mListView.setEnabled(true);
                 } catch (JSONException e) {

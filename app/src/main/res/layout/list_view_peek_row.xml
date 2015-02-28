@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <com.android.volley.toolbox.NetworkImageView
                     android:src="@drawable/custom_loading_peek"
                     android:scaleType="fitXY"
                     android:layout_width="50dp"
@@ -74,7 +74,7 @@
                     android:layout_below="@+id/handleText"
                     />
 
-                <ImageView
+                <com.android.volley.toolbox.NetworkImageView
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:id="@+id/post_image"
@@ -87,7 +87,7 @@
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     android:focusable="false"
-                    android:background="@color/md_grey_200" />
+                    android:src="@color/md_grey_200" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -103,7 +103,8 @@
                     android:id="@+id/upvote"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/vote_up_inactive"/>
+                    android:background="@drawable/vote_up_inactive"
+                    android:focusable="false"/>
 
                 <com.skooterapp.ATextView
                     android:layout_width="wrap_content"
@@ -127,6 +128,7 @@
                     android:layout_below="@+id/voteCount"
                     android:layout_alignLeft="@+id/upvote"
                     android:background="@drawable/vote_down_inactive"
+                    android:focusable="false"
                     />
             </RelativeLayout>
         </LinearLayout>
@@ -205,6 +207,7 @@
                     android:background="@drawable/favorite_icon_inactive"
                     android:layout_marginLeft="15dp"
                     android:layout_marginStart="15dp"
+                    android:focusable="false"
                     />
 
                 <com.skooterapp.ATextView

@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +65,6 @@ public class ComposeActivity extends BaseActivity {
     protected static final String LOG_TAG = ComposeActivity.class.getSimpleName();
     private Menu mMenu;
     private final static int MAX_CHARACTERS = 200;
-    protected Zone mCurrentZone;
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final int CAMERA_BROWSE_IMAGE_REQUEST_CODE = 200;
@@ -75,6 +75,7 @@ public class ComposeActivity extends BaseActivity {
     private static final String IMAGE_DIRECTORY_NAME = "Skooter";
 
     private static ImageView imagePreview;
+    private static FrameLayout imagePreviewFrame;
 
     private Uri fileUri;
     private File mFile;
@@ -148,6 +149,7 @@ public class ComposeActivity extends BaseActivity {
         });
 
         imagePreview = (ImageView) findViewById(R.id.image_preview);
+        imagePreviewFrame = (FrameLayout) findViewById(R.id.image_preview_frame);
 
         calculateActiveZone();
     }
@@ -184,7 +186,7 @@ public class ComposeActivity extends BaseActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
+        if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
             //Successfully captured the image
             previewCapturedImage();
         } else if (requestCode == CAMERA_BROWSE_IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -194,7 +196,7 @@ public class ComposeActivity extends BaseActivity {
             mFile = new File(realPath);
             Uri uriFromPath = Uri.fromFile(mFile);
             fileUri = uriFromPath;
-            imagePreview.setVisibility(View.VISIBLE);
+            imagePreviewFrame.setVisibility(View.VISIBLE);
             imagePreview.setImageURI(uriFromPath);
         } else if (requestCode == CAMERA_BROWSE_IMAGE_REQUEST_CODE_KITKAT && resultCode == RESULT_OK) {
             fileUri = data.getData();
@@ -203,7 +205,7 @@ public class ComposeActivity extends BaseActivity {
             mFile = new File(realPath);
             Uri uriFromPath = Uri.fromFile(mFile);
             fileUri = uriFromPath;
-            imagePreview.setVisibility(View.VISIBLE);
+            imagePreviewFrame.setVisibility(View.VISIBLE);
             imagePreview.setImageURI(uriFromPath);
         } else if (resultCode == RESULT_CANCELED) {
 
@@ -215,7 +217,7 @@ public class ComposeActivity extends BaseActivity {
 
     private void previewCapturedImage() {
         try {
-            imagePreview.setVisibility(View.VISIBLE);
+            imagePreviewFrame.setVisibility(View.VISIBLE);
 
             BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -463,5 +465,10 @@ public class ComposeActivity extends BaseActivity {
             e.printStackTrace();
             Log.e(LOG_TAG, "Error processing Json Data");
         }
+    }
+
+    public void removeImage(View view) {
+        fileUri = null;
+        imagePreviewFrame.setVisibility(View.GONE);
     }
 }

@@ -21,6 +21,7 @@
         android:paddingBottom="2dp"
         android:paddingLeft="5dp"
         />
+
     <com.skooterapp.AEditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -34,13 +35,33 @@
         <requestFocus/>
     </com.skooterapp.AEditText>
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/image_preview"
-        android:padding="5dp"
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/image_preview_frame"
+        android:visibility="gone"
         android:layout_below="@id/skootText"
-        android:visibility="gone"/>
+        android:layout_margin="5dp">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/image_preview"
+            android:layout_below="@id/skootText"
+            android:scaleType="centerCrop"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:onClick="removeImage"
+            android:text="x"
+            android:textSize="22sp"
+            android:clickable="true"
+            android:textColor="@color/md_white_1000"
+            android:layout_marginRight="5dp"/>
+    </FrameLayout>
+
 
     <LinearLayout
         android:orientation="horizontal"
@@ -70,15 +91,16 @@
             android:padding="5dp"/>
 
         <!--<ImageView-->
-            <!--android:layout_width="38dp"-->
-            <!--android:layout_height="38dp"-->
-            <!--android:src="@drawable/location_icon"-->
-            <!--android:id="@+id/location_icon"-->
-            <!--android:tag="0"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:padding="5dp"/>-->
+        <!--android:layout_width="38dp"-->
+        <!--android:layout_height="38dp"-->
+        <!--android:src="@drawable/location_icon"-->
+        <!--android:id="@+id/location_icon"-->
+        <!--android:tag="0"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:padding="5dp"/>-->
 
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

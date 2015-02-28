@@ -69,29 +69,20 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
 
         Comment comment = data.get(position);
 
-        TextView commentContent = (TextView) convertView.findViewById(R.id.postText);
-        commentContent.setText(comment.getContent());
-
-        TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
-        timestamp.setText(comment.getTimestamp());
-
+        View is_user_comment = convertView.findViewById(R.id.is_user_comment);
+        final TextView commentContent = (TextView) convertView.findViewById(R.id.postText);
+        final TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         final TextView voteCount = (TextView) convertView.findViewById(R.id.voteCount);
-        voteCount.setText(Integer.toString(comment.getVoteCount()));
+        final Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
+        final Button downvoteBtn = (Button) convertView.findViewById(R.id.downvote);
+        final Button flagButton = (Button) convertView.findViewById(R.id.flagButton);
 
-        Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
-        Button downvoteBtn = (Button) convertView.findViewById(R.id.downvote);
+        commentContent.setText(comment.getContent());
+        timestamp.setText(comment.getTimestamp());
+        voteCount.setText(Integer.toString(comment.getVoteCount()));
 
         upvoteBtn.setTag(comment);
         downvoteBtn.setTag(comment);
-
-        upvoteBtn.setEnabled(true);
-        downvoteBtn.setEnabled(true);
-        upvoteBtn.setAlpha(1.0f);
-        downvoteBtn.setAlpha(1.0f);
-
-        View is_user_comment = convertView.findViewById(R.id.is_user_comment);
-        final Button flagButton = (Button) convertView.findViewById(R.id.flagButton);
-
 
         if (comment.isUserComment()) {
             is_user_comment.setVisibility(View.VISIBLE);
@@ -129,90 +120,87 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         } else {
             flagButton.setVisibility(View.GONE);
         }
+        if (canPerformActivity) {
+            upvoteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RelativeLayout rl = (RelativeLayout) v.getParent();
+                    Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
+                    Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
+                    Comment comment = (Comment) upvoteBtn.getTag();
+
+                    //Call the upvote method
+                    comment.upvoteComment();
+                    voteCount.setText(Integer.toString(comment.getVoteCount()));
+
+                    upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
+                    downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_inactive));
+                }
+            });
+
+            downvoteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RelativeLayout rl = (RelativeLayout) v.getParent();
+                    Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
+                    Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
+
+                    Comment comment = (Comment) downvoteBtn.getTag();
+
+                    //Call the upvote method
+                    comment.downvoteComment();
+                    voteCount.setText(Integer.toString(comment.getVoteCount()));
+
+                    upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_inactive));
+                    downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
+                }
+            });
+        } else {
+            upvoteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setMessage("You can't do any activity outside 3 kms");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+            });
+
+            downvoteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setMessage("You can't do any activity outside 3 kms");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+            });
+        }
+
         if (comment.isIfUserVoted()) {
-            upvoteBtn.setEnabled(false);
-            downvoteBtn.setEnabled(false);
             if (comment.isUserVote()) {
                 upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
-                downvoteBtn.setAlpha(0.3f);
+                downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_inactive));
             } else {
+                upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_inactive));
                 downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
-                upvoteBtn.setAlpha(0.3f);
             }
         } else {
-            if(canPerformActivity) {
-                upvoteBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        RelativeLayout rl = (RelativeLayout) v.getParent();
-                        Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
-                        Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
-                        Comment comment = (Comment) upvoteBtn.getTag();
-
-                        //Call the upvote method
-                        comment.upvoteComment();
-                        voteCount.setText(Integer.toString(comment.getVoteCount() + 1));
-                        upvoteBtn.setEnabled(false);
-                        downvoteBtn.setEnabled(false);
-                        upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
-                        downvoteBtn.setAlpha(0.3f);
-                    }
-                });
-
-                downvoteBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        RelativeLayout rl = (RelativeLayout) v.getParent();
-                        Button upvoteBtn = (Button) rl.findViewById(R.id.upvote);
-                        Button downvoteBtn = (Button) rl.findViewById(R.id.downvote);
-
-                        Comment comment = (Comment) downvoteBtn.getTag();
-
-                        //Call the upvote method
-                        comment.downvoteComment();
-                        voteCount.setText(Integer.toString(comment.getVoteCount() - 1));
-                        upvoteBtn.setEnabled(false);
-                        downvoteBtn.setEnabled(false);
-                        downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
-                        upvoteBtn.setAlpha(0.3f);
-                    }
-                });
-            } else {
-                upvoteBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                        builder.setMessage("You can't do any activity outside 3 kms");
-                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
-                    }
-                });
-
-                downvoteBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                        builder.setMessage("You can't do any activity outside 3 kms");
-                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
-                    }
-                });
-            }
+            upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_inactive));
+            downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_inactive));
         }
-        //upvoteBtn.setFocusable(false);
-        //downvoteBtn.setFocusable(false);
 
         return convertView;
     }

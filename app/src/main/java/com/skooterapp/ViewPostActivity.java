@@ -45,11 +45,11 @@ public class ViewPostActivity extends BaseActivity {
     protected ArrayAdapter<Post> postAdapter;
     protected boolean canPerformActivity;
 
-    LinearLayout flagView;
-    LinearLayout deleteView;
-    TextView typeIdView;
-    TextView typeView;
-    ListView listPosts;
+    protected LinearLayout flagView;
+    protected LinearLayout deleteView;
+    protected TextView typeIdView;
+    protected TextView typeView;
+    protected ListView listPosts;
 
     private final static int MAX_CHARACTERS = 200;
 
@@ -67,11 +67,14 @@ public class ViewPostActivity extends BaseActivity {
         listPosts = (ListView) findViewById(R.id.list_posts);
 
         final TextView commentText = (TextView) findViewById(R.id.commentText);
+        final Button commentBtn = (Button) findViewById(R.id.commentSkoot);
         final int postId;
 
         Intent intent = getIntent();
+
         mPost = (Post) intent.getSerializableExtra(SKOOTER_POST);
         canPerformActivity = intent.getBooleanExtra("can_perform_activity", true);
+
         if(mPost == null) {
             postId = intent.getIntExtra(SKOOTER_POST_ID, 0);
             getCommentsForPostId(postId, userId, true);
@@ -81,16 +84,12 @@ public class ViewPostActivity extends BaseActivity {
             initListViews();
         }
 
-        Button commentBtn = (Button) findViewById(R.id.commentSkoot);
-
         if (canPerformActivity) {
             commentBtn.setOnClickListener(new View.OnClickListener() {
-                String tag = "post_comment";
-
                 @Override
                 public void onClick(View v) {
                     if (commentText.getText().length() > 0 && commentText.getText().length() <= 200) {
-                        String url = "http://skooter.elasticbeanstalk.com/comment";
+                        String url = BaseActivity.substituteString(getResources().getString(R.string.comment_new), new HashMap<String, String>());
                         Map<String, String> params = new HashMap<String, String>();
                         params.put("user_id", Integer.toString(userId));
                         params.put("content", commentText.getText().toString());
@@ -130,7 +129,7 @@ public class ViewPostActivity extends BaseActivity {
                             }
                         });
 
-                        AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
+                        AppController.getInstance().addToRequestQueue(jsonObjectRequest, "post_comment");
 
                     } else if (commentText.getText().length() > MAX_CHARACTERS) {
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ViewPostActivity.this);

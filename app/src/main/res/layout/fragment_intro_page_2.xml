@@ -3,68 +3,76 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
+    >
 
-    <ImageView
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:src="@drawable/intro_trending_icon"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:id="@+id/trending_icon"
-        android:alpha="1.0" />
-
-    <com.skooterapp.ATextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="Stay informed with the trending content"
-        android:id="@+id/stay_informed"
         android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/trending_icon"
-        android:layout_marginTop="30dp"
-        android:textColor="@color/skooterIntroTextColor"
-        android:textAlignment="center"
-        android:alpha="1.0"
         android:gravity="center"
-        />
+        android:orientation="vertical">
 
-    <com.skooterapp.ATextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="Find out what's happening at campus"
-        android:id="@+id/find_out_latest"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/stay_informed"
-        android:layout_marginTop="30dp"
-        android:textColor="@color/skooterIntroTextColor"
-        android:textAlignment="center"
-        android:alpha="1.0"
-        android:gravity="center"
-        />
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:src="@drawable/intro_trending_icon"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/trending_icon"
+            android:alpha="1.0"/>
 
-    <com.skooterapp.ABITextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="\@Placements, @CampusNews,
+        <com.skooterapp.ATextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Stay informed with the trending content"
+            android:id="@+id/stay_informed"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/trending_icon"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/skooterIntroTextColor"
+            android:textAlignment="center"
+            android:alpha="1.0"
+            android:gravity="center"
+            />
+
+        <com.skooterapp.ATextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Find out what's happening at campus"
+            android:id="@+id/find_out_latest"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/stay_informed"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/skooterIntroTextColor"
+            android:textAlignment="center"
+            android:alpha="1.0"
+            android:gravity="center"
+            />
+
+        <com.skooterapp.ABITextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="\@Placements, @CampusNews,
 @Bhasad, @Crushesh, @fuchcha,
 @Confessions"
-        android:id="@+id/intro_channels"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/find_out_latest"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="@color/skooterIntroTextColor"
-        android:textAlignment="center"
-        android:alpha="1.0"
-        android:gravity="center"
-        />
+            android:id="@+id/intro_channels"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/find_out_latest"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/skooterIntroTextColor"
+            android:textAlignment="center"
+            android:alpha="1.0"
+            android:gravity="center"
+            />
+    </LinearLayout>
 
 </RelativeLayout>

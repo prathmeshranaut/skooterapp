@@ -98,12 +98,12 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(LOG_TAG, Integer.toString(position));
-                if (position < mChannelsList.size()) {
+                if (position < mChannelsList.size() + 1) {
                     Intent intent = new Intent(mContext, ChannelActivity.class);
                     Log.d(LOG_TAG, mPostsList.get(position - 1).toString());
-                    intent.putExtra("CHANNEL_NAME", mChannelsList.get(position));
+                    intent.putExtra("CHANNEL_NAME", mChannelsList.get(position - 1));
                     mContext.startActivity(intent);
-                } else {
+                } else if (position > mChannelsList.size() + 1) {
                     Log.d(LOG_TAG, mPostsList.get(position).toString());
                     Intent intent = new Intent(getActivity(), ViewPostActivity.class);
                     intent.putExtra(BaseActivity.SKOOTER_POST, (Post) mPostsList.get(position - mChannelsList.size() - 2));
@@ -196,37 +196,6 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
             return num2;
         }
     }
-
-//    public void getTrendingChannels() {
-//        Map<String, String> params = new HashMap<String, String>();
-//        params.put("user_id", Integer.toString(BaseActivity.userId));
-//
-//        String url = BaseActivity.substituteString(getResources().getString(R.string.channel_trending), params);
-//
-//        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
-//            @Override
-//            public void onResponse(JSONArray response) {
-//                try {
-//                    mPostsList.clear();
-//                    for (int i = 0; i < 3; i++) {
-//                        mPostsList.add(i, response.getString(i));
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Log.e(LOG_TAG, "Error processing Json Data");
-//                }
-//                mPostsAdapter.notifyDataSetChanged();
-//                mSwipeRefreshLayout.setRefreshing(false);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                VolleyLog.d(LOG_TAG, "Error: " + error.getMessage());
-//            }
-//        });
-//        Log.d(LOG_TAG, mPostsList.toString());
-//        AppController.getInstance().addToRequestQueue(jsonArrayRequest, "trending_channels");
-//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

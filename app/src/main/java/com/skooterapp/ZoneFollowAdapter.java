@@ -8,12 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.skooterapp.data.Zone;
 
 import java.util.ArrayList;
@@ -44,23 +42,25 @@ public class ZoneFollowAdapter extends ArrayAdapter<Zone>{
         TextView zoneName = (TextView) convertView.findViewById(R.id.zone_name);
         zoneName.setText(zone.getZoneName());
 
-        final ImageView zoneImage = (ImageView) convertView.findViewById(R.id.zone_icon);
+        final NetworkImageView zoneImage = (NetworkImageView) convertView.findViewById(R.id.zone_icon);
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
-        String url = zone.getZoneImage();
+        zoneImage.setImageUrl(zone.getZoneImage(), imageLoader);
 
-        imageLoader.get(url, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                if(response.getBitmap() != null) {
-                    zoneImage.setImageBitmap(response.getBitmap());
-                }
-            }
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Zone Follow", error.getMessage());
-            }
-        });
+//        String url = zone.getZoneImage();
+//
+//        imageLoader.get(url, new ImageLoader.ImageListener() {
+//            @Override
+//            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+//                if(response.getBitmap() != null) {
+//                    zoneImage.setImageBitmap(response.getBitmap());
+//                }
+//            }
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                VolleyLog.d("Zone Follow", error.getMessage());
+//            }
+//        });
 
         final Button button = (Button) convertView.findViewById(R.id.follow_zone_button);
         button.setTag(zone);

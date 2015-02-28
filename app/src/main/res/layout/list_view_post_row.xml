@@ -61,7 +61,7 @@
                     android:layout_marginBottom="5dp"
                     />
 
-                <ImageView
+                <com.android.volley.toolbox.NetworkImageView
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:id="@+id/post_image"
@@ -75,6 +75,7 @@
                     android:scaleType="centerCrop"
                     android:focusable="false"
                     android:background="@color/md_grey_200"
+                    android:src="@color/md_grey_200"
                     android:elevation="8dp" />
             </RelativeLayout>
 

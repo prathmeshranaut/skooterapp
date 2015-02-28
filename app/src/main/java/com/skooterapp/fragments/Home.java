@@ -55,7 +55,6 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     protected ArrayAdapter<Post> mPostsAdapter;
     protected PullToRefreshListView mListPosts;
     protected Context mContext;
-    //protected SwipeRefreshLayout mSwipeRefreshLayout;
     protected LinearLayout mLinearLayout;
 
     private static final int ACTIVITY_POST_SKOOT = 100;

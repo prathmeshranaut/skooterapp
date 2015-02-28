@@ -188,6 +188,20 @@ public class Post implements Serializable {
     }
 
     public void upvotePost() {
+        if(mIfUserVoted) {
+            if(!mUserVote) {
+                //Upvotes + 2
+                mUpvotes += 1;
+                mDownvotes -= 1;
+            } else {
+                return;
+            }
+        } else {
+            //Upvotes + 1
+            mUpvotes += 1;
+        }
+        mUserVote = true;
+        mIfUserVoted = true;
         Map<String, String> params = new HashMap<String, String>();
         params.put("post_id", Integer.toString(getId()));
 
@@ -202,8 +216,6 @@ public class Post implements Serializable {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(LOG_TAG, "Upvote: " + response.toString());
-                mUserVote = true;
-                mIfUserVoted = true;
             }
         }, new Response.ErrorListener() {
             @Override
@@ -231,6 +243,20 @@ public class Post implements Serializable {
     }
 
     public void downvotePost() {
+        if(mIfUserVoted) {
+            if(mUserVote) {
+                //Downvote - 2
+                mUpvotes -= 1;
+                mDownvotes += 1;
+            } else {
+                return;
+            }
+        } else {
+            //Downvote - 1
+            mDownvotes -= 1;
+        }
+        mUserVote = false;
+        mIfUserVoted = true;
         Map<String, String> params = new HashMap<String, String>();
         params.put("post_id", Integer.toString(getId()));
 
@@ -245,8 +271,6 @@ public class Post implements Serializable {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(LOG_TAG, "Downvote: " + response.toString());
-                mUserVote = false;
-                mIfUserVoted = true;
             }
         }, new Response.ErrorListener() {
             @Override

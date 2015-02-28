@@ -13,9 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.skooterapp.data.Post;
 
 import java.util.ArrayList;
@@ -23,9 +22,9 @@ import java.util.List;
 
 public class PeekPostAdapter extends ArrayAdapter<Post> {
 
-    Context mContext;
-    int mLayoutResourceId;
-    List<Post> data = new ArrayList<Post>();
+    protected Context mContext;
+    protected int mLayoutResourceId;
+    protected List<Post> data = new ArrayList<Post>();
 
     public PeekPostAdapter(Context context, int resource, List<Post> objects) {
         super(context, resource, objects);
@@ -44,16 +43,32 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
 
         final Post post = data.get(position);
 
-        View is_user_post_view = convertView.findViewById(R.id.is_user_post);
-        if (post.isUserSkoot()) {
-            is_user_post_view.setAlpha(1.0f);
-        } else {
-            is_user_post_view.setAlpha(0.0f);
-        }
-        TextView postContent = (TextView) convertView.findViewById(R.id.postText);
-        postContent.setText(post.getContent());
-
+        View isUserPostView = convertView.findViewById(R.id.is_user_post);
+        final TextView postContent = (TextView) convertView.findViewById(R.id.postText);
         final TextView handleContent = (TextView) convertView.findViewById(R.id.handleText);
+        final NetworkImageView zoneImage = (NetworkImageView) convertView.findViewById(R.id.zone_icon);
+        final NetworkImageView postImage = (NetworkImageView) convertView.findViewById(R.id.post_image);
+        final TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
+        final TextView voteCount = (TextView) convertView.findViewById(R.id.voteCount);
+        final TextView commentsCount = (TextView) convertView.findViewById(R.id.commentsCount);
+        final TextView favoritesCount = (TextView) convertView.findViewById(R.id.favoritesCount);
+        final Button favoriteBtn = (Button) convertView.findViewById(R.id.favorite);
+        final ImageView commentImage = (ImageView) convertView.findViewById(R.id.commentImage);
+        final Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
+        final Button downvoteBtn = (Button) convertView.findViewById(R.id.downvote);
+        ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
+        // Show/Hide indicator depending if the post is made by user
+        if (post.isUserSkoot()) {
+            isUserPostView.setAlpha(1.0f);
+        } else {
+            isUserPostView.setAlpha(0.0f);
+        }
+
+        postContent.setText(post.getContent());
+        if (post.getChannel().equals("")) {
+            handleContent.setVisibility(View.GONE);
+        }
         handleContent.setText(post.getChannel());
         handleContent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,51 +80,46 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
             }
         });
         handleContent.setVisibility(View.VISIBLE);
-        if (post.getChannel().equals("")) {
-            handleContent.setVisibility(View.GONE);
-        }
 
-        final ImageView zoneImage = (ImageView) convertView.findViewById(R.id.zone_icon);
-        ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+//        String url = post.getImageUrl();
+//
+//        imageLoader.get(url, new ImageLoader.ImageListener() {
+//            @Override
+//            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+//                if (response.getBitmap() != null) {
+//                    zoneImage.setImageBitmap(response.getBitmap());
+//                }
+//            }
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                VolleyLog.d(error.getMessage());
+//            }
+//        });
 
-        String url = post.getImageUrl();
+        zoneImage.setImageUrl(post.getImageUrl(), imageLoader);
 
-        imageLoader.get(url, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                if (response.getBitmap() != null) {
-                    zoneImage.setImageBitmap(response.getBitmap());
-                }
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(error.getMessage());
-            }
-        });
-
-        final ImageView postImage = (ImageView) convertView.findViewById(R.id.post_image);
         if (post.isImagePresent()) {
-
-            ImageLoader imageLoader2 = AppController.getInstance().getImageLoader();
-
-            String url2 = post.getSmallImageUrl();
             postImage.setVisibility(View.VISIBLE);
+            postImage.setImageUrl(post.getSmallImageUrl(), AppController.getInstance().getImageLoader());
 
-            imageLoader2.get(url2, new ImageLoader.ImageListener() {
-                @Override
-                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                    if (response.getBitmap() != null) {
-                        postImage.setImageBitmap(response.getBitmap());
-                        postImage.setBackground(null);
-                    }
-                }
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d("Peek Post", "Error: " + error.getMessage());
-                }
-            });
+//            String url2 = post.getSmallImageUrl();
+//            postImage.setVisibility(View.VISIBLE);
+//            postImage.setBackgroundColor(mContext.getResources().getColor(R.color.md_grey_200));
+//            imageLoader2.get(url2, new ImageLoader.ImageListener() {
+//                @Override
+//                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+//                    if (response.getBitmap() != null) {
+//                        postImage.setImageBitmap(response.getBitmap());
+//                        postImage.setBackground(null);
+//                    }
+//                }
+//
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    VolleyLog.d("Peek Post", "Error: " + error.getMessage());
+//                }
+//            });
             postImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -123,33 +133,15 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
             postImage.setVisibility(View.GONE);
         }
 
-        TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         timestamp.setText(post.getTimestamp());
 
-        final TextView voteCount = (TextView) convertView.findViewById(R.id.voteCount);
         voteCount.setText(Integer.toString(post.getVoteCount()));
-
-        TextView commentsCount = (TextView) convertView.findViewById(R.id.commentsCount);
         commentsCount.setText(Integer.toString(post.getCommentsCount()));
-
-        final TextView favoritesCount = (TextView) convertView.findViewById(R.id.favoritesCount);
         favoritesCount.setText(Integer.toString(post.getFavoriteCount()));
-
-        ImageView commentImage = (ImageView) convertView.findViewById(R.id.commentImage);
-
-        final Button favoriteBtn = (Button) convertView.findViewById(R.id.favorite);
-        Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
-        Button downvoteBtn = (Button) convertView.findViewById(R.id.downvote);
 
         favoriteBtn.setTag(post);
         upvoteBtn.setTag(post);
         downvoteBtn.setTag(post);
-
-        upvoteBtn.setEnabled(true);
-        downvoteBtn.setEnabled(true);
-        favoriteBtn.setEnabled(true);
-        upvoteBtn.setAlpha(1.0f);
-        downvoteBtn.setAlpha(1.0f);
 
         upvoteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,23 +206,17 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
         }
 
         if (post.isIfUserVoted()) {
-            upvoteBtn.setEnabled(false);
-            downvoteBtn.setEnabled(false);
             if (post.isUserVote()) {
                 upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_active));
-                downvoteBtn.setAlpha(0.3f);
+                downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_inactive));
             } else {
+                upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_inactive));
                 downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_active));
-                downvoteBtn.setAlpha(0.7f);
-                upvoteBtn.setAlpha(0.3f);
             }
         } else {
             upvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_up_inactive));
             downvoteBtn.setBackground(mContext.getResources().getDrawable(R.drawable.vote_down_inactive));
         }
-        favoriteBtn.setFocusable(false);
-        upvoteBtn.setFocusable(false);
-        downvoteBtn.setFocusable(false);
 
         return convertView;
     }
