@@ -152,20 +152,6 @@ public class PostAdapter extends ArrayAdapter<Post> {
             postImage.setVisibility(View.VISIBLE);
             postImage.setImageUrl(post.getSmallImageUrl(), AppController.getInstance().getImageLoader());
 
-//            imageLoader.get(url, new ImageLoader.ImageListener() {
-//                @Override
-//                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-//                    if (response.getBitmap() != null) {
-//                        postImage.setImageBitmap(response.getBitmap());
-//                    }
-//                }
-//
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                    VolleyLog.d("Post", error.getMessage());
-//                }
-//            });
-
             postImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -212,6 +198,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         } else {
             commentImage.setImageResource(R.drawable.comment_inactive);
         }
+
         if (canPerformActivity) {
             upvoteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
