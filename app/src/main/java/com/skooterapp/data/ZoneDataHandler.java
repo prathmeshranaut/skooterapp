@@ -69,7 +69,12 @@ public class ZoneDataHandler extends SQLiteOpenHelper {
         ArrayList<Zone> zones = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_ZONES + " ORDER BY " + COLUMN_ZONE_IS_FOLLOWING + " DESC", null);
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_ZONES
+                + " ORDER BY "
+                + COLUMN_ZONE_IS_FOLLOWING
+                + " DESC,"
+                + COLUMN_ZONE_NAME
+                + " ASC", null);
 
         while (c.moveToNext()) {
             Zone zone = new Zone();

@@ -54,16 +54,6 @@ public class FeedbackActivity extends BaseActivity {
             final TextView feedback = (TextView) findViewById(R.id.feedback);
             final TextView name = (TextView) findViewById(R.id.name);
 
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("fbzx", "3373883434178628382");
-            params.put("pageHistory", "0");
-            params.put("entry.528163506", feedback.getText().toString());
-            params.put("entry.609712554", email.getText().toString());
-            params.put("entry.480017787", name.getText().toString());
-            params.put("entry.1210654817", Build.DEVICE);
-            params.put("entry.1766166360", Integer.toString(Build.VERSION.SDK_INT));
-
-            Log.d(LOG_TAG, params.toString());
             final StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {

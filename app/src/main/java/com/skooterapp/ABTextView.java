@@ -5,25 +5,28 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-public class ATextView extends TextView {
-
-    public ATextView(Context context) {
+/**
+ * Created by aayushranaut on 2/28/15.
+ * com.skooterapp
+ */
+public class ABTextView extends TextView {
+    public ABTextView(Context context) {
         super(context);
         init();
     }
 
-    public ATextView(Context context, AttributeSet attrs) {
+    public ABTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public ATextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ABTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
     protected void init() {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "font/museo_300.otf");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "font/museo_500.otf");
         setTypeface(tf);
     }
 }

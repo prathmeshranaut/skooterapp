@@ -129,7 +129,7 @@ public class BaseActivity extends ActionBarActivity {
         activateToolbar();
         if (mToolbar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(title);
+            getSupportActionBar().setTitle("");
         }
         return mToolbar;
     }

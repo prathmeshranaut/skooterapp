@@ -1,6 +1,7 @@
 package com.skooterapp;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -82,6 +83,7 @@ public class ComposeActivity extends BaseActivity {
 
     TextView skootText;
     TextView skootHandle;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +138,7 @@ public class ComposeActivity extends BaseActivity {
                 captureImage();
             }
         });
-        if(!isDeviceSupportCamera()) {
+        if (!isDeviceSupportCamera()) {
             imageSelectIcon.setVisibility(View.GONE);
         }
 
@@ -308,6 +310,8 @@ public class ComposeActivity extends BaseActivity {
                 }
 
                 if (fileUri != null) {
+                    dialog = ProgressDialog.show(ComposeActivity.this, "", "Uploading image...", true);
+
                     new Thread(new Runnable() {
                         public void run() {
                             try {
@@ -408,7 +412,7 @@ public class ComposeActivity extends BaseActivity {
             if (mActiveZones.size() > 0) {
                 params.setParameter("zone_id", Integer.toString(mActiveZones.get(0).getZoneId()));
             } else {
-                params.setParameter("zone_id", "null'");
+                params.setParameter("zone_id", "null");
             }
 
             Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath());
@@ -423,8 +427,12 @@ public class ComposeActivity extends BaseActivity {
             nameValuePairs.add(new BasicNameValuePair("channel", skootHandle.getText().toString()));
             nameValuePairs.add(new BasicNameValuePair("content", skootText.getText().toString()));
             nameValuePairs.add(new BasicNameValuePair("location_id", Integer.toString(locationId)));
+
             if (mActiveZones.size() > 0) {
-                nameValuePairs.add(new BasicNameValuePair("zone_id", Integer.toString(mActiveZones.get(0).getZoneId())));
+                nameValuePairs.add(
+                        new BasicNameValuePair("zone_id",
+                                Integer.toString(mActiveZones.get(0).getZoneId()))
+                );
             } else {
                 nameValuePairs.add(new BasicNameValuePair("zone_id", "null"));
             }
@@ -432,9 +440,14 @@ public class ComposeActivity extends BaseActivity {
             try {
 
                 HttpClient httpclient = new DefaultHttpClient();
-                httpclient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+                httpclient.getParams().setParameter(
+                        CoreProtocolPNames.PROTOCOL_VERSION,
+                        HttpVersion.HTTP_1_1);
 
-                String url = substituteString(getResources().getString(R.string.skoot_new), new HashMap<String, String>());
+                String url = substituteString(
+                        getResources().getString(R.string.skoot_new),
+                        new HashMap<String, String>());
+
                 HttpPost httppost = new HttpPost(url);
 
                 httppost.setHeader("user_id", Integer.toString(userId));
@@ -444,7 +457,7 @@ public class ComposeActivity extends BaseActivity {
                 HttpResponse response = httpclient.execute(httppost);
 
                 parsePost(new JSONObject(EntityUtils.toString(response.getEntity())));
-
+                dialog.dismiss();
                 Log.d("Done", Integer.toString(response.getStatusLine().getStatusCode()));
                 Toast.makeText(ComposeActivity.this, "Woot! Skoot posted!", Toast.LENGTH_SHORT).show();
                 finish();

@@ -36,4 +36,6 @@
     <string name="channel_trending">channels/trending/{user_id}</string>
 
     <string name="static_maps">http://maps.google.com/maps/api/staticmap?center={latitude},{longitude}&amp;zoom=15&amp;size={width}x{height}&amp;sensor=false</string>
+
+    <string name="install_referral">https://docs.google.com/forms/d/100OSlr0pDG-9ZwzmlMMNcZNrljHnYWI3vxso9uksOos/formResponse</string>
 </resources>

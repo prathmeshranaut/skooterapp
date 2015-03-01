@@ -22,7 +22,7 @@ public class AEditText extends EditText {
     }
 
     protected void init() {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "font/museo_300.ttf");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "font/museo_300.otf");
         setTypeface(tf);
     }
 
