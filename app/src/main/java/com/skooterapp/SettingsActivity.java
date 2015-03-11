@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Switch;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -24,30 +25,30 @@ public class SettingsActivity extends BaseActivity {
         int[] icons = {
                 R.drawable.s_invite_icon,
                 R.drawable.s_play_store_icon,
-                //R.drawable.s_notification,
-                R.drawable.s_facebook,
-                R.drawable.s_twitter,
-                R.drawable.s_instagram,
+                R.drawable.s_notification,
+//                R.drawable.s_facebook,
+//                R.drawable.s_twitter,
+//                R.drawable.s_instagram,
                 R.drawable.s_feedback_icon,
                 R.drawable.s_about_icon
         };
         String[] settings = {
                 "Invite Friends",
                 "Rate us on Play Store",
-                //"Notifications",
-                "Like us on Facebook",
-                "Follow us on Twitter",
-                "Follow us on Instagram",
+                "Notifications",
+//                "Like us on Facebook",
+//                "Follow us on Twitter",
+//                "Follow us on Instagram",
                 "Send feedback",
                 "About Us"
         };
         boolean switchButtons[] = {
                 false,
                 false,
-                //true,
-                false,
-                false,
-                false,
+                true,
+//                false,
+//                false,
+//                false,
                 false,
                 false,
         };
@@ -76,36 +77,38 @@ public class SettingsActivity extends BaseActivity {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
                         }
                         break;
-                    //case 2:
-                        //Notification
-
                     case 2:
-                        //Facebook
-                        String url = "https://www.facebook.com/SkooterApp";
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        startActivity(i);
+                        //Notification
+                        Switch switchButton = (Switch) parent.findViewById(R.id.switchButton);
+
                         break;
+//                    case 3:
+//                        //Facebook
+//                        String url = "https://www.facebook.com/SkooterApp";
+//                        Intent i = new Intent(Intent.ACTION_VIEW);
+//                        i.setData(Uri.parse(url));
+//                        startActivity(i);
+//                        break;
+//                    case 4:
+//                        //Twitter
+//                        url = "https://twitter.com/SkooterApp";
+//                        i = new Intent(Intent.ACTION_VIEW);
+//                        i.setData(Uri.parse(url));
+//                        startActivity(i);
+//                        break;
+//                    case 5:
+//                        //Instagram
+//                        url = "http://instagram.com/SkooterApp";
+//                        i = new Intent(Intent.ACTION_VIEW);
+//                        i.setData(Uri.parse(url));
+//                        startActivity(i);
+//                        break;
                     case 3:
-                        //Twitter
-                        url = "https://twitter.com/SkooterApp";
-                        i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        startActivity(i);
-                        break;
-                    case 4:
-                        //Instagram
-                        url = "http://instagram.com/SkooterApp";
-                        i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        startActivity(i);
-                        break;
-                    case 5:
                         //Feedback
                         intent = new Intent(SettingsActivity.this, FeedbackActivity.class);
                         startActivity(intent);
                         break;
-                    case 6:
+                    case 4:
                         //About Us
                         intent = new Intent(SettingsActivity.this, AboutActivity.class);
                         startActivity(intent);

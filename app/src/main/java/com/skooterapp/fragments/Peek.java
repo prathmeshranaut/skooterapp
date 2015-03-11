@@ -71,6 +71,7 @@ public class Peek extends Fragment {
 
         mInfoTextView = (TextView) rootView.findViewById(R.id.peek_info_text);
         mListView = (PullToRefreshListView) rootView.findViewById(R.id.list_posts);
+
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {

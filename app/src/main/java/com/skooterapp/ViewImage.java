@@ -1,15 +1,18 @@
 package com.skooterapp;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -22,7 +25,7 @@ public class ViewImage extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_image);
 
-        final NetworkImageView largeImage = (NetworkImageView) findViewById(R.id.large_image);
+        final ImageView largeImage = (ImageView) findViewById(R.id.large_image);
 
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
@@ -39,35 +42,35 @@ public class ViewImage extends BaseActivity {
             window.setNavigationBarColor(getResources().getColor(R.color.md_black_1000));
         }
 
-        largeImage.setImageUrl(imageUrl, imageLoader);
+//        largeImage.setImageUrl(imageUrl, imageLoader);
 
-        mAttacher = new PhotoViewAttacher(largeImage);
+//        mAttacher = new PhotoViewAttacher(largeImage);
 
-//        imageLoader.get(imageUrl, new ImageLoader.ImageListener() {
-//            @Override
-//            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-//                if (response.getBitmap() != null) {
-//                    Bitmap image = response.getBitmap();
-//                    int nh;
-//                    int nw;
-//                    Bitmap scaled = response.getBitmap();
-//                    if(image.getWidth() > 2048 && image.getWidth() > image.getHeight()) {
-//                        nh = (int) (image.getHeight() * (2048.0 / image.getWidth()));
-//                        scaled = Bitmap.createScaledBitmap(image, 2048, nh, true);
-//                    } else if (image.getHeight() > 2048 && image.getHeight() > image.getWidth()) {
-//                        nw = (int) (image.getWidth() * (2048.0 / image.getHeight()));
-//                        scaled = Bitmap.createScaledBitmap(image, nw, 2048, true);
-//                    }
-//                    largeImage.setImageBitmap(scaled);
-//                    mAttacher = new PhotoViewAttacher(largeImage);
-//                }
-//            }
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                VolleyLog.d("Image View Post", "Error: " + error.getMessage());
-//            }
-//        });
+        imageLoader.get(imageUrl, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                if (response.getBitmap() != null) {
+                    Bitmap image = response.getBitmap();
+                    int nh;
+                    int nw;
+                    Bitmap scaled = response.getBitmap();
+                    if(image.getWidth() > 2048 && image.getWidth() > image.getHeight()) {
+                        nh = (int) (image.getHeight() * (2048.0 / image.getWidth()));
+                        scaled = Bitmap.createScaledBitmap(image, 2048, nh, true);
+                    } else if (image.getHeight() > 2048 && image.getHeight() > image.getWidth()) {
+                        nw = (int) (image.getWidth() * (2048.0 / image.getHeight()));
+                        scaled = Bitmap.createScaledBitmap(image, nw, 2048, true);
+                    }
+                    largeImage.setImageBitmap(scaled);
+                    mAttacher = new PhotoViewAttacher(largeImage);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Image View Post", "Error: " + error.getMessage());
+            }
+        });
     }
 
 

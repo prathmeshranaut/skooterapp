@@ -1,5 +1,7 @@
 package com.skooterapp;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -44,11 +46,15 @@ public class LoadingActivity extends BaseActivity {
     protected final String LOG_TAG = LoadingActivity.class.getSimpleName();
     Handler mHandler = new Handler();
     Thread thread = null;
+    protected boolean mNotification = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
+        Intent intent = getIntent();
+        mNotification = intent.getBooleanExtra("notification", false);
 
         mLoadingTextView = (TextView) findViewById(R.id.loading_text);
         mSettings = getSharedPreferences(PREFS_NAME, 0);
@@ -132,12 +138,23 @@ public class LoadingActivity extends BaseActivity {
             }
         });
 
-        AppController.getInstance().addToRequestQueue(jsonArrayRequest, "zones");
-        Intent i = new Intent(LoadingActivity.this, MainActivity.class);
-        startActivity(i);
-        finish();
+        routeIntent();
     }
 
+    protected void routeIntent() {
+        if(mNotification) {
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancelAll();
+            Intent i = new Intent(LoadingActivity.this, NotificationsActivity.class);
+            startActivity(i);
+            finish();
+        } else {
+            Intent i = new Intent(LoadingActivity.this, MainActivity.class);
+            startActivity(i);
+            finish();
+        }
+    }
     public void addUserLocation() {
         String url = substituteString(getResources().getString(R.string.user_location), new HashMap<String, String>());
 

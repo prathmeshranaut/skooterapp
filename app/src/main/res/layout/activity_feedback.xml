@@ -2,7 +2,8 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.skooterapp.FeedbackActivity">
+                tools:context="com.skooterapp.FeedbackActivity"
+                >
 
     <include layout="@layout/toolbar" android:id="@+id/app_bar" />
 
@@ -28,6 +29,7 @@
         android:id="@+id/feedback"
         android:hint="Tell us your opinions about the app!"
         android:layout_below="@id/email"
-        android:inputType="textMultiLine"/>
+        android:inputType="textMultiLine"
+        android:focusable="false"/>
 
 </RelativeLayout>

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -257,28 +256,20 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 //                }
 //        );
 
-        final EditText postSkoot = (EditText) rootView.findViewById(R.id.skootText);
         mLinearLayout = (LinearLayout) rootView.findViewById(R.id.focusLayout);
         mLinearLayout.requestFocus();
 
-        postSkoot.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    Intent intent = new Intent(getActivity(), ComposeActivity.class);
-                    startActivityForResult(intent, ACTIVITY_POST_SKOOT);
-                }
-            }
-        });
-
         Button postSkootButton = (Button) rootView.findViewById(R.id.commentSkoot);
-        postSkootButton.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ComposeActivity.class);
                 startActivityForResult(intent, ACTIVITY_POST_SKOOT);
             }
-        });
+        };
+
+        postSkootButton.setOnClickListener(listener);
+        mSkootHolder.setOnClickListener(listener);
 
         // Inflate the layout for this fragment
         return rootView;

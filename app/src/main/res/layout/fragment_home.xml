@@ -24,25 +24,27 @@
         android:layout_height="wrap_content"
         android:id="@+id/post_skoot_holder"
         android:background="@drawable/custom_textbox"
-        android:paddingTop="4dp">
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:alpha="0.7"
+        >
 
-        <Button
+        <ImageView
             android:layout_width="30dp"
-            android:layout_height="35dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="8dp"
-            android:id="@+id/commentSkoot"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/post_icon"
-            />
-
-        <com.skooterapp.AIEditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="@string/enter_a_skoot"
-            android:id="@+id/skootText"
+            android:layout_height="30dp"
+            android:src="@drawable/post_icon_white"
             android:layout_toLeftOf="@id/commentSkoot"
+            android:layout_centerVertical="true"
+
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:id="@+id/commentSkoot"
+            android:textColor="@color/skooterBackgroundColor"
+            android:text="SKOOT"
+            android:background="@android:color/transparent"
+            android:layout_centerHorizontal="true"
             />
 
     </RelativeLayout>

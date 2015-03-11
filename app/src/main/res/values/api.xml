@@ -34,6 +34,8 @@
 
     <string name="channel_view">channel/{user_id}/{channel}/{location_id}</string>
     <string name="channel_trending">channels/trending/{user_id}</string>
+    <string name="registration_id">user/registration_id</string>
+    <string name="notification_preferences">user/notify</string>
 
     <string name="static_maps">http://maps.google.com/maps/api/staticmap?center={latitude},{longitude}&amp;zoom=15&amp;size={width}x{height}&amp;sensor=false</string>
 

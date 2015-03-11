@@ -2,12 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#ff007ca7" />
+            <solid android:color="#ffE3E3E3" />
         </shape>
     </item>
     <item android:top="1dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/skooterNPrimaryTextColor" />
+            <solid android:color="@color/skooterBackgroundColor" />
         </shape>
     </item>
 </layer-list>

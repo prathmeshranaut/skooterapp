@@ -14,6 +14,7 @@
         android:id="@+id/notification_icon"
         android:src="@drawable/custom_loading_peek"/>
 
+
     <com.skooterapp.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,6 +22,16 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"/>
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"/>
 
+
+    <com.skooterapp.ATextView
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:text="X"
+        android:textSize="24sp"
+        android:textColor="@color/md_grey_600"
+        android:id="@+id/delete_notification"
+        android:layout_gravity="center_vertical"/>
 </LinearLayout>

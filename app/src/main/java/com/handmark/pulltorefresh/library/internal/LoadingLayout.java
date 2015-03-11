@@ -139,6 +139,10 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 				setSubTextColor(colors);
 			}
 		}
+        if (attrs.hasValue(R.styleable.PullToRefresh_ptrRefreshingLabel)) {
+            String label = attrs.getString(R.styleable.PullToRefresh_ptrRefreshingLabel);
+            mRefreshingLabel = label;
+        }
 
 		// Try and get defined drawable from Attrs
 		Drawable imageDrawable = null;

@@ -68,18 +68,19 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
         postContent.setText(post.getContent());
         if (post.getChannel().equals("")) {
             handleContent.setVisibility(View.GONE);
+        } else {
+            handleContent.setText(post.getChannel());
+            handleContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CharSequence channel = handleContent.getText();
+                    Intent intent = new Intent(mContext, ChannelActivity.class);
+                    intent.putExtra("CHANNEL_NAME", channel.toString());
+                    mContext.startActivity(intent);
+                }
+            });
+            handleContent.setVisibility(View.VISIBLE);
         }
-        handleContent.setText(post.getChannel());
-        handleContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CharSequence channel = handleContent.getText();
-                Intent intent = new Intent(mContext, ChannelActivity.class);
-                intent.putExtra("CHANNEL_NAME", channel.toString());
-                mContext.startActivity(intent);
-            }
-        });
-        handleContent.setVisibility(View.VISIBLE);
 
 //        String url = post.getImageUrl();
 //

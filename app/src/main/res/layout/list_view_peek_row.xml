@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="10dp"
+        android:paddingTop="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="5dp">
@@ -61,18 +61,21 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:textSize="17sp"
                     />
 
                 <com.skooterapp.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="16sp"
                     android:text=""
                     android:id="@+id/postText"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/handleText"
+                    android:layout_marginBottom="5dp"
                     />
+
 
                 <com.android.volley.toolbox.NetworkImageView
                     android:layout_width="match_parent"
@@ -118,6 +121,7 @@
                     android:layout_alignParentEnd="true"
                     android:textAlignment="center"
                     android:gravity="center_horizontal"
+                    android:textSize="16sp"
                     android:textColor="@color/skooterNPrimaryTextColor"/>
 
                 <Button

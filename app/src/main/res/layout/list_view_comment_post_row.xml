@@ -35,7 +35,7 @@
                 <com.skooterapp.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="16sp"
                     android:text=""
                     android:id="@+id/postText"
                     android:layout_alignParentLeft="true"

@@ -34,7 +34,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_reply_textbox"
+            android:paddingTop="3dp">
 
             <Button
                 android:layout_width="wrap_content"
@@ -52,10 +54,10 @@
             <com.skooterapp.AIEditText
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
                 android:hint="@string/enter_a_skoot"
                 android:maxLength="200"
                 android:id="@+id/commentText"
+                android:inputType="textMultiLine"
                 android:layout_toLeftOf="@id/commentSkoot"
                 />
 

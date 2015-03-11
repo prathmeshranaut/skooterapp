@@ -1,12 +1,18 @@
 package com.skooterapp;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,6 +21,8 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.skooterapp.data.Notification;
 import com.skooterapp.data.Post;
@@ -26,6 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -159,44 +168,44 @@ public class NotificationsActivity extends BaseActivity {
                     intent.putExtra(SKOOTER_POST, notification.getPost());
                     startActivity(intent);
                 }
-                String url = substituteString(getResources().getString(R.string.notification_delete), new HashMap<String, String>());
-
-                final int notification_id = notification.getId();
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }) {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String, String> headers = super.getHeaders();
-
-                        if (headers == null
-                                || headers.equals(Collections.emptyMap())) {
-                            headers = new HashMap<String, String>();
-                        }
-
-                        headers.put("user_id", Integer.toString(userId));
-                        headers.put("notification_id", Integer.toString(notification_id));
-                        headers.put("access_token", accessToken);
-
-                        Log.d(LOG_TAG, headers.toString());
-
-                        return headers;
-                    }
-                };
-                mNotificationArrayList.remove(position);
-                mNotificationAdapter.notifyDataSetChanged();
-                if (mNotificationArrayList.size() < 1) {
-                    mUser.setHasNotifications(false);
-                }
-                AppController.getInstance().addToRequestQueue(jsonObjectRequest, "delete_notification");
+//                String url = substituteString(getResources().getString(R.string.notification_delete), new HashMap<String, String>());
+//
+//                final int notification_id = notification.getId();
+//                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//
+//                    }
+//                }, new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                    }
+//                }) {
+//                    @Override
+//                    public Map<String, String> getHeaders() throws AuthFailureError {
+//                        Map<String, String> headers = super.getHeaders();
+//
+//                        if (headers == null
+//                                || headers.equals(Collections.emptyMap())) {
+//                            headers = new HashMap<String, String>();
+//                        }
+//
+//                        headers.put("user_id", Integer.toString(userId));
+//                        headers.put("notification_id", Integer.toString(notification_id));
+//                        headers.put("access_token", accessToken);
+//
+//                        Log.d(LOG_TAG, headers.toString());
+//
+//                        return headers;
+//                    }
+//                };
+//                mNotificationArrayList.remove(position);
+//                mNotificationAdapter.notifyDataSetChanged();
+//                if (mNotificationArrayList.size() < 1) {
+//                    mUser.setHasNotifications(false);
+//                }
+//                AppController.getInstance().addToRequestQueue(jsonObjectRequest, "delete_notification");
             }
         });
 
@@ -222,5 +231,106 @@ public class NotificationsActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class NotificationAdapter extends ArrayAdapter<Notification> {
+
+        Context mContext;
+        int mLayoutResourceId;
+        List<Notification> data = new ArrayList<Notification>();
+
+        public NotificationAdapter(Context context, int resource, List<Notification> objects) {
+            super(context, resource, objects);
+            mContext = context;
+            mLayoutResourceId = resource;
+            this.data = objects;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+
+            if (convertView == null) {
+                LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+                convertView = inflater.inflate(mLayoutResourceId, parent, false);
+            }
+
+            final Notification notification = data.get(position);
+
+            final ImageView imageView = (ImageView) convertView.findViewById(R.id.notification_icon);
+            ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+
+            String url = notification.getIconUrl();
+
+            imageLoader.get(url, new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    if(response.getBitmap() != null) {
+                        imageView.setImageBitmap(response.getBitmap());
+                    }
+                }
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(error.getMessage());
+                }
+            });
+
+            TextView textView = (TextView) convertView.findViewById(R.id.notification_text);
+            textView.setText(notification.getText());
+
+            ATextView deleteButton = (ATextView) convertView.findViewById(R.id.delete_notification);
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Notification notification = mNotificationArrayList.get(position);
+
+                    String url = substituteString(getResources().getString(R.string.notification_delete), new HashMap<String, String>());
+
+                    final int notification_id = notification.getId();
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }) {
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> headers = super.getHeaders();
+
+                            if (headers == null
+                                    || headers.equals(Collections.emptyMap())) {
+                                headers = new HashMap<String, String>();
+                            }
+
+                            headers.put("user_id", Integer.toString(userId));
+                            headers.put("notification_id", Integer.toString(notification_id));
+                            headers.put("access_token", accessToken);
+
+                            Log.d(LOG_TAG, headers.toString());
+
+                            return headers;
+                        }
+                    };
+                    mNotificationArrayList.remove(position);
+                    mNotificationAdapter.notifyDataSetChanged();
+                    if (mNotificationArrayList.size() < 1) {
+                        mUser.setHasNotifications(false);
+                    }
+                    AppController.getInstance().addToRequestQueue(jsonObjectRequest, "delete_notification");
+                }
+            });
+
+            return convertView;
+        }
+
+        @Override
+        public int getCount() {
+            return (null != data ? data.size() : 0);
+        }
     }
 }

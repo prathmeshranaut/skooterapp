@@ -23,14 +23,14 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_toRightOf="@id/settings_icon"/>
 
-    <!--<Switch-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:visibility="gone"-->
-        <!--android:layout_gravity="center_vertical"-->
-        <!--android:gravity="center"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:id="@+id/switchButton"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_alignParentRight="true"/>-->
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:id="@+id/switchButton"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"/>
 </RelativeLayout>
