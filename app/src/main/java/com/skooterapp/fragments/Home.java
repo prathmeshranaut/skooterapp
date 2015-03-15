@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,7 +33,6 @@ import com.skooterapp.BaseActivity;
 import com.skooterapp.ComposeActivity;
 import com.skooterapp.PostAdapter;
 import com.skooterapp.R;
-import com.skooterapp.SkooterJsonArrayRequest;
 import com.skooterapp.ViewPostActivity;
 import com.skooterapp.data.Post;
 
@@ -137,17 +135,17 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
 
         mSkootHolder = rootView.findViewById(R.id.post_skoot_holder);
 
-//        mListPosts.getViewTreeObserver().addOnGlobalLayoutListener(
+//        mNotificationList.getViewTreeObserver().addOnGlobalLayoutListener(
 //                new ViewTreeObserver.OnGlobalLayoutListener() {
 //                    @Override
 //                    public void onGlobalLayout() {
 //                        mQuickReturnHeight = mQuickReturnView.getHeight();
 //                        mListView.computeScrollY();
-//                        mCachedVerticalScrollRange = mListPosts.getListHeight();
+//                        mCachedVerticalScrollRange = mNotificationList.getListHeight();
 //                    }
 //                }
 //        );
-//        mListPosts.setOnScrollListener(
+//        mNotificationList.setOnScrollListener(
 //                new AbsListView.OnScrollListener() {
 //                    @Override
 //                    public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -337,58 +335,12 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         }
     }
 
-    public void checkNotifications() {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("user_id", Integer.toString(BaseActivity.userId));
-
-        String url = BaseActivity.substituteString(getResources().getString(R.string.user_notifications), params);
-
-        SkooterJsonArrayRequest jsonArrayRequest = new SkooterJsonArrayRequest(url, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                Log.d(LOG_TAG, response.toString());
-                if (response.length() > 0) {
-                    changeNotificationIconInMenu();
-                    BaseActivity.mUser.setHasNotifications(true);
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(LOG_TAG, error.getMessage());
-            }
-        });
-        AppController.getInstance().addToRequestQueue(jsonArrayRequest, "notifications");
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
         mMenu = menu;
-        if (BaseActivity.mUser != null) {
-            if (BaseActivity.mUser.isHasNotifications()) {
-                changeNotificationIconInMenu();
-            } else {
-                checkNotifications();
-            }
-        }
         super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    protected void changeNotificationIconInMenu() {
-        if (mMenu != null && BaseActivity.mUser != null) {
-            MenuItem menuItem = mMenu.findItem(R.id.action_alerts);
-            if (BaseActivity.mUser.isHasNotifications()) {
-                if (menuItem != null) {
-                    menuItem.setIcon(R.drawable.notification_icon_active);
-                }
-            } else {
-                if (menuItem != null) {
-                    menuItem.setIcon(R.drawable.notification_icon);
-                }
-            }
-        }
     }
 }

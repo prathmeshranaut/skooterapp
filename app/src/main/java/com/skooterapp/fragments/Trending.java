@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -202,15 +201,6 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
         inflater.inflate(R.menu.menu_trending, menu);
-
-        if (BaseActivity.mUser != null) {
-            if (BaseActivity.mUser.isHasNotifications()) {
-                MenuItem menuItem = menu.findItem(R.id.action_alerts);
-                if (menuItem != null) {
-                    menuItem.setIcon(R.drawable.notification_icon_active);
-                }
-            }
-        }
 
 //        MenuItem searchItem = menu.findItem(R.id.action_search);
 //

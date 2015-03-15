@@ -293,12 +293,7 @@ public class MainActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_alerts) {
-            Intent intent = new Intent(MainActivity.this, NotificationsActivity.class);
-            startActivity(intent);
-
-            return true;
-        } else if (id == R.id.action_settings) {
+        if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;

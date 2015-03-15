@@ -27,7 +27,6 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:baselineAligned="false"
-            android:layout_marginBottom="2dp"
             android:id="@+id/post_container">
 
             <RelativeLayout
@@ -88,12 +87,12 @@
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:id="@+id/upvote"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
+                    android:layout_centerHorizontal="true"
                     android:background="@drawable/vote_up_inactive"
+                    android:gravity="center_horizontal"
                     android:focusable="false"/>
 
                 <com.skooterapp.ATextView
@@ -101,20 +100,16 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:id="@+id/voteCount"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginEnd="15dp"
                     android:layout_below="@+id/upvote"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:textAlignment="center"
                     android:gravity="center_horizontal"
+                    android:layout_centerHorizontal="true"
                     android:textSize="16sp"
                     android:textColor="@color/skooterNPrimaryTextColor"/>
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:id="@+id/downvote"
                     android:layout_below="@+id/voteCount"
                     android:layout_alignLeft="@+id/upvote"

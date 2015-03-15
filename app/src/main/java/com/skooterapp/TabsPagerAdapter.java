@@ -11,7 +11,7 @@ import android.text.style.ImageSpan;
 
 import com.skooterapp.fragments.Home;
 import com.skooterapp.fragments.Me;
-
+import com.skooterapp.fragments.Notification;
 import com.skooterapp.fragments.Peek;
 import com.skooterapp.fragments.Trending;
 
@@ -22,6 +22,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             R.drawable.home_inactive,
             R.drawable.trending_inactive,
             R.drawable.peek_inactive,
+            R.drawable.notification,
             R.drawable.profile_icon,
     };
 
@@ -29,6 +30,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             R.drawable.home_active,
             R.drawable.trending_active,
             R.drawable.peek_active,
+            R.drawable.notification_active,
             R.drawable.profile_icon_filled
     };
 
@@ -71,6 +73,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 return new Peek();
             case 3:
+                return new Notification();
+            case 4:
                 return new Me();
             default:
                 return null;

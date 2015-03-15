@@ -415,7 +415,10 @@ public class ComposeActivity extends BaseActivity {
                 params.setParameter("zone_id", "null");
             }
 
-            Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath());
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 8;
+
+            Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream); //compress to which format you want.
             byte[] byte_arr = stream.toByteArray();

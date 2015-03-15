@@ -3,6 +3,7 @@ package com.skooterapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 
 import org.json.JSONObject;
 
@@ -70,7 +72,7 @@ public class SettingsAdapter extends ArrayAdapter<String> {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("user_id", Integer.toString(BaseActivity.userId));
                     params.put("notify", Boolean.toString(isChecked));
-                    
+
                     SkooterJsonObjectRequest skooterJsonObjectRequest =
                             new SkooterJsonObjectRequest(Request.Method.PUT,
                                     url, new JSONObject(params),
@@ -80,11 +82,12 @@ public class SettingsAdapter extends ArrayAdapter<String> {
                                             SharedPreferences.Editor editor = settings.edit();
                                             editor.putBoolean(BaseActivity.SETTINGS_NOTIFICATION, isCheckedClone);
                                             editor.commit();
+                                            Log.d("SettingsAdapter", response.toString());
                                         }
                                     }, new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-
+                                    VolleyLog.d("SettingAdapter", "Error: " + error.getMessage());
                                 }
                             });
 
