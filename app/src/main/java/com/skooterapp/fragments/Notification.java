@@ -26,13 +26,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.skooterapp.ATextView;
 import com.skooterapp.AppController;
 import com.skooterapp.BaseActivity;
 import com.skooterapp.R;
 import com.skooterapp.SkooterJsonArrayRequest;
+import com.skooterapp.SkooterJsonObjectRequest;
+import com.skooterapp.TabsPagerAdapter;
 import com.skooterapp.ViewPostActivity;
 import com.skooterapp.data.Post;
 
@@ -52,8 +52,9 @@ public class Notification extends Fragment implements SwipeRefreshLayout.OnRefre
     protected List<com.skooterapp.data.Notification> mNotificationArrayList
             = new ArrayList<com.skooterapp.data.Notification>();
     protected NotificationAdapter mNotificationAdapter;
-    protected PullToRefreshListView mNotificationList;
+    protected ListView mNotificationList;
     protected Context mContext;
+    protected TextView mNoNotificationText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,11 @@ public class Notification extends Fragment implements SwipeRefreshLayout.OnRefre
         if (isVisibleToUser) {
             ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle("Notifications");
         }
+        BaseActivity.mUser.setHasNotifications(false);
+        TabsPagerAdapter.imageResId[3] = R.drawable.notification;
+        TabsPagerAdapter.activeImageResId[3] = R.drawable.notification_active;
+
+        markNotificationsRead();
     }
 
     @Override
@@ -80,18 +86,13 @@ public class Notification extends Fragment implements SwipeRefreshLayout.OnRefre
         mContext = container.getContext();
 
         View rootView = inflater.inflate(R.layout.fragment_notification, container, false);
-        mNotificationList = (PullToRefreshListView) rootView.findViewById(R.id.list_posts);
+        mNotificationList = (ListView) rootView.findViewById(R.id.notifications_list);
+        mNoNotificationText = (TextView) rootView.findViewById(R.id.notification_alert);
 
         getNotificationsForUser();
 
         mNotificationAdapter = new NotificationAdapter(mContext, R.layout.list_view_notification_row, mNotificationArrayList);
         mNotificationList.setAdapter(mNotificationAdapter);
-        mNotificationList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                getNotificationsForUser();
-            }
-        });
 
         mNotificationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -196,10 +197,17 @@ public class Notification extends Fragment implements SwipeRefreshLayout.OnRefre
                     if (response.length() < 1) {
                         //No notifications
                         BaseActivity.mUser.setHasNotifications(false);
+                        TabsPagerAdapter.imageResId[3] = R.drawable.notification;
+                        TabsPagerAdapter.activeImageResId[3] = R.drawable.notification_active;
+
+                        mNoNotificationText.setVisibility(View.VISIBLE);
                     } else {
                         BaseActivity.mUser.setHasNotifications(true);
+                        TabsPagerAdapter.imageResId[3] = R.drawable.notification_alert;
+                        TabsPagerAdapter.activeImageResId[3] = R.drawable.notification_active_alert;
+
+                        mNoNotificationText.setVisibility(View.GONE);
                     }
-                    mNotificationList.onRefreshComplete();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");
@@ -213,6 +221,31 @@ public class Notification extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
         AppController.getInstance().addToRequestQueue(jsonArrayRequest, "notifications");
+    }
+
+    public void markNotificationsRead() {
+        if(mNotificationArrayList.size() > 0) {
+            Map<String, String> params = new HashMap<>();
+            params.put("user_id", Integer.toString(BaseActivity.userId));
+
+            String url = BaseActivity.substituteString(getString(R.string.notification_read), params);
+
+            params = new HashMap<>();
+            params.put("notification_id", Integer.toString(mNotificationArrayList.get(0).getId()));
+            SkooterJsonObjectRequest skooterJsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.PUT, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.d(LOG_TAG, error.getMessage());
+                }
+            });
+
+            AppController.getInstance().addToRequestQueue(skooterJsonObjectRequest, "notification_read");
+        }
     }
 
     @Override

@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -20,9 +19,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.skooterapp.data.Post;
-
 import com.skooterapp.data.Comment;
+import com.skooterapp.data.Post;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,12 +35,9 @@ import java.util.Map;
 public class ViewPostActivity extends BaseActivity {
 
     private static final String LOG_TAG = ViewPostActivity.class.getSimpleName();
-    protected List<Comment> mCommentsList = new ArrayList<Comment>();
-    protected ArrayAdapter<Comment> mCommentsAdapter;
-    protected ListView mListComments;
-    protected List<Post> postList;
+    protected List<Object> postList;
     protected Post mPost;
-    protected ArrayAdapter<Post> postAdapter;
+    protected ViewPostAdapter postAdapter;
     protected boolean canPerformActivity;
 
     protected LinearLayout flagView;
@@ -75,7 +70,7 @@ public class ViewPostActivity extends BaseActivity {
         mPost = (Post) intent.getSerializableExtra(SKOOTER_POST);
         canPerformActivity = intent.getBooleanExtra("can_perform_activity", true);
 
-        if(mPost == null) {
+        if (mPost == null) {
             postId = intent.getIntExtra(SKOOTER_POST_ID, 0);
             getCommentsForPostId(postId, userId, true);
         } else {
@@ -114,13 +109,13 @@ public class ViewPostActivity extends BaseActivity {
 
                                     Comment commentObject = Comment.parseCommentFromJSONObject(jsonObject);
                                     if (commentObject != null) {
-                                        mCommentsList.add(commentObject);
+                                        postList.add(commentObject);
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                     Log.e(LOG_TAG, "Error processing JSON data");
                                 }
-                                mCommentsAdapter.notifyDataSetChanged();
+                                postAdapter.notifyDataSetChanged();
                             }
                         }, new Response.ErrorListener() {
                             @Override
@@ -205,16 +200,13 @@ public class ViewPostActivity extends BaseActivity {
     }
 
     public void initListViews() {
-        postList = new ArrayList<Post>();
+        postList = new ArrayList<Object>();
         postList.add(mPost);
 
-        postAdapter = new PostAdapter(this, R.layout.list_view_post_row, postList, true, flagView, deleteView, typeIdView, typeView, canPerformActivity);
+        postAdapter = new ViewPostAdapter(this, R.layout.list_view_post_row, postList, true, flagView, deleteView, typeIdView, typeView, canPerformActivity);
         listPosts.setAdapter(postAdapter);
 
         String tag = "load_comments";
-        mCommentsAdapter = new CommentsAdapter(this, R.layout.list_view_comment_post_row, mCommentsList, true, flagView, deleteView, typeIdView, typeView, canPerformActivity);
-        mListComments = (ListView) findViewById(R.id.list_comments);
-        mListComments.setAdapter(mCommentsAdapter);
     }
 
     public void getCommentsForPostId(int postId, int userId, final boolean parsePost) {
@@ -234,21 +226,21 @@ public class ViewPostActivity extends BaseActivity {
                 try {
                     JSONArray jsonArray = response.getJSONArray(SKOOT_COMMENTS);
 
-                    if(parsePost) {
+                    if (parsePost) {
                         mPost = Post.parsePostFromJSONObject(response.getJSONObject(SKOOT));
                         initListViews();
                     }
                     for (int i = 0; i < jsonArray.length(); i++) {
                         Comment commentObject = Comment.parseCommentFromJSONObject(jsonArray.getJSONObject(i));
                         if (commentObject != null) {
-                            mCommentsList.add(commentObject);
+                            postAdapter.add(commentObject);
                         }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing JSON data");
                 }
-                mCommentsAdapter.notifyDataSetChanged();
+                postAdapter.notifyDataSetChanged();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -349,7 +341,6 @@ public class ViewPostActivity extends BaseActivity {
         }
 
         flagView.setVisibility(View.GONE);
-
     }
 
     public void acceptDelete(View view) {
@@ -392,14 +383,18 @@ public class ViewPostActivity extends BaseActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.v(LOG_TAG, "Delete Comment" + response.toString());
-                    int position = Comment.findCommentPositionInListById(mCommentsList, Integer.parseInt(typeId.getText().toString()));
+                    List newList = postList.subList(1, postList.size());
+                    Log.d(LOG_TAG, newList.toString());
+                    List<Comment> commentList = (List<Comment>) newList;
+                    int position = Comment.findCommentPositionInListById(commentList, Integer.parseInt(typeId.getText().toString()));
 
                     if (position >= 0) {
-                        postList.get(0).setCommentsCount(postList.get(0).getCommentsCount() - 1);
-                        mHomePosts.get(Post.findPostPositionInListById(mHomePosts, mCommentsList.get(position).getPostId())).setCommentsCount(postList.get(0).getCommentsCount());
-                        mCommentsList.remove(position);
+                        Post post = (Post) postList.get(0);
+                        post.setCommentsCount(post.getCommentsCount() - 1);
+
+                        mHomePosts.get(Post.findPostPositionInListById(mHomePosts,post.getId())).setCommentsCount(post.getCommentsCount());
+                        postList.remove(position+1);
                     }
-                    mCommentsAdapter.notifyDataSetChanged();
                     postAdapter.notifyDataSetChanged();
                 }
             }, new Response.ErrorListener() {

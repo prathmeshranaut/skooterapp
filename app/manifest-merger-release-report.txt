@@ -4,7 +4,7 @@ ADDED from AndroidManifest.xml:2:1
 	xmlns:android
 		ADDED from AndroidManifest.xml:2:11
 	package
-		ADDED from AndroidManifest.xml:3:11
+		ADDED from AndroidManifest.xml:3:5
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
 	android:versionName
@@ -62,13 +62,13 @@ ADDED from AndroidManifest.xml:18:5
 permission#com.skooterapp.permission.C2D_MESSAGE
 ADDED from AndroidManifest.xml:20:5
 	android:protectionLevel
-		ADDED from AndroidManifest.xml:21:17
+		ADDED from AndroidManifest.xml:22:9
 	android:name
-		ADDED from AndroidManifest.xml:20:17
+		ADDED from AndroidManifest.xml:21:9
 uses-permission#com.skooterapp.permission.C2D_MESSAGE
-ADDED from AndroidManifest.xml:22:5
+ADDED from AndroidManifest.xml:24:5
 	android:name
-		ADDED from AndroidManifest.xml:22:22
+		ADDED from AndroidManifest.xml:24:22
 supports-screens
 ADDED from AndroidManifest.xml:26:5
 	android:largeScreens
@@ -97,33 +97,33 @@ MERGED from com.android.support:support-v4:21.0.3:16:5
 	android:name
 		ADDED from AndroidManifest.xml:33:9
 receiver#com.skooterapp.InstallReferrerReceiver
-ADDED from AndroidManifest.xml:39:9
+ADDED from AndroidManifest.xml:38:9
 	android:exported
-		ADDED from AndroidManifest.xml:41:13
-	android:name
 		ADDED from AndroidManifest.xml:40:13
+	android:name
+		ADDED from AndroidManifest.xml:39:13
 intent-filter#com.android.vending.INSTALL_REFERRER
-ADDED from AndroidManifest.xml:42:13
+ADDED from AndroidManifest.xml:41:13
 action#com.android.vending.INSTALL_REFERRER
-ADDED from AndroidManifest.xml:43:17
+ADDED from AndroidManifest.xml:42:17
 	android:name
-		ADDED from AndroidManifest.xml:43:25
+		ADDED from AndroidManifest.xml:42:25
 receiver#com.skooterapp.GcmBroadcastReceiver
-ADDED from AndroidManifest.xml:47:9
+ADDED from AndroidManifest.xml:45:9
 	android:permission
-		ADDED from AndroidManifest.xml:49:13
+		ADDED from AndroidManifest.xml:47:13
 	android:name
-		ADDED from AndroidManifest.xml:48:13
+		ADDED from AndroidManifest.xml:46:13
 intent-filter#com.example.gcm+com.google.android.c2dm.intent.RECEIVE
-ADDED from AndroidManifest.xml:50:13
+ADDED from AndroidManifest.xml:48:13
 action#com.google.android.c2dm.intent.RECEIVE
+ADDED from AndroidManifest.xml:49:17
+	android:name
+		ADDED from AndroidManifest.xml:49:25
+category#com.example.gcm
 ADDED from AndroidManifest.xml:51:17
 	android:name
-		ADDED from AndroidManifest.xml:51:25
-category#com.example.gcm
-ADDED from AndroidManifest.xml:52:17
-	android:name
-		ADDED from AndroidManifest.xml:52:27
+		ADDED from AndroidManifest.xml:51:27
 service#com.skooterapp.GcmIntentService
 ADDED from AndroidManifest.xml:55:9
 	android:name
@@ -338,6 +338,12 @@ ADDED from AndroidManifest.xml:220:9
 		ADDED from AndroidManifest.xml:223:13
 	android:name
 		ADDED from AndroidManifest.xml:221:13
+activity#com.skooterapp.PeekZoneActivity
+ADDED from AndroidManifest.xml:228:9
+	android:label
+		ADDED from AndroidManifest.xml:230:13
+	android:name
+		ADDED from AndroidManifest.xml:229:13
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:21.0.3:15:5
@@ -345,6 +351,7 @@ MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from uk.co.chrisjenx:calligraphy:2.0.1:7:5
 MERGED from com.google.android.gms:play-services:6.5.87:18:5
 MERGED from com.android.support:support-v4:21.0.3:15:5
+MERGED from com.github.amlcurran.showcaseview:library:5.0.0:7:5
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0

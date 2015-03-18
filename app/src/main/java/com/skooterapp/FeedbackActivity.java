@@ -53,6 +53,7 @@ public class FeedbackActivity extends BaseActivity {
             final TextView email = (TextView) findViewById(R.id.email);
             final TextView feedback = (TextView) findViewById(R.id.feedback);
             final TextView name = (TextView) findViewById(R.id.name);
+            final TextView phoneNumber = (TextView) findViewById(R.id.phoneNumber);
 
             final StringRequest jsonObjectRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
@@ -76,6 +77,8 @@ public class FeedbackActivity extends BaseActivity {
                     params.put("entry.480017787", name.getText().toString());
                     params.put("entry.1210654817", Build.DEVICE);
                     params.put("entry.1766166360", Integer.toString(Build.VERSION.SDK_INT));
+                    params.put("entry.1977350393", phoneNumber.getText().toString());
+                    params.put("entry.1872674154", Integer.toString(BaseActivity.userId));
 
                     if (params != null && params.size() > 0) {
                         return encodeParameters(params, getParamsEncoding());

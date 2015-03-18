@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingTop="40dp"
+              android:paddingBottom="40dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:id="@+id/zone_header_image"
+            android:scaleType="centerCrop"
+            android:alpha="0.5"/>
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:id="@+id/zone_logo"
+            android:layout_centerHorizontal="true"
+            android:alpha="0.8"
+            android:layout_below="@id/zone_header_image"
+            android:layout_marginTop="-60dp"/>
+
+        <com.skooterapp.ABTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/zone_name"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/zone_logo"
+            android:layout_marginTop="20dp"
+            android:textSize="18sp"/>
+
+    </RelativeLayout>
+</LinearLayout>

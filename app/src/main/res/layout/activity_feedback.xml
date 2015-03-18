@@ -13,6 +13,7 @@
         android:hint="Name"
         android:id="@+id/name"
         android:layout_below="@id/app_bar"
+        android:layout_marginTop="5dp"
         />
 
     <com.skooterapp.AEditText
@@ -21,6 +22,17 @@
         android:hint="Email"
         android:id="@+id/email"
         android:layout_below="@id/name"
+        android:layout_marginTop="5dp"
+
+        />
+
+    <com.skooterapp.AEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/phoneNumber"
+        android:hint="Phone"
+        android:layout_below="@id/email"
+        android:layout_marginTop="5dp"
         />
 
     <com.skooterapp.AEditText
@@ -28,8 +40,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/feedback"
         android:hint="Tell us your opinions about the app!"
-        android:layout_below="@id/email"
+        android:layout_below="@id/phoneNumber"
         android:inputType="textMultiLine"
-        android:focusable="false"/>
+        android:layout_marginTop="5dp"
+        />
 
 </RelativeLayout>

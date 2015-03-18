@@ -47,10 +47,12 @@ public class ChannelActivity extends BaseActivity {
         params.put("location_id", Integer.toString(locationId));
         if(mChannel.charAt(0) == '@') {
             params.put("channel", mChannel.substring(1));
-            activateToolbarWithHomeEnabled(mChannel.substring(1));
+            activateToolbarWithHomeEnabled();
+            getSupportActionBar().setTitle(mChannel.substring(1));
         } else {
             params.put("channel", mChannel);
-            activateToolbarWithHomeEnabled(mChannel);
+            getSupportActionBar().setTitle(mChannel);
+
         }
 
         String url = substituteString(getResources().getString(R.string.channel_view), params);

@@ -4,6 +4,8 @@
     <string name="home">latest/{user_id}/{location_id}</string>
     <string name="hot">hot/{user_id}/{location_id}</string>
     <string name="peek">sneakpeek/{user_id}.json</string>
+    <string name="v2_peek">peek/{zone_id}/{user_id}</string>
+    peek
 
     <string name="skoot_single">skoot/{user_id}/{post_id}.json</string>
     <string name="skoot_new">skoot</string>
@@ -14,6 +16,7 @@
     <string name="vote_comment">comment/{comment_id}</string>
 
     <string name="zones">zones/{user_id}/{location_id}</string>
+    <string name="v2_zones">v2/zones/{user_id}/{location_id}</string>
     <string name="zones_follow">zone/follow</string>
     <string name="zones_unfollow">zone/unfollow</string>
 
@@ -28,6 +31,7 @@
     <string name="unfavorite_post">unfavorite/{post_id}</string>
 
     <string name="notification_delete">notification</string>
+    <string name="notification_read">notification/read/{user_id}</string>
 
     <string name="flag_skoot">flag/skoot</string>
     <string name="flag_comment">flag/comment</string>

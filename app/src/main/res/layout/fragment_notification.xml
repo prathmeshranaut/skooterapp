@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:skooter="http://schemas.android.com/tools"
     xmlns:ptr="http://schemas.android.com/apk/res-auto"
@@ -11,12 +11,21 @@
     skooter:context="com.skooterapp.fragments.Notification"
     >
 
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:layout_width="wrap_content"
+    <com.skooterapp.AEditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/list_posts"
-        android:layout_weight="1"
-        ptr:ptrAnimationStyle="flip"
+        android:visibility="gone"
+        android:text="@string/no_unread_notifications"
+        android:background="#FFDDDDDD"
+        android:padding="50dp"
+        android:id="@+id/notification_alert"
+        android:layout_below="@id/app_bar"
+        android:gravity="center_horizontal"
         />
 
-</LinearLayout>
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/notifications_list"/>
+
+</RelativeLayout>

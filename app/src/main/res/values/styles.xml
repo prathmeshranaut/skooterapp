@@ -38,4 +38,21 @@
         <item name="android:textColorSecondary">@color/skooterPrimaryTextColor</item>
         <item name="android:colorFocusedHighlight">@color/skooterBackgroundColor</item>
     </style>
+
+    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
+        <item name="sv_backgroundColor">#663d4353</item>
+        <item name="sv_showcaseColor">#25467A</item>
+        <item name="sv_buttonText">Close</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
+        <item name="sv_detailTextAppearance">@style/CustomDetail</item>
+    </style>
+
+    <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title">
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="CustomDetail" parent="TextAppearance.ShowcaseView.Detail">
+        <item name="android:textColor">#fff</item>
+    </style>
+
 </resources>

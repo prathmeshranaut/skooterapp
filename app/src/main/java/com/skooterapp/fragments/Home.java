@@ -269,6 +269,23 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         postSkootButton.setOnClickListener(listener);
         mSkootHolder.setOnClickListener(listener);
 
+//        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//        lps.addRule(RelativeLayout.CENTER_VERTICAL);
+//        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+//        lps.setMargins(margin, margin, margin, margin);
+//
+//        ShowcaseView sv = new ShowcaseView.Builder(getActivity())
+//                .setTarget(new ViewTarget(rootView.findViewById(R.id.post_skoot_holder)))
+//                .setContentTitle("Home")
+//                .setContentText("Get all the updates happening around you in 3 km.")
+//                .setStyle(R.style.CustomShowcaseTheme)
+//                .hideOnTouchOutside()
+//                .build();
+//
+//        Log.v(LOG_TAG, Integer.toString(container.getChildCount()));
+//
+//        sv.setButtonPosition(lps);
         // Inflate the layout for this fragment
         return rootView;
     }

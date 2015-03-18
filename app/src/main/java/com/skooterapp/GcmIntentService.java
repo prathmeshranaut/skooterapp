@@ -1,8 +1,10 @@
 package com.skooterapp;
 
+import android.app.ActivityManager;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +13,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import java.util.List;
 
 public class GcmIntentService extends IntentService {
     private static final String LOG_TAG = GcmIntentService.class.getSimpleName();
@@ -63,22 +67,34 @@ public class GcmIntentService extends IntentService {
     // This is just one simple example of what you might choose to do with
     // a GCM message.
     private void sendNotification(String title, String msg) {
-        mNotificationManager = (NotificationManager)
-                this.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent intent = new Intent(this, LoadingActivity.class);
-        intent.putExtra("notification", true);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        // get the info from the currently running task
+        List< ActivityManager.RunningTaskInfo > taskInfo = am.getRunningTasks(1);
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.push_notification_icon)
-                        .setContentTitle(title)
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(msg))
-                        .setContentText(msg)
-                        .setAutoCancel(true);
+        Log.d("current task :", "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClass().getSimpleName());
 
-        mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        ComponentName componentInfo = taskInfo.get(0).topActivity;
+//if  app is running
+        if(componentInfo.getPackageName().equalsIgnoreCase("com.skooterapp")) {
+            //do the implementation for if your app is running
+
+            mNotificationManager = (NotificationManager)
+                    this.getSystemService(Context.NOTIFICATION_SERVICE);
+            Intent intent = new Intent(this, LoadingActivity.class);
+            intent.putExtra("notification", true);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.push_notification_icon)
+                            .setContentTitle(title)
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(msg))
+                            .setContentText(msg)
+                            .setAutoCancel(true);
+
+            mBuilder.setContentIntent(contentIntent);
+            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        }
     }
 }

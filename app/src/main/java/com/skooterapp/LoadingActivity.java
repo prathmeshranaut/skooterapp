@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -32,6 +33,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,10 +47,11 @@ public class LoadingActivity extends BaseActivity {
 
     protected SharedPreferences mSettings;
     protected TextView mLoadingTextView;
-    protected final String LOG_TAG = LoadingActivity.class.getSimpleName();
+    protected final static String LOG_TAG = LoadingActivity.class.getSimpleName();
     Handler mHandler = new Handler();
     Thread thread = null;
     protected boolean mNotification = false;
+    ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,8 @@ public class LoadingActivity extends BaseActivity {
         mNotification = intent.getBooleanExtra("notification", false);
 
         mLoadingTextView = (TextView) findViewById(R.id.loading_text);
+        mProgressBar = (ProgressBar) findViewById(R.id.loading_progress);
+
         mSettings = getSharedPreferences(PREFS_NAME, 0);
         userId = mSettings.getInt("userId", 0);
         accessToken = mSettings.getString("access_token", "");
@@ -89,7 +96,6 @@ public class LoadingActivity extends BaseActivity {
                 final String USER_FOLLOWS = "user_follows";
                 final String ACTIVE_ZONE = "active_zone";
                 final String ZONE_IMAGE = "zone_image";
-
 
                 try {
                     mActiveZones.clear();
@@ -127,6 +133,7 @@ public class LoadingActivity extends BaseActivity {
                             Log.d("Active Zones: ", mActiveZones.toString());
                         }
                     }
+                    routeIntent();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -138,15 +145,16 @@ public class LoadingActivity extends BaseActivity {
             }
         });
 
-        routeIntent();
+        AppController.getInstance().addToRequestQueue(jsonArrayRequest, "loading_zone");
+
     }
 
     protected void routeIntent() {
-        if(mNotification) {
+        if (mNotification) {
             NotificationManager mNotificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.cancelAll();
-            Intent i = new Intent(LoadingActivity.this, NotificationsActivity.class);
+            Intent i = new Intent(LoadingActivity.this, MainActivity.class);
             startActivity(i);
             finish();
         } else {
@@ -155,6 +163,7 @@ public class LoadingActivity extends BaseActivity {
             finish();
         }
     }
+
     public void addUserLocation() {
         String url = substituteString(getResources().getString(R.string.user_location), new HashMap<String, String>());
 
@@ -208,6 +217,7 @@ public class LoadingActivity extends BaseActivity {
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "location");
         } else {
             mLoadingTextView.setText("We're having a hard time locating you!");
+            mProgressBar.setVisibility(View.GONE);
             mLocator.showSettingsAlert();
         }
     }
@@ -289,6 +299,7 @@ public class LoadingActivity extends BaseActivity {
                     }
                     mUser = new User(userId, score, posts, comments);
                     addUserLocation();
+                    getNotificationCount();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");
@@ -303,6 +314,60 @@ public class LoadingActivity extends BaseActivity {
         });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "login_user");
+    }
+
+    public void getNotificationCount() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user_id", Integer.toString(BaseActivity.userId));
+
+        String url = BaseActivity.substituteString(getResources().getString(R.string.user_notifications), params);
+
+        SkooterJsonArrayRequest jsonArrayRequest = new SkooterJsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                if (response.length() < 1) {
+                    //No notifications
+                    BaseActivity.mUser.setHasNotifications(false);
+                    TabsPagerAdapter.imageResId[3] = R.drawable.notification;
+                    TabsPagerAdapter.activeImageResId[3] = R.drawable.notification_active;
+                } else {
+                    final String NOTIFICATION_READ = "read";
+
+                    int count = 0;
+                    try {
+
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject jsonNotification = response.getJSONObject(i);
+
+                            boolean notification_read = jsonNotification.getBoolean(NOTIFICATION_READ);
+
+                            if(notification_read) {
+                                count += 1;
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e(LOG_TAG, "Error processing Json Data");
+                    }
+
+                    if(count > 0) {
+                        BaseActivity.mUser.setHasNotifications(true);
+                        TabsPagerAdapter.imageResId[3] = R.drawable.notification_alert;
+                        TabsPagerAdapter.activeImageResId[3] = R.drawable.notification_active_alert;
+                    } else {
+                        BaseActivity.mUser.setHasNotifications(false);
+                        TabsPagerAdapter.imageResId[3] = R.drawable.notification;
+                        TabsPagerAdapter.activeImageResId[3] = R.drawable.notification_active;
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(LOG_TAG, error.getMessage());
+            }
+        });
+        AppController.getInstance().addToRequestQueue(jsonArrayRequest, "notifications");
     }
 
     public void loginUser() {
@@ -348,9 +413,10 @@ public class LoadingActivity extends BaseActivity {
     }
 
     public void bootstrapCheckDeviceSettings() {
-        if (!isOnline()) {
-            mLoadingTextView.setText("We're unable to connect with the Skooter servers. \n We'll keep trying");
+        if (!isOnline() && !isInternetAccessible(getApplicationContext())) {
+            mLoadingTextView.setText("We're unable to connect with the Skooter servers. \n Looks like there is a problem with connectivity");
             mLoadingTextView.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 
@@ -366,8 +432,21 @@ public class LoadingActivity extends BaseActivity {
         if (networkInfo == null || !networkInfo.isConnected() || !networkInfo.isAvailable()) {
             return false;
         }
-
         return true;
+    }
+
+    public static boolean isInternetAccessible(Context context) {
+        try {
+            HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
+            urlc.setRequestProperty("User-Agent", "Test");
+            urlc.setRequestProperty("Connection", "close");
+            urlc.setConnectTimeout(1500);
+            urlc.connect();
+            return (urlc.getResponseCode() == 200);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Couldn't check internet connection", e);
+            return false;
+        }
     }
 
     @Override

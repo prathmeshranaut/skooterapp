@@ -111,13 +111,6 @@ public class GPSLocator extends Service implements LocationListener {
                 mContext.startActivity(intent);
             }
         });
-
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
         alertDialog.show();
     }
 

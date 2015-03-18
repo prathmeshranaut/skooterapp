@@ -8,8 +8,8 @@ android {
         applicationId "com.skooterapp"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 6
-        versionName "1.0.5"
+        versionCode 7
+        versionName "1.0.6"
     }
     buildTypes {
         release {
@@ -33,6 +33,7 @@ dependencies {
     compile 'uk.co.chrisjenx:calligraphy:2.0.1'
     compile 'com.google.http-client:google-http-client-android:1.18.0-rc'
     compile 'com.google.android.gms:play-services:6.5.87'
+    compile 'com.github.amlcurran.showcaseview:library:5.0.0'
     compile('org.apache.httpcomponents:httpmime:4.+') {
         exclude module: "httpclient"
     }
