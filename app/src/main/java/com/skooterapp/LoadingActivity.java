@@ -33,9 +33,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -413,7 +410,7 @@ public class LoadingActivity extends BaseActivity {
     }
 
     public void bootstrapCheckDeviceSettings() {
-        if (!isOnline() && !isInternetAccessible(getApplicationContext())) {
+        if (!isOnline()) {
             mLoadingTextView.setText("We're unable to connect with the Skooter servers. \n Looks like there is a problem with connectivity");
             mLoadingTextView.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.GONE);
@@ -434,20 +431,20 @@ public class LoadingActivity extends BaseActivity {
         }
         return true;
     }
-
-    public static boolean isInternetAccessible(Context context) {
-        try {
-            HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
-            urlc.setRequestProperty("User-Agent", "Test");
-            urlc.setRequestProperty("Connection", "close");
-            urlc.setConnectTimeout(1500);
-            urlc.connect();
-            return (urlc.getResponseCode() == 200);
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Couldn't check internet connection", e);
-            return false;
-        }
-    }
+//
+//    public static boolean isInternetAccessible(Context context) {
+//        try {
+//            HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
+//            urlc.setRequestProperty("User-Agent", "Test");
+//            urlc.setRequestProperty("Connection", "close");
+//            urlc.setConnectTimeout(1500);
+//            urlc.connect();
+//            return (urlc.getResponseCode() == 200);
+//        } catch (IOException e) {
+//            Log.e(LOG_TAG, "Couldn't check internet connection", e);
+//            return false;
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

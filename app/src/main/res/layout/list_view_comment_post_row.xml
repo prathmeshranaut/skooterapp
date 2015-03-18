@@ -39,6 +39,8 @@
                     android:text=""
                     android:id="@+id/postText"
                     android:layout_alignParentLeft="true"
+                    android:autoLink="all"
+                    android:linksClickable="true"
                     />
             </RelativeLayout>
 
