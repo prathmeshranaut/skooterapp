@@ -64,7 +64,7 @@
                     android:textSize="17sp"
                     />
 
-                <com.skooterapp.ATextView
+                <com.skooterapp.ALinkifiedTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
@@ -75,7 +75,6 @@
                     android:layout_below="@+id/handleText"
                     android:layout_marginBottom="5dp"
                     android:autoLink="all"
-                    android:linksClickable="true"
                     />
 
 
