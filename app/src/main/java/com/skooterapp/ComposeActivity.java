@@ -16,7 +16,6 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,16 +35,18 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.skooterapp.data.Post;
 import com.skooterapp.data.Zone;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
@@ -105,7 +106,9 @@ public class ComposeActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 MenuItem menuItem = mMenu.findItem(R.id.text_counter);
                 //TODO Redmi crash
-                menuItem.setTitle(Integer.toString(MAX_CHARACTERS - s.length()));
+                if(menuItem != null) {
+                    menuItem.setTitle(Integer.toString(MAX_CHARACTERS - s.length()));
+                }
             }
 
             @Override
@@ -415,48 +418,165 @@ public class ComposeActivity extends BaseActivity {
                 params.setParameter("zone_id", "null");
             }
 
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 8;
-
-            Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath(), options);
+            Bitmap bitmap = BitmapFactory.decodeFile(fileUri.getPath());
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream); //compress to which format you want.
-            byte[] byte_arr = stream.toByteArray();
-            String image_str = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+
+            ByteArrayBody byteArrayBody;
             ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+            String format = mFile.getPath().substring(mFile.getPath().lastIndexOf(".")+1);
+            if(format.equalsIgnoreCase("png"))
+            {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
+                byte[] byte_arr = stream.toByteArray();
 
-            nameValuePairs.add(new BasicNameValuePair("image", image_str));
-            nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(userId)));
-            nameValuePairs.add(new BasicNameValuePair("channel", skootHandle.getText().toString()));
-            nameValuePairs.add(new BasicNameValuePair("content", skootText.getText().toString()));
-            nameValuePairs.add(new BasicNameValuePair("location_id", Integer.toString(locationId)));
-
-            if (mActiveZones.size() > 0) {
-                nameValuePairs.add(
-                        new BasicNameValuePair("zone_id",
-                                Integer.toString(mActiveZones.get(0).getZoneId()))
-                );
+                Log.d("PNG", "Detected a PNG");
+                Log.d("PNG DATA: ", byte_arr.toString());
+                byteArrayBody = new ByteArrayBody(byte_arr,"image/png", "image.png");
             } else {
-                nameValuePairs.add(new BasicNameValuePair("zone_id", "null"));
+                Log.d("JPEG", "Detected a JPEG");
+
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                byte[] byte_arr = stream.toByteArray();
+
+                Log.d("JPG DATA: ", byte_arr.toString());
+                byteArrayBody = new ByteArrayBody(byte_arr,"image/jpeg", "image.jpg");
             }
 
             try {
-
-                HttpClient httpclient = new DefaultHttpClient();
-                httpclient.getParams().setParameter(
-                        CoreProtocolPNames.PROTOCOL_VERSION,
-                        HttpVersion.HTTP_1_1);
-
                 String url = substituteString(
                         getResources().getString(R.string.skoot_new),
                         new HashMap<String, String>());
 
+                HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httppost = new HttpPost(url);
 
                 httppost.setHeader("user_id", Integer.toString(userId));
                 httppost.setHeader("access_token", accessToken);
 
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+//                InputStream inputStream;
+//                inputStream = new FileInputStream(mFile);
+//                byte[] data;
+//
+//                data = IOUtil.toByteArray(inputStream);
+//
+//                InputStreamBody inputStreamBody = new InputStreamBody(new ByteArrayInputStream(data), "Pic.jpg");
+
+                final File file = mFile;
+                ContentBody fb;
+                if(format.equalsIgnoreCase("png"))
+                {
+                    fb = new FileBody(file, "image/png");
+                    Log.d("PNG", "Detected a PNG");
+
+                } else {
+                    Log.d("JPEG", "Detected a JPEG");
+                    fb = new FileBody(file, "image/jpg");
+                }
+                builder.addPart("image", byteArrayBody);
+                builder.addTextBody("user_id", Integer.toString(BaseActivity.userId));
+                builder.addTextBody("channel", skootHandle.getText().toString());
+                builder.addTextBody("content", skootText.getText().toString());
+                builder.addTextBody("location_id", Integer.toString(locationId));
+
+                if (mActiveZones.size() > 0) {
+                    builder.addTextBody("zone_id", Integer.toString(mActiveZones.get(0).getZoneId()));
+                } else {
+                    builder.addTextBody("zone_id", "null");
+                }
+
+                final HttpEntity imageUploadEntity = builder.build();
+                Log.d(LOG_TAG, imageUploadEntity.getContentType().toString());
+//                class ProgressiveEntity implements HttpEntity {
+//                    @Override
+//                    public void consumeContent() throws IOException {
+//                        yourEntity.consumeContent();
+//                    }
+//                    @Override
+//                    public InputStream getContent() throws IOException,
+//                            IllegalStateException {
+//                        return yourEntity.getContent();
+//                    }
+//                    @Override
+//                    public Header getContentEncoding() {
+//                        return yourEntity.getContentEncoding();
+//                    }
+//                    @Override
+//                    public long getContentLength() {
+//                        return yourEntity.getContentLength();
+//                    }
+//                    @Override
+//                    public Header getContentType() {
+//                        return yourEntity.getContentType();
+//                    }
+//                    @Override
+//                    public boolean isChunked() {
+//                        return yourEntity.isChunked();
+//                    }
+//                    @Override
+//                    public boolean isRepeatable() {
+//                        return yourEntity.isRepeatable();
+//                    }
+//                    @Override
+//                    public boolean isStreaming() {
+//                        return yourEntity.isStreaming();
+//                    } // CONSIDER put a _real_ delegator into here!
+//
+//                    @Override
+//                    public void writeTo(OutputStream outstream) throws IOException {
+//
+//                        class ProxyOutputStream extends FilterOutputStream {
+//                            /**
+//                             * @author Stephen Colebourne
+//                             */
+//
+//                            public ProxyOutputStream(OutputStream proxy) {
+//                                super(proxy);
+//                            }
+//                            public void write(int idx) throws IOException {
+//                                out.write(idx);
+//                            }
+//                            public void write(byte[] bts) throws IOException {
+//                                out.write(bts);
+//                            }
+//                            public void write(byte[] bts, int st, int end) throws IOException {
+//                                out.write(bts, st, end);
+//                            }
+//                            public void flush() throws IOException {
+//                                out.flush();
+//                            }
+//                            public void close() throws IOException {
+//                                out.close();
+//                            }
+//                        } // CONSIDER import this class (and risk more Jar File Hell)
+//
+//                        class ProgressiveOutputStream extends ProxyOutputStream {
+//                            public ProgressiveOutputStream(OutputStream proxy) {
+//                                super(proxy);
+//                            }
+//                            public void write(byte[] bts, int st, int end) throws IOException {
+//
+//                                // FIXME  Put your progress bar stuff here!
+//
+//                                out.write(bts, st, end);
+//                            }
+//                        }
+//
+//                        yourEntity.writeTo(new ProgressiveOutputStream(outstream));
+//                    }
+//
+//                };
+//
+//                ProgressiveEntity myEntity = new ProgressiveEntity();
+
+//                httpclient.getParams().setParameter(
+//                        CoreProtocolPNames.PROTOCOL_VERSION,
+//                        HttpVersion.HTTP_1_1);
+
+                //httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                httppost.setEntity(imageUploadEntity);
                 HttpResponse response = httpclient.execute(httppost);
 
                 parsePost(new JSONObject(EntityUtils.toString(response.getEntity())));

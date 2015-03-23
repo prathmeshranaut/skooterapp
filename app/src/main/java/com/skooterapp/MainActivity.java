@@ -94,7 +94,6 @@ public class MainActivity extends BaseActivity {
 
             Log.d("MainActivity", retrieveReferralParams.toString());
 
-
             StringRequest skooterJsonObjectRequest = new StringRequest(
                     Request.Method.POST,
                     url,
@@ -119,12 +118,19 @@ public class MainActivity extends BaseActivity {
                     params.put("fbzx", "-335929672963535987");
                     params.put("pageHistory", "0");
                     params.put("entry.628117443", retrieveReferralParams.get("utm_source"));
-                    params.put("entry.1790336789", retrieveReferralParams.get("utm_medium"));
-                    params.put("entry.1187582545", retrieveReferralParams.get("utm_term"));
-                    params.put("entry.991118102", retrieveReferralParams.get("utm_content"));
-                    params.put("entry.1555135749", retrieveReferralParams.get("utm_campaign"));
+                    if (retrieveReferralParams.get("utm_medium") != null) {
+                        params.put("entry.1790336789", retrieveReferralParams.get("utm_medium"));
+                    }
+                    if (retrieveReferralParams.get("utm_term") != null) {
+                        params.put("entry.1187582545", retrieveReferralParams.get("utm_term"));
+                    }
+                    if (retrieveReferralParams.get("utm_content") != null) {
+                        params.put("entry.991118102", retrieveReferralParams.get("utm_content"));
+                    }
+                    if (retrieveReferralParams.get("utm_campaign") != null) {
+                        params.put("entry.1555135749", retrieveReferralParams.get("utm_campaign"));
+                    }
                     params.put("entry.1526753725", Integer.toString(BaseActivity.userId));
-
                     if (params != null && params.size() > 0) {
                         return encodeParameters(params, getParamsEncoding());
                     }
@@ -298,6 +304,8 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
             return true;
         } else if (id == R.id.score) {
+            return true;
+        }  else if (id == R.id.action_search) {
             return true;
         }
 

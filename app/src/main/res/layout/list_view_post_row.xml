@@ -60,6 +60,7 @@
                     android:layout_below="@+id/handleText"
                     android:layout_marginBottom="5dp"
                     android:autoLink="all"
+                    android:linksClickable="true"
                     />
 
                 <com.android.volley.toolbox.NetworkImageView

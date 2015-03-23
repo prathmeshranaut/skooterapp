@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -49,6 +50,7 @@ public class LoadingActivity extends BaseActivity {
     Thread thread = null;
     protected boolean mNotification = false;
     ProgressBar mProgressBar;
+    protected Button mRetryButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +62,19 @@ public class LoadingActivity extends BaseActivity {
 
         mLoadingTextView = (TextView) findViewById(R.id.loading_text);
         mProgressBar = (ProgressBar) findViewById(R.id.loading_progress);
+        mRetryButton = (Button) findViewById(R.id.retry_connection);
 
         mSettings = getSharedPreferences(PREFS_NAME, 0);
         userId = mSettings.getInt("userId", 0);
         accessToken = mSettings.getString("access_token", "");
         mLocator = new GPSLocator(this);
+
+        mRetryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                retryLogin();
+            }
+        });
 
         if (userId == 0) {
             loginUser();
@@ -134,10 +144,12 @@ public class LoadingActivity extends BaseActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                mRetryButton.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mRetryButton.setVisibility(View.VISIBLE);
                 VolleyLog.d(LOG_TAG, error.networkResponse);
             }
         });
@@ -211,10 +223,11 @@ public class LoadingActivity extends BaseActivity {
                 }
             };
 
+            mRetryButton.setVisibility(View.GONE);
             AppController.getInstance().addToRequestQueue(jsonObjectRequest, "location");
         } else {
             mLoadingTextView.setText("We're having a hard time locating you!");
-            mProgressBar.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.VISIBLE);
             mLocator.showSettingsAlert();
         }
     }
@@ -228,6 +241,8 @@ public class LoadingActivity extends BaseActivity {
         SkooterJsonObjectRequest jsonObjectRequest = new SkooterJsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                mRetryButton.setVisibility(View.GONE);
+
                 final String SKOOT_SCORE = "score";
                 final String SKOOT_POST = "skoots";
                 final String SKOOT_COMMENT = "comments";
@@ -301,11 +316,13 @@ public class LoadingActivity extends BaseActivity {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");
                 }
+                mRetryButton.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(LOG_TAG, error.getMessage());
+                VolleyLog.d(LOG_TAG + "User login", error.getMessage());
+                mRetryButton.setVisibility(View.VISIBLE);
                 bootstrapCheckDeviceSettings();
             }
         });
@@ -357,11 +374,13 @@ public class LoadingActivity extends BaseActivity {
                         TabsPagerAdapter.activeImageResId[3] = R.drawable.notification_active;
                     }
                 }
+                mRetryButton.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(LOG_TAG, error.getMessage());
+                mRetryButton.setVisibility(View.VISIBLE);
             }
         });
         AppController.getInstance().addToRequestQueue(jsonArrayRequest, "notifications");
@@ -393,14 +412,17 @@ public class LoadingActivity extends BaseActivity {
                     editor.putString("access_token", accessToken);
                     editor.apply();
                     getUserDetails();
+                    mRetryButton.setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e(LOG_TAG, "Error processing Json Data");
+                    mRetryButton.setVisibility(View.VISIBLE);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                mRetryButton.setVisibility(View.GONE);
                 bootstrapCheckDeviceSettings();
                 error.printStackTrace();
             }
@@ -415,6 +437,7 @@ public class LoadingActivity extends BaseActivity {
             mLoadingTextView.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.GONE);
         }
+        mRetryButton.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -466,5 +489,17 @@ public class LoadingActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void retryLogin() {
+        mRetryButton.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mLoadingTextView.setVisibility(View.GONE);
+
+        if (userId == 0) {
+            loginUser();
+        } else {
+            getUserDetails();
+        }
     }
 }

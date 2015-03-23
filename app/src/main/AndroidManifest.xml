@@ -67,15 +67,13 @@ a
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value=".ChannelActivity" />
         </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
+            <meta-data android:name="android.app.default_searchable"
+                       android:value=".ChannelActivity" />
         </activity>
         <activity
             android:name=".ViewPostActivity"

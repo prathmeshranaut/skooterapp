@@ -45,5 +45,6 @@
     <string name="title_activity_introductory">IntroductoryActivity</string>
     <string name="loading_content_from_nearby">Loading content from around 3km</string>
     <string name="title_activity_peek_zone">PeekZoneActivity</string>
+    <string name="search_channels">Search channels</string>
 
 </resources>

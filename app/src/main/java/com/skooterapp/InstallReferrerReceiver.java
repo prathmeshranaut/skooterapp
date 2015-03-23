@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -49,6 +50,7 @@ public class InstallReferrerReceiver extends BroadcastReceiver {
             referralParams.put(pair[0], pair[1]);
         }
 
+        Log.d("referrer", referralParams.toString());
         InstallReferrerReceiver.storeReferralParams(context, referralParams);
     }
 

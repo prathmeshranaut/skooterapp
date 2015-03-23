@@ -25,7 +25,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.skooterapp.AppController;
 import com.skooterapp.BaseActivity;
-import com.skooterapp.PeekActivity;
 import com.skooterapp.PeekPostAdapter;
 import com.skooterapp.R;
 import com.skooterapp.SkooterJsonArrayRequest;
@@ -254,7 +253,7 @@ public class Peek extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
-        inflater.inflate(R.menu.menu_peek, menu);
+        //inflater.inflate(R.menu.menu_peek, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -264,11 +263,11 @@ public class Peek extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        if (id == R.id.action_add_zone) {
-            Intent intent = new Intent(mContext, PeekActivity.class);
-            startActivity(intent);
-        }
+//
+//        if (id == R.id.action_add_zone) {
+//            Intent intent = new Intent(mContext, PeekActivity.class);
+//            startActivity(intent);
+//        }
 
         return super.onOptionsItemSelected(item);
     }

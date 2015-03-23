@@ -78,6 +78,7 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         final Button flagButton = (Button) convertView.findViewById(R.id.flagButton);
 
         commentContent.setText(comment.getContent());
+        commentContent.setMovementMethod(null);
         timestamp.setText(comment.getTimestamp());
         voteCount.setText(Integer.toString(comment.getVoteCount()));
 

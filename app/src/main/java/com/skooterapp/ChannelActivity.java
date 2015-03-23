@@ -2,6 +2,7 @@ package com.skooterapp;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -113,6 +114,9 @@ public class ChannelActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {
+            Intent parentActivityIntent = new Intent(this, MainActivity.class);
+            parentActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(parentActivityIntent);
             finish();
             return true;
         }
@@ -124,15 +128,28 @@ public class ChannelActivity extends BaseActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             mChannel = query;
-        }else {
+
+        }
+        else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            doView(intent);
+        }
+        else {
             mChannel = intent.getStringExtra("CHANNEL_NAME");
         }
-
+        Log.d(LOG_TAG + " Search", intent.getExtras().toString());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
         handleIntent(intent);
+    }
+    private void doView(final Intent queryIntent) {
+        Uri uri = queryIntent.getData();
+        String action = queryIntent.getAction();
+        Intent i = new Intent(action);
+        i.setData(uri);
+        startActivity(i);
+        this.finish();
     }
 }

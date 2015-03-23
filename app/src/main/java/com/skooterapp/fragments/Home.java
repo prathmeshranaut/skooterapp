@@ -1,16 +1,22 @@
 package com.skooterapp.fragments;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,9 +36,12 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.skooterapp.AppController;
 import com.skooterapp.BaseActivity;
+import com.skooterapp.ChannelActivity;
 import com.skooterapp.ComposeActivity;
 import com.skooterapp.PostAdapter;
 import com.skooterapp.R;
+import com.skooterapp.SearchSuggestionsAdapter;
+import com.skooterapp.SkooterJsonArrayRequest;
 import com.skooterapp.ViewPostActivity;
 import com.skooterapp.data.Post;
 
@@ -67,7 +76,10 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
     private TextView mQuickReturnView;
     private View mPlaceHolder;
     protected View mSkootHolder;
+    private List<String> items = new ArrayList<String>();
     private Menu mMenu;
+    private SearchView mSearchView;
+    protected SearchSuggestionsAdapter mSuggestionAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -358,6 +370,135 @@ public class Home extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
         mMenu = menu;
+
+        mMenu = menu;
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+        mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        mSearchView.setIconified(true);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Log.d(LOG_TAG, s);
+                mSearchView.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                items.clear();
+                if (query.length() >= 3) {
+                    loadSuggestions(query);
+                }
+                return true;
+            }
+        });
+        mSearchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int i) {
+                Cursor cursor = (Cursor) mSearchView.getSuggestionsAdapter().getItem(i);
+                String feedName = cursor.getString(2);
+                mSearchView.setQuery(feedName, false);
+                mSearchView.clearFocus();
+                Intent intent = new Intent(getActivity(), ChannelActivity.class);
+                Log.d(LOG_TAG, feedName);
+                intent.putExtra("CHANNEL_NAME", feedName);
+                startActivity(intent);
+                return true;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int i) {
+                Cursor cursor = (Cursor) mSearchView.getSuggestionsAdapter().getItem(i);
+                String feedName = cursor.getString(1);
+                mSearchView.setQuery(feedName, false);
+                mSearchView.clearFocus();
+                Intent intent = new Intent(getActivity(), ChannelActivity.class);
+                intent.putExtra("CHANNEL_NAME", feedName);
+                Log.d(LOG_TAG, feedName);
+                startActivity(intent);
+                return true;
+            }
+        });
+
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_search) {
+            mSearchView.setIconified(true);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void loadSuggestions(String query) {
+        AppController.getInstance().cancelPendingRequests("suggestions");
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", Integer.toString(BaseActivity.userId));
+        params.put("query", query);
+
+        String url = BaseActivity.substituteString(getString(R.string.channel_suggestion), params);
+        final String q = query;
+        SkooterJsonArrayRequest skooterJsonArrayRequest = new SkooterJsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                items.clear();
+                Log.d(LOG_TAG, response.toString());
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        if (!response.isNull(i)) {
+                            items.add(response.getString(i));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                loadHistory(q, mMenu);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e(LOG_TAG, error.getMessage());
+            }
+        });
+
+        AppController.getInstance().addToRequestQueue(skooterJsonArrayRequest, "suggestions");
+    }
+
+    private void loadHistory(String query, Menu menu) {
+        // Cursor
+        String[] columns = new String[]{"_id", "text"};
+        Object[] temp = new Object[]{0, "default"};
+
+        MatrixCursor cursor = new MatrixCursor(columns);
+
+        for (int i = 0; i < items.size(); i++) {
+
+            temp[0] = i;
+            temp[1] = items.get(i);
+
+            cursor.addRow(temp);
+        }
+
+        if (mSuggestionAdapter == null) {
+            mSuggestionAdapter = new SearchSuggestionsAdapter(getActivity().getBaseContext(), cursor, items);
+            mSearchView.setSuggestionsAdapter(mSuggestionAdapter);
+        }else {
+            mSuggestionAdapter.changeCursor(cursor);
+        }
+        mSuggestionAdapter.notifyDataSetInvalidated();
     }
 }

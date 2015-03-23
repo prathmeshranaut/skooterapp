@@ -21,7 +21,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.skooterapp.AppController;
 import com.skooterapp.BaseActivity;
-import com.skooterapp.PeekActivity;
 import com.skooterapp.PeekNewPostAdapter;
 import com.skooterapp.PeekZoneActivity;
 import com.skooterapp.R;
@@ -137,7 +136,7 @@ public class PeekNew extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         menu.clear();
-//        inflater.inflate(R.menu.menu_peek, menu);
+        inflater.inflate(R.menu.menu_peek, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -147,11 +146,6 @@ public class PeekNew extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        if (id == R.id.action_add_zone) {
-            Intent intent = new Intent(mContext, PeekActivity.class);
-            startActivity(intent);
-        }
 
         return super.onOptionsItemSelected(item);
     }

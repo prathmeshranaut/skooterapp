@@ -5,19 +5,19 @@
       tools:context="com.skooterapp.MainActivity">
 
     <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/search_icon"
+        android:title="Search"
+        skooter:showAsAction="always"
+        android:orderInCategory="1"
+        android:actionViewClass="android.support.v7.widget.SearchView"
+        skooter:actionViewClass="android.support.v7.widget.SearchView"/>
+
+    <item
         android:id="@+id/action_settings"
         android:title="Settings"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         android:icon="@drawable/ic_action_overlay"
         skooter:showAsAction="ifRoom"/>
-
-    <!--<item-->
-        <!--android:id="@+id/action_search"-->
-        <!--android:icon="@drawable/search_icon"-->
-        <!--android:title="Search"-->
-        <!--app:showAsAction="always"-->
-        <!--android:orderInCategory="2"-->
-        <!--android:actionViewClass="android.support.v7.widget.SearchView"-->
-        <!--app:actionViewClass="android.support.v7.widget.SearchView"/>-->
 
 </menu>

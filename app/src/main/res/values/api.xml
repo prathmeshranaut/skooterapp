@@ -38,6 +38,7 @@
 
     <string name="channel_view">channel/{user_id}/{channel}/{location_id}</string>
     <string name="channel_trending">channels/trending/{user_id}</string>
+    <string name="channel_suggestion">channels/suggestions/{user_id}/{query}</string>
     <string name="registration_id">user/registration_id</string>
     <string name="notification_preferences">user/notify</string>
 

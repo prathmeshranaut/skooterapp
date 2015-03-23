@@ -13,7 +13,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -21,6 +21,9 @@ android {
 
 android {
     packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
     }
 }
 
@@ -31,4 +34,9 @@ dependencies {
     compile 'com.google.http-client:google-http-client-android:1.18.0-rc'
     compile 'com.google.android.gms:play-services:6.5.87'
     compile 'com.github.amlcurran.showcaseview:library:5.0.0'
+    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
+    compile('org.apache.httpcomponents:httpmime:4.3') {
+        exclude module: "httpclient"
+    }
+    compile 'commons-io:commons-io:20030203.000550'
 }

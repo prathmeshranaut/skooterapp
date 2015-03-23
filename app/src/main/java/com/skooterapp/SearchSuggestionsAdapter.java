@@ -10,13 +10,13 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class ExampleAdapter extends CursorAdapter {
+public class SearchSuggestionsAdapter extends CursorAdapter {
 
     private List<String> items;
 
     private TextView text;
 
-    public ExampleAdapter(Context context, Cursor cursor, List<String> items) {
+    public SearchSuggestionsAdapter(Context context, Cursor cursor, List<String> items) {
 
         super(context, cursor, false);
 
@@ -24,11 +24,14 @@ public class ExampleAdapter extends CursorAdapter {
 
     }
 
+
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        try {
+            text.setText(items.get(cursor.getPosition()));
+        } catch (IndexOutOfBoundsException e) {
 
-        text.setText(items.get(cursor.getPosition()));
-
+        }
     }
 
     @Override
@@ -41,7 +44,6 @@ public class ExampleAdapter extends CursorAdapter {
         text = (TextView) view.findViewById(R.id.item);
 
         return view;
-
     }
 
 }

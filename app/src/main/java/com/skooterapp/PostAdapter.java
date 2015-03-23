@@ -95,6 +95,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         }
 
         postContent.setText(post.getContent());
+        postContent.setMovementMethod(null);
 
         handleContent.setText(post.getChannel());
         handleContent.setVisibility(View.VISIBLE);
