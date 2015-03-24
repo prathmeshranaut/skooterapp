@@ -51,6 +51,9 @@ public class ViewPostActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        overridePendingTransition(R.anim.activity_open_translate, R.anim.activity_close_scale);
+
         setContentView(R.layout.activity_view_post);
 
         activateToolbarWithHomeEnabled("");
@@ -197,6 +200,12 @@ public class ViewPostActivity extends BaseActivity {
                 }
             });
         }
+    }
+
+    protected void onPause() {
+        super.onPause();
+        //closing transition animations
+        overridePendingTransition(R.anim.activity_open_scale, R.anim.activity_close_translate);
     }
 
     public void initListViews() {
@@ -392,8 +401,8 @@ public class ViewPostActivity extends BaseActivity {
                         Post post = (Post) postList.get(0);
                         post.setCommentsCount(post.getCommentsCount() - 1);
 
-                        mHomePosts.get(Post.findPostPositionInListById(mHomePosts,post.getId())).setCommentsCount(post.getCommentsCount());
-                        postList.remove(position+1);
+                        mHomePosts.get(Post.findPostPositionInListById(mHomePosts, post.getId())).setCommentsCount(post.getCommentsCount());
+                        postList.remove(position + 1);
                     }
                     postAdapter.notifyDataSetChanged();
                 }

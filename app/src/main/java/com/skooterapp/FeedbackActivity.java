@@ -65,7 +65,7 @@ public class FeedbackActivity extends BaseActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-                    VolleyLog.d(LOG_TAG, error.getStackTrace());
+                    VolleyLog.d(LOG_TAG, error.getMessage());
                 }
             }) {
                 public byte[] getBody() {

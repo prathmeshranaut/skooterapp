@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Skooter" parent="Theme.Base">
-        <item name="android:navigationBarColor">?colorPrimaryDark</item>
+        <!--<item name="android:navigationBarColor">?colorPrimaryDark</item>-->
         <item name="colorAccent">@color/skooterNPrimaryTextColor</item>
     </style>
 

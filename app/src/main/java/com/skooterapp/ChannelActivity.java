@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -31,6 +32,7 @@ public class ChannelActivity extends BaseActivity {
     private PostAdapter mPostsAdapter;
     private ListView mListView;
     String mChannel;
+    private TextView mNoChannelTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class ChannelActivity extends BaseActivity {
         handleIntent(getIntent());
 
         mListView = (ListView) findViewById(R.id.list_channels);
+        mNoChannelTextView = (TextView) findViewById(R.id.no_channel_post);
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", Integer.toString(userId));
@@ -67,6 +70,10 @@ public class ChannelActivity extends BaseActivity {
                         Post postObject = Post.parsePostFromJSONObject(response.getJSONObject(i));
 
                         mPostsList.add(postObject);
+                    }
+                    if(response.length() == 0) {
+                        mListView.setVisibility(View.GONE);
+                        mNoChannelTextView.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

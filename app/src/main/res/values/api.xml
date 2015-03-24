@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="main_url">http://skooter.herokuapp.com/</string>
+    <string name="main_url">http://skooter.elasticbeanstalk.com/</string>
     <string name="home">latest/{user_id}/{location_id}</string>
     <string name="hot">hot/{user_id}/{location_id}</string>
     <string name="peek">sneakpeek/{user_id}.json</string>

@@ -234,7 +234,7 @@ public class Trending extends Fragment implements SwipeRefreshLayout.OnRefreshLi
             @Override
             public boolean onQueryTextChange(String query) {
                 items.clear();
-                if (query.length() >= 3) {
+                if (query.length() >= 2) {
                     loadSuggestions(query);
                 }
                 return true;
