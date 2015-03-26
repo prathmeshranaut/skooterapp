@@ -16,9 +16,11 @@ public class SettingsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.activity_open_translate, R.anim.activity_close_scale);
+
         setContentView(R.layout.activity_settings);
 
-        activateToolbarWithHomeEnabled("Settings");
+        getSupportActionBar().setTitle("Settings");
 
         ListView settingsList = (ListView) findViewById(R.id.settings_list);
 
@@ -118,6 +120,11 @@ public class SettingsActivity extends BaseActivity {
         });
     }
 
+    protected void onPause() {
+        super.onPause();
+        //closing transition animations
+        overridePendingTransition(R.anim.activity_open_scale, R.anim.activity_close_translate);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

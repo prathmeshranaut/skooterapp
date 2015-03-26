@@ -23,7 +23,7 @@ public class ATextView extends TextView {
     }
 
     protected void init() {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "font/museo_300.otf");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "font/Ubuntu-Regular.ttf");
         setTypeface(tf);
     }
 }

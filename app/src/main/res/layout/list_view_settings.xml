@@ -16,12 +16,12 @@
     <com.skooterapp.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text=""
         android:id="@+id/settings_text"
         android:layout_centerInParent="true"
         android:layout_gravity="center_vertical"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_toRightOf="@id/settings_icon"/>
+        android:layout_toRightOf="@id/settings_icon"
+        android:textSize="18sp"/>
 
     <Switch
         android:layout_width="wrap_content"

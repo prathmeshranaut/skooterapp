@@ -16,7 +16,7 @@
         android:layout_below="@id/app_bar"
         android:id="@+id/logo"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         />
 
     <com.skooterapp.ATextView
@@ -36,7 +36,7 @@
         android:layout_below="@id/about_skooter"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
-        android:layout_margin="20dp"
+        android:layout_margin="15dp"
         android:textSize="18sp"/>
 
     <LinearLayout
