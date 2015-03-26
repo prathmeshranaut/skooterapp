@@ -104,7 +104,6 @@ public class ViewPostActivity extends BaseActivity {
 
                                 postAdapter.notifyDataSetChanged();
 
-
                                 final String SKOOT_COMMENTS = "comment";
 
                                 try {

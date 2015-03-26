@@ -47,7 +47,7 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
         final TextView postContent = (TextView) convertView.findViewById(R.id.postText);
         final TextView handleContent = (TextView) convertView.findViewById(R.id.handleText);
         final NetworkImageView zoneImage = (NetworkImageView) convertView.findViewById(R.id.zone_icon);
-        final NetworkImageView postImage = (NetworkImageView) convertView.findViewById(R.id.post_image);
+        final FeedImageView postImage = (FeedImageView) convertView.findViewById(R.id.post_image);
         final TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
         final TextView voteCount = (TextView) convertView.findViewById(R.id.voteCount);
         final TextView commentsCount = (TextView) convertView.findViewById(R.id.commentsCount);
@@ -66,6 +66,7 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
         }
 
         postContent.setText(post.getContent());
+        postContent.setMovementMethod(null);
         if (post.getChannel().equals("")) {
             handleContent.setVisibility(View.GONE);
         } else {
@@ -102,6 +103,11 @@ public class PeekPostAdapter extends ArrayAdapter<Post> {
 
         if (post.isImagePresent()) {
             postImage.setVisibility(View.VISIBLE);
+
+            postImage.setWidth(post.getWidth());
+            postImage.setHeight(post.getHeight());
+            postImage.setDefaultImageId(R.drawable.loading_image);
+
             postImage.setImageUrl(post.getSmallImageUrl(), AppController.getInstance().getImageLoader());
 
 //            String url2 = post.getSmallImageUrl();

@@ -8,14 +8,14 @@ android {
         applicationId "com.skooterapp"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 8
-        versionName "1.1"
+        versionCode 9
+        versionName "1.1.1"
     }
     buildTypes {
         debug {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            zipAlignEnabled true
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            zipAlignEnabled true
         }
         release {
             minifyEnabled true

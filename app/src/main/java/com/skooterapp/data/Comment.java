@@ -51,6 +51,10 @@ public class Comment implements Serializable {
         return mId;
     }
 
+    public int getPostId() {
+        return mPostId;
+    }
+
     public String getContent() {
         return mContent;
     }
@@ -79,20 +83,13 @@ public class Comment implements Serializable {
         return BaseActivity.getTimeAgo(mTimestamp);
     }
 
-    @Override
-    public String toString() {
-        return mContent + "\n" +
-                (mUpvotes - mDownvotes) + "\n" +
-                mTimestamp;
-    }
-
-    public int getPostId() {
-        return mPostId;
+    public int getVoteCount() {
+        return mUpvotes - mDownvotes;
     }
 
     public void upvoteComment() {
-        if(mIfUserVoted) {
-            if(!mUserVote) {
+        if (mIfUserVoted) {
+            if (!mUserVote) {
                 //Upvotes + 2
                 mUpvotes += 1;
                 mDownvotes -= 1;
@@ -131,8 +128,8 @@ public class Comment implements Serializable {
     }
 
     public void downvoteComment() {
-        if(mIfUserVoted) {
-            if(mUserVote) {
+        if (mIfUserVoted) {
+            if (mUserVote) {
                 //Downvote - 2
                 mUpvotes -= 1;
                 mDownvotes += 1;
@@ -168,10 +165,6 @@ public class Comment implements Serializable {
         });
 
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, "downvote_comment");
-    }
-
-    public int getVoteCount() {
-        return mUpvotes - mDownvotes;
     }
 
     public static int findCommentPositionInListById(List<Comment> commentList, int commentId) {

@@ -150,9 +150,14 @@ public class Notification extends Fragment implements SwipeRefreshLayout.OnRefre
                 final String SKOOT_IMAGE_PRESENT = "image_present";
                 final String SKOOT_SMALL_IMAGE_URL = "small_image_url";
                 final String SKOOT_LARGE_IMAGE_URL = "large_image_url";
+                final String SKOOT_IMAGE_RESOLUTION = "image_resolution";
+                final String SKOOT_IMAGE_WIDTH = "width";
+                final String SKOOT_IMAGE_HEIGHT = "height";
+                final String NOTIFICATION_READ = "read";
 
                 try {
                     mNotificationArrayList.clear();
+                    int count = 0;
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject jsonNotification = response.getJSONObject(i);
                         int id = jsonNotification.getInt(NOTIFICATION_ID);
@@ -160,7 +165,11 @@ public class Notification extends Fragment implements SwipeRefreshLayout.OnRefre
                         int post_id = jsonNotification.getInt(NOTIFICATION_POST_ID);
                         boolean post_redirect = jsonNotification.getBoolean(NOTIFICATION_POST_REDIRECT);
                         String icon_url = jsonNotification.getString(NOTIFICATION_ICON_URL);
+                        boolean notification_read = jsonNotification.getBoolean(NOTIFICATION_READ);
 
+                        if(notification_read) {
+                            count += 1;
+                        }
                         com.skooterapp.data.Notification notification;
 
                         if (post_redirect) {
@@ -185,8 +194,11 @@ public class Notification extends Fragment implements SwipeRefreshLayout.OnRefre
                             boolean isImagePresent = jsonPost.getBoolean(SKOOT_IMAGE_PRESENT);
                             String small_image_url = jsonPost.getString(SKOOT_SMALL_IMAGE_URL);
                             String large_image_url = jsonPost.getString(SKOOT_LARGE_IMAGE_URL);
+                            JSONObject image_resolution = jsonPost.getJSONObject(SKOOT_IMAGE_RESOLUTION);
+                            int width = image_resolution.getInt(SKOOT_IMAGE_WIDTH);
+                            int height = image_resolution.getInt(SKOOT_IMAGE_HEIGHT);
 
-                            Post postObject = new Post(post_id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
+                            Post postObject = new Post(post_id, channel, post, upvotes, downvotes, commentsCount, favoriteCount,  skoot_if_user_voted, user_vote, user_favorited, user_commented, user_skoot,  image_url, isImagePresent, small_image_url, large_image_url, width, height, created_at);
                             notification = new com.skooterapp.data.Notification(id, post_id, text, icon_url, post_redirect, postObject);
                         } else {
                             notification = new com.skooterapp.data.Notification(id, post_id, text, icon_url, post_redirect);
@@ -194,18 +206,23 @@ public class Notification extends Fragment implements SwipeRefreshLayout.OnRefre
                         mNotificationArrayList.add(notification);
                     }
 
-                    if (response.length() < 1) {
-                        //No notifications
+                    if(count > 0) {
+                        BaseActivity.mUser.setHasNotifications(true);
+                        TabsPagerAdapter.imageResId[3] = R.drawable.notification_alert;
+                        TabsPagerAdapter.activeImageResId[3] = R.drawable.notification_active_alert;
+                    } else {
                         BaseActivity.mUser.setHasNotifications(false);
                         TabsPagerAdapter.imageResId[3] = R.drawable.notification;
                         TabsPagerAdapter.activeImageResId[3] = R.drawable.notification_active;
+                    }
 
+                    if (response.length() < 1) {
+                        //No notifications
                         mNoNotificationText.setVisibility(View.VISIBLE);
                     } else {
                         BaseActivity.mUser.setHasNotifications(true);
                         TabsPagerAdapter.imageResId[3] = R.drawable.notification_alert;
                         TabsPagerAdapter.activeImageResId[3] = R.drawable.notification_active_alert;
-
                         mNoNotificationText.setVisibility(View.GONE);
                     }
                 } catch (JSONException e) {
@@ -294,7 +311,7 @@ public class Notification extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    VolleyLog.d(error.getMessage());
+                    VolleyLog.d(LOG_TAG, error.getMessage());
                 }
             });
 

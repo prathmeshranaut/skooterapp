@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.skooterapp.data.Post;
 
 import java.util.ArrayList;
@@ -75,7 +74,7 @@ public class TrendingPostAdapter extends ArrayAdapter {
             final Button upvoteBtn = (Button) convertView.findViewById(R.id.upvote);
             final Button downvoteBtn = (Button) convertView.findViewById(R.id.downvote);
             final ImageView commentImage = (ImageView) convertView.findViewById(R.id.commentImage);
-            final NetworkImageView postImage = (NetworkImageView) convertView.findViewById(R.id.post_image);
+            final FeedImageView postImage = (FeedImageView) convertView.findViewById(R.id.post_image);
 
             if (post.isUserSkoot()) {
                 is_user_post_view.setAlpha(1.0f);
@@ -109,6 +108,11 @@ public class TrendingPostAdapter extends ArrayAdapter {
 
             if (post.isImagePresent()) {
                 postImage.setVisibility(View.VISIBLE);
+
+                postImage.setWidth(post.getWidth());
+                postImage.setHeight(post.getHeight());
+                postImage.setDefaultImageId(R.drawable.loading_image);
+
                 postImage.setImageUrl(post.getSmallImageUrl(), AppController.getInstance().getImageLoader());
 
                 postImage.setOnClickListener(new View.OnClickListener() {

@@ -263,6 +263,9 @@ public class LoadingActivity extends BaseActivity {
                 final String SKOOT_IMAGE_PRESENT = "image_present";
                 final String SKOOT_SMALL_IMAGE_URL = "small_image_url";
                 final String SKOOT_LARGE_IMAGE_URL = "large_image_url";
+                final String SKOOT_IMAGE_RESOLUTION = "image_resolution";
+                final String SKOOT_IMAGE_WIDTH = "width";
+                final String SKOOT_IMAGE_HEIGHT = "height";
 
                 try {
                     int score = response.getInt(SKOOT_SCORE);
@@ -291,8 +294,11 @@ public class LoadingActivity extends BaseActivity {
                         boolean isImagePresent = jsonPost.getBoolean(SKOOT_IMAGE_PRESENT);
                         String small_image_url = jsonPost.getString(SKOOT_SMALL_IMAGE_URL);
                         String large_image_url = jsonPost.getString(SKOOT_LARGE_IMAGE_URL);
+                        JSONObject image_resolution = jsonPost.getJSONObject(SKOOT_IMAGE_RESOLUTION);
+                        int width = image_resolution.getInt(SKOOT_IMAGE_WIDTH);
+                        int height = image_resolution.getInt(SKOOT_IMAGE_HEIGHT);
 
-                        Post postObject = new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, true, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
+                        Post postObject = new Post(id, channel, post, upvotes, downvotes, commentsCount, favoriteCount,  skoot_if_user_voted, user_vote, user_favorited, user_commented, true,  image_url, isImagePresent, small_image_url, large_image_url, width, height, created_at);
                         posts.add(postObject);
                     }
 

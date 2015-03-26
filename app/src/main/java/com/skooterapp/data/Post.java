@@ -44,6 +44,9 @@ public class Post implements Serializable {
     protected static final String SKOOT_IMAGE_PRESENT = "image_present";
     protected static final String SKOOT_SMALL_IMAGE_URL = "small_image_url";
     protected static final String SKOOT_LARGE_IMAGE_URL = "large_image_url";
+    protected static final String SKOOT_IMAGE_RESOLUTION = "image_resolution";
+    protected static final String SKOOT_IMAGE_WIDTH = "width";
+    protected static final String SKOOT_IMAGE_HEIGHT = "height";
 
     private int mId;
     private String mChannel;
@@ -61,6 +64,9 @@ public class Post implements Serializable {
     private boolean mImagePresent;
     private String mSmallImageUrl;
     private String mLargeImageUrl;
+    private int mWidth;
+    private int mHeight;
+    private String mTimestamp;
 
     public boolean isImagePresent() {
         return mImagePresent;
@@ -154,26 +160,42 @@ public class Post implements Serializable {
         mFavoriteCount = favoriteCount;
     }
 
-    private String mTimestamp;
+    public int getHeight() {
+        return mHeight;
+    }
 
-    public Post(int id, String channel, String content, int commentsCount, int favoriteCount, int upvotes, int downvotes, boolean ifUserVoted, boolean userVote, boolean userSkoot, boolean userFavorited, boolean userCommented, String timestamp, String imageUrl, boolean imagePresent, String smallImageUrl, String largeImageUrl) {
+    public void setHeight(int height) {
+        mHeight = height;
+    }
+
+    public int getWidth() {
+        return mWidth;
+    }
+
+    public void setWidth(int width) {
+        mWidth = width;
+    }
+
+    public Post(int id, String channel, String content, int upvotes, int downvotes, int commentsCount, int favoriteCount, boolean ifUserVoted, boolean userVote, boolean userFavorited, boolean userCommented, boolean userSkoot, String imageUrl, boolean imagePresent, String smallImageUrl, String largeImageUrl, int width, int height, String timestamp) {
         mId = id;
         mChannel = channel;
         mContent = content;
-        mCommentsCount = commentsCount;
-        mFavoriteCount = favoriteCount;
-        mUserFavorited = userFavorited;
-        mUserCommented = userCommented;
         mUpvotes = upvotes;
         mDownvotes = downvotes;
+        mCommentsCount = commentsCount;
+        mFavoriteCount = favoriteCount;
         mIfUserVoted = ifUserVoted;
         mUserVote = userVote;
+        mUserFavorited = userFavorited;
+        mUserCommented = userCommented;
         mUserSkoot = userSkoot;
-        mTimestamp = timestamp;
         mImageUrl = imageUrl;
         mImagePresent = imagePresent;
         mSmallImageUrl = smallImageUrl;
         mLargeImageUrl = largeImageUrl;
+        mWidth = width;
+        mHeight = height;
+        mTimestamp = timestamp;
     }
 
     @Override
@@ -363,8 +385,11 @@ public class Post implements Serializable {
             boolean isImagePresent = response.getBoolean(SKOOT_IMAGE_PRESENT);
             String small_image_url = response.getString(SKOOT_SMALL_IMAGE_URL);
             String large_image_url = response.getString(SKOOT_LARGE_IMAGE_URL);
+            JSONObject image_resolution = response.getJSONObject(SKOOT_IMAGE_RESOLUTION);
+            int width = image_resolution.getInt(SKOOT_IMAGE_WIDTH);
+            int height = image_resolution.getInt(SKOOT_IMAGE_HEIGHT);
 
-            return new Post(id, channel, post, commentsCount, favoriteCount, upvotes, downvotes, skoot_if_user_voted, user_vote, user_skoot, user_favorited, user_commented, created_at, image_url, isImagePresent, small_image_url, large_image_url);
+            return new Post(id, channel, post, upvotes, downvotes, commentsCount, favoriteCount,  skoot_if_user_voted, user_vote, user_favorited, user_commented, user_skoot,  image_url, isImagePresent, small_image_url, large_image_url, width, height, created_at);
         } catch (Exception e) {
             return null;
         }
