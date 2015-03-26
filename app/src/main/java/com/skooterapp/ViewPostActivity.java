@@ -64,8 +64,6 @@ public class ViewPostActivity extends BaseActivity {
         typeView = (TextView) findViewById(R.id.type);
         listPosts = (ListView) findViewById(R.id.list_posts);
 
-        final TextView commentText = (TextView) findViewById(R.id.commentText);
-        final Button commentBtn = (Button) findViewById(R.id.commentSkoot);
         final int postId;
 
         Intent intent = getIntent();
@@ -81,6 +79,13 @@ public class ViewPostActivity extends BaseActivity {
             getCommentsForPostId(mPost.getId(), userId, false);
             initListViews();
         }
+
+        canPerformReplies(postId);
+    }
+
+    private void canPerformReplies(final int postId) {
+        final TextView commentText = (TextView) findViewById(R.id.commentText);
+        final Button commentBtn = (Button) findViewById(R.id.commentSkoot);
 
         if (canPerformActivity) {
             commentBtn.setOnClickListener(new View.OnClickListener() {
@@ -221,6 +226,7 @@ public class ViewPostActivity extends BaseActivity {
         Map<String, String> params = new HashMap<String, String>();
         params.put("user_id", Integer.toString(userId));
         params.put("post_id", Integer.toString(postId));
+        params.put("location_id", Integer.toString(BaseActivity.locationId));
 
         String url = substituteString(getResources().getString(R.string.skoot_single), params);
 
@@ -228,16 +234,24 @@ public class ViewPostActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 final String SKOOT_COMMENTS = "comments";
+                final String SKOOT_ACTIVITY = "activity_enabled";
                 final String SKOOT = "skoot";
 
                 Log.d(LOG_TAG, response.toString());
                 try {
                     JSONArray jsonArray = response.getJSONArray(SKOOT_COMMENTS);
+                    boolean canPerformActivity = response.getBoolean(SKOOT_ACTIVITY);
 
                     if (parsePost) {
                         mPost = Post.parsePostFromJSONObject(response.getJSONObject(SKOOT));
                         initListViews();
                     }
+
+                    if(canPerformActivity != ViewPostActivity.this.canPerformActivity) {
+                        ViewPostActivity.this.canPerformReplies(mPost.getId());
+                        postAdapter = new ViewPostAdapter(ViewPostActivity.this, R.layout.list_view_post_row, postList, true, flagView, deleteView, typeIdView, typeView, canPerformActivity);
+                    }
+
                     for (int i = 0; i < jsonArray.length(); i++) {
                         Comment commentObject = Comment.parseCommentFromJSONObject(jsonArray.getJSONObject(i));
                         if (commentObject != null) {
