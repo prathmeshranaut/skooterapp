@@ -5,7 +5,7 @@
     <string name="hot">hot/{user_id}/{location_id}</string>
     <string name="peek">sneakpeek/{user_id}.json</string>
     <string name="v2_peek">peek/{zone_id}/{user_id}</string>
-    peek
+
 
     <string name="skoot_single">skoot/{user_id}/{post_id}/{location_id}.json</string>
     <string name="skoot_new">skoot</string>

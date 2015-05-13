@@ -22,7 +22,7 @@
         android:paddingLeft="5dp"
         />
 
-    <com.skooterapp.AEditText
+    <com.skooterapp.layouts.AEditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
@@ -33,7 +33,7 @@
         android:padding="10dp">
 
         <requestFocus/>
-    </com.skooterapp.AEditText>
+    </com.skooterapp.layouts.AEditText>
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
             android:layout_centerVertical="true"
             android:id="@+id/channel_at_icon"/>
 
-        <com.skooterapp.AEditText
+        <com.skooterapp.layouts.AEditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"

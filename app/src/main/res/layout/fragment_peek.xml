@@ -17,7 +17,7 @@
         ptr:ptrRefreshingLabel="Loading content from followed zones"
         />
 
-    <com.skooterapp.ATextView
+    <com.skooterapp.layouts.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/peek_info_text"

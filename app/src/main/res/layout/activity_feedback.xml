@@ -7,7 +7,7 @@
 
     <include layout="@layout/toolbar" android:id="@+id/app_bar" />
 
-    <com.skooterapp.AEditText
+    <com.skooterapp.layouts.AEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"
@@ -16,7 +16,7 @@
         android:layout_marginTop="5dp"
         />
 
-    <com.skooterapp.AEditText
+    <com.skooterapp.layouts.AEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
@@ -26,7 +26,7 @@
 
         />
 
-    <com.skooterapp.AEditText
+    <com.skooterapp.layouts.AEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/phoneNumber"
@@ -35,7 +35,7 @@
         android:layout_marginTop="5dp"
         />
 
-    <com.skooterapp.AEditText
+    <com.skooterapp.layouts.AEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/feedback"

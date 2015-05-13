@@ -19,7 +19,7 @@
         android:layout_marginBottom="20dp"
         />
 
-    <com.skooterapp.ATextView
+    <com.skooterapp.layouts.ATextView
         android:text="@string/about_us_extract"
         android:id="@+id/about_skooter"
         android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
         android:layout_margin="20dp"
         android:textSize="18sp"/>
 
-    <com.skooterapp.ABITextView
+    <com.skooterapp.layouts.ABITextView
         android:text="@string/website_link"
         android:id="@+id/skooter_website"
         android:layout_width="wrap_content"

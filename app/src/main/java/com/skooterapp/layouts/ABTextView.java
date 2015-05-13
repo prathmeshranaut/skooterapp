@@ -1,4 +1,4 @@
-package com.skooterapp;
+package com.skooterapp.layouts;
 
 import android.content.Context;
 import android.graphics.Typeface;

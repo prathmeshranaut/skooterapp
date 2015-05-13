@@ -26,6 +26,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.skooterapp.data.Notification;
 import com.skooterapp.data.Post;
+import com.skooterapp.layouts.ATextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;

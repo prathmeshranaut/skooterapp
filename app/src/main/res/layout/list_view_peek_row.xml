@@ -69,7 +69,7 @@
                         android:textSize="17sp"
                         />
 
-                    <com.skooterapp.ALinkifiedTextView
+                    <com.skooterapp.layouts.ALinkifiedTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
@@ -116,7 +116,7 @@
                     android:gravity="center_horizontal"
                     android:focusable="false"/>
 
-                <com.skooterapp.ATextView
+                <com.skooterapp.layouts.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -162,7 +162,7 @@
                     android:layout_marginRight="3dp"
                     />
 
-                <com.skooterapp.ATextView
+                <com.skooterapp.layouts.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
@@ -189,7 +189,7 @@
                     android:layout_marginEnd="3dp"
                     />
 
-                <com.skooterapp.ATextView
+                <com.skooterapp.layouts.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
@@ -217,7 +217,7 @@
                     android:focusable="false"
                     />
 
-                <com.skooterapp.ATextView
+                <com.skooterapp.layouts.ATextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"

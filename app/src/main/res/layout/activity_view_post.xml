@@ -43,7 +43,7 @@
                 android:background="@drawable/custombutton"
                 />
 
-            <com.skooterapp.AIEditText
+            <com.skooterapp.layouts.AIEditText
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="Reply..."
@@ -74,7 +74,7 @@
             android:background="@drawable/cross_icon"
             android:onClick="dismissView"/>
 
-        <com.skooterapp.ATextView
+        <com.skooterapp.layouts.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Want to flag this skoot?"
@@ -169,7 +169,7 @@
         android:visibility="gone"
         android:paddingTop="10dp">
 
-        <com.skooterapp.ATextView
+        <com.skooterapp.layouts.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Are you sure you want to delete your skoot?"
@@ -202,14 +202,14 @@
                 android:onClick="dismissView"/>
         </LinearLayout>
 
-        <com.skooterapp.ATextView
+        <com.skooterapp.layouts.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:id="@+id/type_id"
             android:text="" />
 
-        <com.skooterapp.ATextView
+        <com.skooterapp.layouts.ATextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"

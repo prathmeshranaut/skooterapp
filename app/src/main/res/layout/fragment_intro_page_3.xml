@@ -22,7 +22,7 @@
         android:alpha="1.0"
         />
 
-    <com.skooterapp.ATextView
+    <com.skooterapp.layouts.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="22sp"

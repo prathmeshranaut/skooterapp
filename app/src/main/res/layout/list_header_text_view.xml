@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.skooterapp.ATextView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.skooterapp.layouts.ATextView xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:id="@+id/addZonesText"
               android:gravity="center_horizontal"
               android:padding="40dp"
               android:text="Follow feeds from college campuses &amp; companies by clicking on +">
-</com.skooterapp.ATextView>
+</com.skooterapp.layouts.ATextView>

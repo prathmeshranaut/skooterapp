@@ -26,7 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.skooterapp.ATextView;
+import com.skooterapp.layouts.ATextView;
 import com.skooterapp.AppController;
 import com.skooterapp.BaseActivity;
 import com.skooterapp.R;

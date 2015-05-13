@@ -14,7 +14,7 @@
         android:src="@drawable/flame"
         android:id="@+id/trending_icon" />
 
-    <com.skooterapp.ATextView
+    <com.skooterapp.layouts.ATextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/trending_icon"

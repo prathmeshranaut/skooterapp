@@ -4,7 +4,7 @@
                 android:background="@color/skooterBackgroundColor"
                 android:padding="12dp">
 
-    <com.skooterapp.ATextView
+    <com.skooterapp.layouts.ATextView
         android:id="@+id/item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

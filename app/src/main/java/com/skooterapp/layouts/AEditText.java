@@ -1,23 +1,22 @@
-package com.skooterapp;
+package com.skooterapp.layouts;
 
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
+import android.widget.EditText;
 
-public class ATextView extends TextView {
-
-    public ATextView(Context context) {
+public class AEditText extends EditText {
+    public AEditText(Context context) {
         super(context);
         init();
     }
 
-    public ATextView(Context context, AttributeSet attrs) {
+    public AEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public ATextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -25,5 +24,10 @@ public class ATextView extends TextView {
     protected void init() {
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "font/Ubuntu-Regular.ttf");
         setTypeface(tf);
+    }
+
+    @Override
+    public boolean isInEditMode() {
+        return true;
     }
 }

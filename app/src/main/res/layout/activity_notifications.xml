@@ -6,7 +6,7 @@
 
     <include layout="@layout/toolbar" android:id="@+id/app_bar" />
 
-    <com.skooterapp.AEditText
+    <com.skooterapp.layouts.AEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
