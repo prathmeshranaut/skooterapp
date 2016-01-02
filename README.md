@@ -12,3 +12,5 @@ People are using Skooter to:
 ► Sell and Buy stuff ranging from Books, Mobiles, Cars, Bikes, Movie Tickets, Event passes to anything
 
 ► Promote events, spread promotional flyers, photo posts, announcements and reminders to everyone in neighborhood
+
+![Skooter Screenshot #1 - Share thoughts anonymously](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/1.png)
