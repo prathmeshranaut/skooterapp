@@ -13,6 +13,8 @@ People are using Skooter to:
 
 ► Promote events, spread promotional flyers, photo posts, announcements and reminders to everyone in neighborhood
 
+#Screenshots
+
 ![Skooter Screenshot #1 - Share thoughts anonymously](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/1.png)
 
 ![Skooter Screenshot #2 - onfess share secrets & crushes](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/2.png)
