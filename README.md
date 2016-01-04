@@ -17,10 +17,10 @@ People are using Skooter to:
 
 ![Skooter Screenshot #1 - Share thoughts anonymously](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/1.png)
 
-![Skooter Screenshot #2 - onfess share secrets & crushes](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/2.png)
+![Skooter Screenshot #2 - Confess share secrets & crushes](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/2.png)
 
-![Skooter Screenshot #3 - Share thoughts anonymously](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/3.png)
+![Skooter Screenshot #3 - Explore whats happeneing around you](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/3.png)
 
-![Skooter Screenshot #4 - Share thoughts anonymously](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/4.png)
+![Skooter Screenshot #4 - Peek and follow updates from real location](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/4.png)
 
-![Skooter Screenshot #5 - Share thoughts anonymously](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/5.png)
+![Skooter Screenshot #5 - Channelize your posts](https://raw.githubusercontent.com/aayushranaut/skooterapp/master/screenshots/5.png)
