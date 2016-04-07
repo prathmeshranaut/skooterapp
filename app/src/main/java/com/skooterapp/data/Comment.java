@@ -138,7 +138,7 @@ public class Comment implements Serializable {
             }
         } else {
             //Downvote - 1
-            mDownvotes -= 1;
+            mDownvotes += 1;
         }
         mUserVote = false;
         mIfUserVoted = true;
