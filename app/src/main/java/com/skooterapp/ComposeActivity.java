@@ -422,7 +422,7 @@ public class ComposeActivity extends BaseActivity {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
             ByteArrayBody byteArrayBody;
-            ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+//            ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
             String format = mFile.getPath().substring(mFile.getPath().lastIndexOf(".")+1);
             if(format.equalsIgnoreCase("png"))
             {

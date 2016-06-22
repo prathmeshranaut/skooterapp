@@ -47,7 +47,7 @@ public class HttpHeaderParser {
         long maxAge = 0;
         boolean hasCacheControl = false;
 
-        String serverEtag = null;
+        String serverEtag;
         String headerValue;
 
         headerValue = headers.get("Date");

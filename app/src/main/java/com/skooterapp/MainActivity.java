@@ -205,7 +205,7 @@ public class MainActivity extends BaseActivity {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                String msg = "";
+                String msg;
 
                 try {
                     if (gcm == null) {
