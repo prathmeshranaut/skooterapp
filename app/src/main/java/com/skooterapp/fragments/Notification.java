@@ -241,7 +241,7 @@ public class Notification extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void markNotificationsRead() {
-        if(mNotificationArrayList.size() > 0) {
+        if(!mNotificationArrayList.isEmpty()) {
             Map<String, String> params = new HashMap<>();
             params.put("user_id", Integer.toString(BaseActivity.userId));
 

@@ -267,7 +267,7 @@ public class ComposeActivity extends BaseActivity {
     private void calculateActiveZone() {
         TextView activeZone = (TextView) findViewById(R.id.zone);
         String text = "Active Zone: ";
-        if (mActiveZones.size() > 0) {
+        if (!mActiveZones.isEmpty()) {
             for (Zone zone : mActiveZones) {
                 text += zone.getZoneName() + ", ";
             }
@@ -306,7 +306,7 @@ public class ComposeActivity extends BaseActivity {
                 params.put("channel", skootHandle.getText().toString());
                 params.put("content", skootText.getText().toString());
                 params.put("location_id", Integer.toString(locationId));
-                if (mActiveZones.size() > 0) {
+                if (!mActiveZones.isEmpty()) {
                     params.put("zone_id", Integer.toString(mActiveZones.get(0).getZoneId()));
                 } else {
                     params.put("zone_id", "null'");
@@ -412,7 +412,7 @@ public class ComposeActivity extends BaseActivity {
             params.setParameter("channel", skootHandle.getText().toString());
             params.setParameter("content", skootText.getText().toString());
             params.setParameter("location_id", Integer.toString(locationId));
-            if (mActiveZones.size() > 0) {
+            if (!mActiveZones.isEmpty()) {
                 params.setParameter("zone_id", Integer.toString(mActiveZones.get(0).getZoneId()));
             } else {
                 params.setParameter("zone_id", "null");
@@ -481,7 +481,7 @@ public class ComposeActivity extends BaseActivity {
                 builder.addTextBody("content", skootText.getText().toString());
                 builder.addTextBody("location_id", Integer.toString(locationId));
 
-                if (mActiveZones.size() > 0) {
+                if (!mActiveZones.isEmpty()) {
                     builder.addTextBody("zone_id", Integer.toString(mActiveZones.get(0).getZoneId()));
                 } else {
                     builder.addTextBody("zone_id", "null");

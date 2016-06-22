@@ -131,7 +131,7 @@ public class MainActivity extends BaseActivity {
                         params.put("entry.1555135749", retrieveReferralParams.get("utm_campaign"));
                     }
                     params.put("entry.1526753725", Integer.toString(BaseActivity.userId));
-                    if (params != null && params.size() > 0) {
+                    if (params != null && !params.isEmpty()) {
                         return encodeParameters(params, getParamsEncoding());
                     }
                     return null;

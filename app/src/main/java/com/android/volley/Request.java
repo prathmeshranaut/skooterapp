@@ -393,7 +393,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
         // call getPostParams() and getPostParamsEncoding() since legacy clients would have
         // overridden these two member functions for POST requests.
         Map<String, String> postParams = getPostParams();
-        if (postParams != null && postParams.size() > 0) {
+        if (postParams != null && !postParams.isEmpty()) {
             return encodeParameters(postParams, getPostParamsEncoding());
         }
         return null;
@@ -445,7 +445,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
      */
     public byte[] getBody() throws AuthFailureError {
         Map<String, String> params = getParams();
-        if (params != null && params.size() > 0) {
+        if (params != null && !params.isEmpty()) {
             return encodeParameters(params, getParamsEncoding());
         }
         return null;
