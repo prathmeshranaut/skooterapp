@@ -23,6 +23,11 @@ import android.util.Log;
 public final class LogManager {
 
     private static Logger logger = new LoggerDefault();
+    /**
+     * Prevents class instantiation 
+     */
+    private LogManager() {
+    }
 
     public static void setLogger(Logger newLogger) {
         logger = newLogger;
