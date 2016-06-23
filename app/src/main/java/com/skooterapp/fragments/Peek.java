@@ -78,7 +78,7 @@ public class Peek extends Fragment {
             }
         });
 
-        if (followingZones.size() > 0) {
+        if (!followingZones.isEmpty()) {
             //Fetch the peek posts for the person
             mInfoTextView.setText("Peeking posts...");
             mInfoTextView.setVisibility(View.VISIBLE);

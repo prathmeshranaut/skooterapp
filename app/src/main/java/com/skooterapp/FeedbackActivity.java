@@ -88,7 +88,7 @@ public class FeedbackActivity extends BaseActivity {
                     params.put("entry.1977350393", phoneNumber.getText().toString());
                     params.put("entry.1872674154", Integer.toString(BaseActivity.userId));
 
-                    if (params != null && params.size() > 0) {
+                    if (params != null && !params.isEmpty()) {
                         return encodeParameters(params, getParamsEncoding());
                     }
                     return null;
