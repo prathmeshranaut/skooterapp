@@ -20,6 +20,11 @@ import android.content.Context;
 import android.os.Build;
 
 public final class VersionedGestureDetector {
+    /**
+     * Prevents class instantiation 
+     */
+    private VersionedGestureDetector() {
+    }
 
     public static GestureDetector newInstance(Context context,
                                               OnGestureListener listener) {

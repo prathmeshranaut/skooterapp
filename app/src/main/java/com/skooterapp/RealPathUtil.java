@@ -9,6 +9,11 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
 public class RealPathUtil {
+    /**
+     * Prevents class instantiation 
+     */
+    private RealPathUtil() {
+    }
 
     @SuppressLint("NewApi")
     public static String getRealPathFromURI_API19(Context context, Uri uri){

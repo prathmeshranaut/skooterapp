@@ -27,6 +27,11 @@ public final class OverscrollHelper {
 
 	static final String LOG_TAG = "OverscrollHelper";
 	static final float DEFAULT_OVERSCROLL_SCALE = 1f;
+	/**
+	 * Prevents class instantiation 
+	 */
+	private OverscrollHelper() {
+	}
 
 	/**
 	 * Helper method for Overscrolling that encapsulates all of the necessary
