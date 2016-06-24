@@ -71,7 +71,7 @@ public class Me extends Fragment {
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = null;
+                Intent intent;
                 switch (position) {
                     case 0:
                         intent = new Intent(getActivity(), MePostsActivity.class);
